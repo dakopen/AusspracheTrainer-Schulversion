@@ -1,20 +1,25 @@
-from django.shortcuts import render
+from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status, views
+from rest_framework import status, views, generics
 from .serializers import UserSerializer
+from .permissions import IsAdminOrSecretaryCreatingAllowedRoles
 
 @api_view(['GET'])
 def hello_world(request):
     return Response({"message": "Hello, world!"})
 
 
+class CreateUserView(generics.CreateAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminOrSecretaryCreatingAllowedRoles]
 
-class UserCreateView(views.APIView):
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
+    def perform_create(self, serializer):
+        # If the creator is a secretary, set the school to their school
+        if self.request.user.role == self.request.user.SECRETARY:
+            serializer.save(school=self.request.user.school)
+        else:
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -8,16 +8,14 @@ class School(models.Model):
     short_id = models.CharField(max_length=10, unique=True, validators=[RegexValidator(r'^[A-Z]+$')])
 
 class User(AbstractUser):
-    STUDENT = 1
-    TEACHER = 2
-    SECRETARY = 3
-    STUDYSTUDENT = 4
+    TEACHER = 1
+    SECRETARY = 2
+    ADMIN = 3
     ROLE_CHOICES = (
-        (STUDENT, 'Student'),
         (TEACHER, 'Teacher'),
         (SECRETARY, 'Secretary'),
-        (STUDYSTUDENT, 'Study Student'),
+        (ADMIN, 'Admin'),
     )
-    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True)
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=ADMIN)
     school = models.ForeignKey('School', on_delete=models.CASCADE, blank=True, null=True, related_name='users')
 
