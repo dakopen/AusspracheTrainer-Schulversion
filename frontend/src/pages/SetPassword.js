@@ -23,7 +23,8 @@ function SetPassword() {
       if (response.ok) { // Check if status code is in the range 200-299
         alert('Password has been set successfully.');
       } else {
-        console.log('Response:', response);
+        const errorData = await response.json(); // Assuming the server sends back JSON
+        console.log('Response:', errorData);
       }
     } catch (error) {
       alert('Failed to set password. The link might be expired or invalid.');
