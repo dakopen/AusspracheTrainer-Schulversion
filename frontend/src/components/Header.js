@@ -4,14 +4,16 @@ import AuthContext from '../context/AuthContext'
 
 
 const Header = () => {
-  let {name} = useContext(AuthContext)
+  let {user, logoutUser} = useContext(AuthContext)
   return (
     <div>
-      <Link to="/">Home</Link>
+      <Link to="/">Home</Link><br></br>
+      <Link to="/create-teacher">Create Teacher</Link>
       <span> | </span>
-      <Link to="/login">Login</Link>
+      {user ? <p onClick={logoutUser}>Logout</p> : <Link to="/login">Login</Link>}
+      {user && <p>Hello user with Role: { user.role }</p>}
+      <hr></hr>
       
-      <p>Hello { name }</p>
     </div>
   )
 }

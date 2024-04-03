@@ -13,3 +13,16 @@ class IsAdminOrSecretaryCreatingAllowedRoles(permissions.BasePermission):
             return requested_role not in [request.user.ADMIN]  # Admins are not allowed to be created by secretaries
         
         return False
+
+
+class IsAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == request.user.ADMIN
+    
+class IsSecretary(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == request.user.SECRETARY
+    
+class IsTeacher(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == request.user.TEACHER
