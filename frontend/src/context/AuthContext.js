@@ -1,7 +1,10 @@
 import { createContext, useState, useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
+import { useNotification } from './NotificationContext'
+
 const AuthContext = createContext()
+// import NotificationContext from './NotificationContext'
 
 export default AuthContext;
 
@@ -12,8 +15,40 @@ export const AuthProvider = ({ children }) => {
     let [authTokens, setAuthTokens] = useState(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     let [user, setUser] = useState(() => localStorage.getItem('authTokens') ? jwtDecode(localStorage.getItem('authTokens')) : null)
     let [loading, setLoading] = useState(true)
-
+    const { addNotification } = useNotification();
     const navigate = useNavigate()
+
+
+    let sendToLogin = async (e) => {
+        e.preventDefault()
+        let username = e.target.username.value
+        let password = e.target.password.value
+        await loginUserWithCredentials(username, password)
+    }
+
+    let loginUserWithCredentials = async (username, password) => {
+        let response = await fetch('http://localhost:8000/api/token/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'username': username,
+                'password': password
+            })
+        })
+        let data = await response.json()
+        console.log("data:", data)
+        if (response.status === 200){
+            setAuthTokens(data)
+            setUser(jwtDecode(data.access))
+            localStorage.setItem('authTokens', JSON.stringify(data))
+            addNotification("Erfolgreich eingeloggt", "success")
+            navigate('/')
+        } else {
+            alert("Etwas ist schiefgelaufen")
+        }
+    }
 
 
     let loginUser = async (e) => {
@@ -75,7 +110,9 @@ export const AuthProvider = ({ children }) => {
         user:user,
         authTokens:authTokens,
         loginUser: loginUser,
-        logoutUser: logoutUser
+        logoutUser: logoutUser,
+        sendToLogin: sendToLogin,
+        loginUserWithCredentials: loginUserWithCredentials,
     }
 
     let tenMinutes = 600000

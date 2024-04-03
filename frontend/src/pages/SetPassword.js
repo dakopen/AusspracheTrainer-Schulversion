@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useNotification } from '../context/NotificationContext';
 
 function SetPassword() {
   const [password, setPassword] = useState('');
   const location = useLocation();
+  const navigate = useNavigate();
+  const { addNotification } = useNotification();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+
     const params = new URLSearchParams(location.search);
     const token = params.get('token');
     const uid = params.get('uid');
+
 
     try {
       const response = await fetch('http://127.0.0.1:8000/accounts/set-password/', {
@@ -22,12 +28,16 @@ function SetPassword() {
 
       if (response.ok) { // Check if status code is in the range 200-299
         alert('Password has been set successfully.');
+        navigate('/login');
+        
       } else {
         const errorData = await response.json(); // Assuming the server sends back JSON
         console.log('Response:', errorData);
+
+        addNotification(errorData.error, 'error');
+
       }
     } catch (error) {
-      alert('Failed to set password. The link might be expired or invalid.');
       console.error('Error:', error);
     }
   };

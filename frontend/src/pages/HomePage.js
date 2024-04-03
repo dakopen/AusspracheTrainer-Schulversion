@@ -1,11 +1,16 @@
 import React from 'react'
+import { useNotification } from '../context/NotificationContext';
 
 const HomePage = () => {
+  const { addNotification } = useNotification();
   return (
-    <div>
-      <p>You are logged to the home page!</p>
-    </div>
-  )
+    <div className="App">
+      <p>Homepage</p>
+      <button onClick={() => addNotification('Error! Something went wrong.', 'error')}>
+        Show Error
+      </button>
+          </div>
+  );
 }
 
 export default HomePage
