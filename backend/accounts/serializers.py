@@ -15,9 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             username=validated_data['username'],  # username is the email
             password=None,  # User is created without a password
-            email=None
+            role=User.TEACHER,  # Default role is teacher
         )
-        user.school = validated_data.get('school', None)
         user.is_active = False  # Make the user inactive until they set their password
         user.save()
         
@@ -28,8 +27,8 @@ class UserSerializer(serializers.ModelSerializer):
     
     def send_password_setup_email(self, user):
         # Logic remains the same
-        token = self.generate_password_reset_token(user)
-        password_reset_link = f"{settings.FRONTEND_URL}/set-password/?token={token}"
+        token, uid = self.generate_password_reset_token(user)
+        password_reset_link = f"{settings.FRONTEND_URL}/set-password/?token={token}&uid={uid}"
         send_mail(
             'Aktiviere Deinen AusspracheTrainer Account',
             f'Bitte aktiviere Deinen Account, indem Du ein Passwort wählst: {password_reset_link}',
@@ -45,4 +44,4 @@ class UserSerializer(serializers.ModelSerializer):
         from django.utils.encoding import force_bytes
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        return f"{uid}/{token}"
+        return token, uid

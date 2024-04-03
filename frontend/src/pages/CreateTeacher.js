@@ -1,26 +1,33 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
 import AuthContext from '../context/AuthContext';
 
 function CreateTeacher() {
   const [email, setEmail] = useState('');
-  // Assume token is stored somewhere after login, e.g., localStorage
-  let {authTokens} = useContext(AuthContext);
+  const { authTokens } = useContext(AuthContext);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const url = 'http://127.0.0.1:8000/accounts/create-teacher/';
+    const data = JSON.stringify({ username: email });
+
     try {
-      // Include the Authorization header with the JWT
-      const response = await axios.post('/accounts/create-teacher/', { username: email }, {
+      const response = await fetch(url, {
+        method: 'POST',
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${authTokens.access}`
-        }
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + String(authTokens.access)
+        },
+        body: data
       });
+
       if (response.status === 201) {
         alert('User created successfully. A link has been sent to their email to set a password.');
+      } else {
+        const responseData = await response.json();
+        throw new Error(responseData.detail || 'An error occurred while creating the user.');
       }
     } catch (error) {
-      alert('There was an error creating the user.');
+      alert(error.message);
       console.error(error);
     }
   };
