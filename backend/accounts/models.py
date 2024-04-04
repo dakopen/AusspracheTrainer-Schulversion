@@ -8,7 +8,7 @@ class School(models.Model):
     short_id = models.CharField(max_length=10, unique=True, validators=[RegexValidator(r'^[A-Z]+$')])
 
 class User(AbstractUser):
-    TEACHER = 1
+    TEACHER = DEFAULT = 1
     SECRETARY = 2
     ADMIN = 3
     ROLE_CHOICES = (

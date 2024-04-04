@@ -7,8 +7,9 @@ from rest_framework.response import Response
 from rest_framework import status, views, generics
 from rest_framework.views import APIView
 
-from .serializers import UserSerializer
-from .permissions import IsAdminOrSecretaryCreatingAllowedRoles
+from .models import School
+from .serializers import UserSerializer, SchoolSerializer
+from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin
 
 import logging
 logger = logging.getLogger(__name__)
@@ -21,8 +22,16 @@ def hello_world(request):
     return Response({"message": "Hello, world!"})
 
 
+class CreateAnyRoleView(generics.CreateAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdmin]
 
-class CreateUserView(generics.CreateAPIView):
+    def perform_create(self, serializer):
+        serializer.save()  # make sure to add school and role in the data sent
+
+
+class CreateTeacherView(generics.CreateAPIView):
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAdminOrSecretaryCreatingAllowedRoles]
@@ -30,9 +39,9 @@ class CreateUserView(generics.CreateAPIView):
     def perform_create(self, serializer):
         # If the creator is a secretary, set the school to their school
         if self.request.user.role == self.request.user.SECRETARY:
-            serializer.save(school=self.request.user.school)
+            serializer.save(school=self.request.user.school, role=User.TEACHER)
         else:
-            serializer.save()
+            serializer.save(role=User.TEACHER)
 
 
 class SetPasswordView(APIView):
@@ -63,3 +72,16 @@ class SetPasswordView(APIView):
         user.is_active = True  # Optionally activate the user now
         user.save()
         return Response({"success": "Password has been set successfully."}, status=status.HTTP_200_OK)
+    
+
+class SchoolListView(generics.ListAPIView):
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+    permission_classes = [IsAdmin]
+
+
+class SchoolCreateView(generics.CreateAPIView):
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+    permission_classes = [IsAdmin]
+

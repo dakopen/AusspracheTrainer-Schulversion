@@ -1,8 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from rest_framework import serializers
 from django.urls import reverse
 from django.conf import settings
+from django.core.validators import RegexValidator
+from rest_framework import serializers
+
+from .models import School
+
 
 User = get_user_model()
 
@@ -11,11 +15,18 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'school')  # Adjusted to not include 'email'
 
-    def create(self, validated_data):
+    def create(self, validated_data, school=None, role=None):
+        if school is None:
+            school = validated_data.get('school')
+        
+        if role is None:
+            role = validated_data.get('role')
+
         user = User.objects.create_user(
             username=validated_data['username'],  # username is the email
             password=None,  # User is created without a password
-            role=User.TEACHER,  # Default role is teacher
+            school=school,
+            role=role
         )
         user.is_active = False  # Make the user inactive until they set their password
         user.save()
@@ -45,3 +56,13 @@ class UserSerializer(serializers.ModelSerializer):
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         return token, uid
+
+class SchoolSerializer(serializers.ModelSerializer):
+    short_id = serializers.CharField(
+        max_length=10,
+        validators=[RegexValidator(r'^[A-Z]+$')]
+    )
+
+    class Meta:
+        model = School
+        fields = ('id', 'name', 'address', 'short_id')
