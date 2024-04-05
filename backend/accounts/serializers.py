@@ -7,20 +7,22 @@ from rest_framework import serializers
 
 from .models import School
 
+import logging
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'school')  # Adjusted to not include 'email'
+        fields = ('id', 'username', 'school', 'role')  # Adjusted to not include 'email'
 
     def create(self, validated_data, school=None, role=None):
         if school is None:
             school = validated_data.get('school')
         
         if role is None:
-            role = validated_data.get('role')
+            role = validated_data.get('role', User.DEFAULT)
 
         user = User.objects.create_user(
             username=validated_data['username'],  # username is the email
