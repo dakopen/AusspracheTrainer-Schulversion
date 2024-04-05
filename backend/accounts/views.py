@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from .models import School
 from .serializers import UserSerializer, SchoolSerializer
-from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin
+from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsTeacher
 
 import logging
 logger = logging.getLogger(__name__)
@@ -42,6 +42,16 @@ class CreateTeacherView(generics.CreateAPIView):
             serializer.save(school=self.request.user.school, role=User.TEACHER)
         else:
             serializer.save(role=User.TEACHER)
+
+class CreateStudyStudentView(generics.CreateAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsTeacher]
+
+    def perform_create(self, serializer):
+        serializer.save(school=self.request.user.school, role=User.STUDYSTUDENT)
+
+
 
 
 class SetPasswordView(APIView):
