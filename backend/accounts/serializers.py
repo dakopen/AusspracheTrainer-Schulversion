@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.validators import RegexValidator
 from rest_framework import serializers
 
-from .models import School
+from .models import Course, School
 
 import random
 import string
@@ -17,7 +17,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'school', 'role', 'study_student', 'course')  # Adjusted to not include 'email'
+        fields = ('id', 'username', 'school', 'role', 'study_student_username', 'belongs_to_course')  # Adjusted to not include 'email'
 
     def create(self, validated_data, school=None, role=None):
         if role is None:
@@ -43,7 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
                 username=validated_data.get('username'),  # username is the email
                 password=None,  # User is created without a password
                 school=school,
-                role=role
+                role=role,
             )
             self.send_password_setup_email(user)
 
@@ -86,3 +86,20 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = ('id', 'name', 'address', 'short_id')
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ('id', 'name', 'language', 'teacher')
+        extra_kwargs = {'teacher': {'read_only': True}}
+
+    def validate(self, attrs):
+        teacher = self.context['request'].user
+        if teacher.role != User.TEACHER:
+            raise serializers.ValidationError("Only teachers can create courses.")
+        return attrs
+
+    def create(self, validated_data):
+        return Course.objects.create(**validated_data)
+ 

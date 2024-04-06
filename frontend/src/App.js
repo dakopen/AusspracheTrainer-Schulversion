@@ -18,6 +18,7 @@ import LoginPage from "./pages/LoginPage";
 import CreateTeacher from "./pages/CreateTeacher";
 import CreateAnyRole from "./pages/CreateAnyRole";
 import CreateSchool from "./pages/CreateSchool";
+import CreateCourse from "./pages/CreateCourse";
 import SetPassword from "./pages/SetPassword";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
@@ -59,6 +60,10 @@ function App() {
 								<Route
 									element={<CreateSchool />}
 									path="/create-school"
+								/>
+								<Route
+									element={<CreateCourse />}
+									path="/create-course"
 								/>
 							</Routes>
 						</AuthProvider>

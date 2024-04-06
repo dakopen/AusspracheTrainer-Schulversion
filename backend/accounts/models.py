@@ -20,16 +20,10 @@ class Course(models.Model):
     )
 
     language = models.PositiveSmallIntegerField(choices=LANGUAGE_CHOICES, default=ENGLISH)
-    teacher = models.ForeignKey('User', on_delete=models.CASCADE, related_name='courses')
-
-
-    def clean(self):
-        if not self.teacher.role == User.TEACHER:
-            raise ValidationError("Only teachers create courses.")
+    teacher = models.ForeignKey('User', on_delete=models.PROTECT, related_name='courses')
+    
 
 class User(AbstractUser):
-    is_token_user = models.BooleanField(default=False)
-
     TEACHER = DEFAULT = 1
     SECRETARY = 2
     ADMIN = 3
@@ -49,10 +43,10 @@ class User(AbstractUser):
     email = models.EmailField('E-Mail Adresse', unique=False, validators=[EmailValidator()], blank=True, null=True)
 
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=ADMIN)
-    school = models.ForeignKey('School', on_delete=models.CASCADE, blank=True, null=True, related_name='users')
+    school = models.ForeignKey('School', on_delete=models.PROTECT, blank=True, null=True, related_name='users')
 
     study_student_username = models.CharField(max_length=10, unique=True, null=True, blank=True)
-    belongs_to_course = models.ForeignKey('Course', on_delete=models.SET_NULL, null=True, blank=True, related_name='students')
+    belongs_to_course = models.ForeignKey('Course', on_delete=models.PROTECT, null=True, blank=True, related_name='students')
 
     USERNAME_FIELD = 'username'
 

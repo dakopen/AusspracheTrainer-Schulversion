@@ -7,9 +7,9 @@ from rest_framework.response import Response
 from rest_framework import status, views, generics
 from rest_framework.views import APIView
 
-from .models import School
-from .serializers import UserSerializer, SchoolSerializer
-from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsTeacher
+from .models import School, Course
+from .serializers import UserSerializer, SchoolSerializer, CourseSerializer
+from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsTeacher, IsTeacherOrAdmin
 
 import logging
 logger = logging.getLogger(__name__)
@@ -50,8 +50,6 @@ class CreateStudyStudentView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(school=self.request.user.school, role=User.STUDYSTUDENT)
-
-
 
 
 class SetPasswordView(APIView):
@@ -95,3 +93,23 @@ class SchoolCreateView(generics.CreateAPIView):
     serializer_class = SchoolSerializer
     permission_classes = [IsAdmin]
 
+
+class CourseListView(generics.ListAPIView):
+    serializer_class = CourseSerializer
+    permission_classes = [IsTeacherOrAdmin]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == User.ADMIN:
+            return Course.objects.all()
+        else:
+            return Course.objects.filter(teacher=user)
+        
+
+class CourseCreateView(generics.CreateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    permission_classes = [IsTeacher]
+
+    def perform_create(self, serializer):
+        serializer.save(teacher=self.request.user)
