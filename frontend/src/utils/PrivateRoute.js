@@ -1,60 +1,90 @@
 import { Navigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
+import { useNotification } from "../context/NotificationContext";
 
 const TeacherOrSecretaryOrAdminRoute = ({ element: Element, ...rest }) => {
-	let { user } = useContext(AuthContext);
+	const { user } = useContext(AuthContext);
+	const { addNotification } = useNotification();
 
-	if (user) {
-		return user.role === 1 || user.role === 2 || user.role === 3 ? (
-			<Element {...rest} />
-		) : (
-			<Navigate to="/login" />
-		);
+	useEffect(() => {
+		if (!user) {
+			addNotification("Bitte logge dich zuerst ein!", "error");
+		} else if (!(user.role === 1 || user.role === 2 || user.role === 3)) {
+			addNotification("Nicht die nötige Berechtigung.", "error");
+		}
+	}, []);
+
+	if (!user) {
+		return <Navigate to="/login" />;
+	} else if (user.role === 1 || user.role === 2 || user.role === 3) {
+		return <Element {...rest} />;
 	} else {
 		return <Navigate to="/login" />;
 	}
 };
 
 const AdminRoute = ({ element: Element, ...rest }) => {
-	let { user } = useContext(AuthContext);
+	const { user } = useContext(AuthContext);
+	const { addNotification } = useNotification();
 
-	if (user) {
-		return user.role === 3 ? (
-			<Element {...rest} />
-		) : (
-			<Navigate to="/login" />
-		);
+	useEffect(() => {
+		if (!user) {
+			addNotification("Bitte logge dich zuerst ein!", "error");
+		} else if (user.role !== 3) {
+			addNotification("Nicht die nötige Berechtigung.", "error");
+		}
+	}, []);
+
+	if (!user) {
+		return <Navigate to="/login" />;
+	} else if (user.role === 3) {
+		return <Element {...rest} />;
 	} else {
 		return <Navigate to="/login" />;
 	}
 };
 
 const SecretaryOrAdminRoute = ({ element: Element, ...rest }) => {
-	let { user } = useContext(AuthContext);
+	const { user } = useContext(AuthContext);
+	const { addNotification } = useNotification();
 
-	if (user) {
-		return user.role === 2 || user.role === 3 ? (
-			<Element {...rest} />
-		) : (
-			<Navigate to="/login" />
-		);
+	useEffect(() => {
+		if (!user) {
+			addNotification("Bitte logge dich zuerst ein!", "error");
+		} else if (!(user.role === 2 || user.role === 3)) {
+			addNotification("Nicht die nötige Berechtigung.", "error");
+		}
+	}, []);
+
+	if (!user) {
+		return <Navigate to="/login" />;
+	} else if (user.role === 2 || user.role === 3) {
+		return <Element {...rest} />;
 	} else {
 		return <Navigate to="/login" />;
 	}
 };
 
 const TeacherRoute = ({ element: Element, ...rest }) => {
-	let { user } = useContext(AuthContext);
+	const { user } = useContext(AuthContext);
+	const { addNotification } = useNotification();
 
-	if (user) {
-		return user.role === 1 ? (
-			<Element {...rest} />
-		) : (
-			<Navigate to="/login" />
-		);
-	} else {
+	useEffect(() => {
+		if (!user) {
+			addNotification("Bitte logge dich zuerst ein!", "error");
+		} else if (user.role !== 1) {
+			console.log("User not logged in");
+			addNotification("Nicht die nötige Berechtigung.", "error");
+		}
+	}, []);
+
+	if (!user) {
 		return <Navigate to="/login" />;
+	} else if (user.role !== 1) {
+		return <Navigate to="/login" />;
+	} else {
+		return <Element {...rest} />;
 	}
 };
 

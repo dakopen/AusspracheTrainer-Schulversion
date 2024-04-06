@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
 	AdminRoute,
+	SecretaryOrAdminRoute,
 	TeacherOrSecretaryOrAdminRoute,
+	TeacherRoute,
 } from "./utils/PrivateRoute";
 
 import { AuthProvider } from "./context/AuthContext";
@@ -32,25 +34,24 @@ function App() {
 						<AuthProvider>
 							<Header />
 							<Routes>
-								<Route
-									element={
-										<TeacherOrSecretaryOrAdminRoute
-											element={HomePage}
-										/>
-									}
-									path="/"
-								/>
+								<Route element={<HomePage />} path="/" />
 								<Route
 									element={<AdminRoute element={HomePage} />}
 									path="/adminroute"
 								/>
 								<Route element={<LoginPage />} path="/login" />
 								<Route
-									element={<CreateTeacher />}
+									element={
+										<SecretaryOrAdminRoute
+											element={CreateTeacher}
+										/>
+									}
 									path="/create-teacher"
 								/>
 								<Route
-									element={<CreateAnyRole />}
+									element={
+										<AdminRoute element={CreateAnyRole} />
+									}
 									path="/create-any-role"
 								/>
 								<Route
@@ -58,11 +59,15 @@ function App() {
 									path="set-password/"
 								/>
 								<Route
-									element={<CreateSchool />}
+									element={
+										<AdminRoute element={CreateSchool} />
+									}
 									path="/create-school"
 								/>
 								<Route
-									element={<CreateCourse />}
+									element={
+										<TeacherRoute element={CreateCourse} />
+									}
 									path="/create-course"
 								/>
 							</Routes>

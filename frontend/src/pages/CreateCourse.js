@@ -1,12 +1,27 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
+import { fetchCourses } from "../utils/api";
 
 const CreateCourse = () => {
 	const [name, setName] = useState("");
 	const [language, setLanguage] = useState(1); // Default to English
 	const { authTokens } = useContext(AuthContext);
 	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
+	const [courses, setCourses] = useState([]);
+
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				const fetchedCourses = await fetchCourses(authTokens);
+				setCourses(fetchedCourses);
+			} catch (error) {
+				console.error("Error loading data:", error);
+			}
+		};
+
+		loadData();
+	}, [authTokens]);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -31,6 +46,10 @@ const CreateCourse = () => {
 				// Optionally reset form fields
 				setName("");
 				setLanguage(1); // Reset to default language
+				
+				// refetch courses
+				const fetchedCourses = await fetchCourses(authTokens);
+				setCourses(fetchedCourses);
 			} else {
 				const responseData = await response.json();
 				console.log(responseData);
@@ -46,29 +65,40 @@ const CreateCourse = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<label>
-				Name:
-				<input
-					type="text"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-					required
-				/>
-			</label>
-			<label>
-				Language:
-				<select
-					value={language}
-					onChange={(e) => setLanguage(e.target.value)}
-					required
-				>
-					<option value={1}>Englisch</option>
-					<option value={2}>Französisch</option>
-				</select>
-			</label>
-			<button type="submit">Create Course</button>
-		</form>
+		<>
+			<div>
+				{courses.map((course) => {
+					return (
+						<p key={course.id}>
+							{course.name} - {course.language} - {course.teacher}
+						</p>
+					);
+				})}
+			</div>
+			<form onSubmit={handleSubmit}>
+				<label>
+					Name:
+					<input
+						type="text"
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+						required
+					/>
+				</label>
+				<label>
+					Language:
+					<select
+						value={language}
+						onChange={(e) => setLanguage(e.target.value)}
+						required
+					>
+						<option value={1}>Englisch</option>
+						<option value={2}>Französisch</option>
+					</select>
+				</label>
+				<button type="submit">Create Course</button>
+			</form>
+		</>
 	);
 };
 
