@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"; // Import useParams if you're usin
 import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
 import { useNotification } from "../context/NotificationContext";
+import CourseStudents from "../components/CourseStudents";
 
 const ShowCourse = () => {
 	const { courseId } = useParams(); // Get courseId from the URL if using React Router
@@ -53,7 +54,7 @@ const ShowCourse = () => {
 					<p>
 						<strong>Teacher:</strong> {course.teacher}
 					</p>
-					{/* Add more details as needed */}
+					<CourseStudents />
 				</>
 			) : (
 				<p>Loading course details...</p>

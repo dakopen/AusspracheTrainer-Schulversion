@@ -45,7 +45,6 @@ class User(AbstractUser):
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=ADMIN)
     school = models.ForeignKey('School', on_delete=models.PROTECT, blank=True, null=True, related_name='users')
 
-    study_student_username = models.CharField(max_length=10, unique=True, null=True, blank=True)
     belongs_to_course = models.ForeignKey('Course', on_delete=models.PROTECT, null=True, blank=True, related_name='students')
 
     USERNAME_FIELD = 'username'

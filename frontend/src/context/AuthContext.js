@@ -30,6 +30,10 @@ export const AuthProvider = ({ children }) => {
 		await loginUserWithCredentials(username, password);
 	};
 
+	let sendToStudyStudentLogin = async (e) => {
+		e.preventDefault();
+	};
+
 	let loginUserWithCredentials = async (username, password) => {
 		let response = await fetch("http://localhost:8000/api/token/", {
 			method: "POST",

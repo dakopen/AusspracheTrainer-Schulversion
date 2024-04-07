@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import { fetchCourses } from "../utils/api";
-import CreateCourse from "./CreateCourse.js";
+import CreateCourse from "../components/CreateCourse.js";
 import { isTeacher } from "../utils/RoleChecks";
 import { Link } from "react-router-dom";
 

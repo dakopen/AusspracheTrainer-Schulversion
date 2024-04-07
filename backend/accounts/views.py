@@ -3,6 +3,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, views, generics
@@ -11,11 +12,14 @@ from rest_framework.exceptions import PermissionDenied
 
 from .models import School, Course
 from .serializers import UserSerializer, SchoolSerializer, CourseSerializer
-from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsTeacher, IsTeacherOrAdmin
+from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, \
+                        IsTeacher, IsTeacherOrAdmin, IsTeacherOrSecretaryOrAdmin
 
 import logging
 logger = logging.getLogger(__name__)
 
+import random
+import string
 
 User = get_user_model()
 
@@ -79,7 +83,7 @@ class SetPasswordView(APIView):
         #     return Response({"error": "Password does not meet complexity requirements."}, status=status.HTTP_400_BAD_REQUEST)
 
         user.set_password(password)
-        user.is_active = True  # Optionally activate the user now
+        user.is_active = True  # activate the user
         user.save()
         return Response({"success": "Password has been set successfully."}, status=status.HTTP_200_OK)
     
@@ -120,7 +124,7 @@ class CourseCreateView(generics.CreateAPIView):
 class CourseDetailView(generics.RetrieveAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [IsTeacherOrAdmin]
+    permission_classes = [IsTeacherOrSecretaryOrAdmin]
 
     def get_object(self):
         """
@@ -131,7 +135,77 @@ class CourseDetailView(generics.RetrieveAPIView):
         course = get_object_or_404(Course, pk=pk)
 
         user = self.request.user
-        if user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user):
+        if user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user) or (user.role == User.SECRETARY and course.teacher.school == user.school):
             return course
         else:
             raise PermissionDenied({'message': 'Du hast nicht die Berechtigung, diesen Kurs anzuzeigen.'})
+        
+
+class CourseStudentListView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsTeacherOrSecretaryOrAdmin]
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        course = get_object_or_404(Course, pk=pk)
+
+        user = self.request.user
+        if user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user) or (user.role == User.SECRETARY and course.teacher.school == user.school):
+            return course.students.all()
+        else:
+            raise PermissionDenied({'message': 'Du hast nicht die Berechtigung, die Schüler dieses Kurses anzuzeigen.'})
+        
+class CourseStudentCreateView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsTeacherOrSecretaryOrAdmin]
+
+    def perform_create(self, serializer):
+        pk = self.kwargs.get('pk')
+        course = get_object_or_404(Course, pk=pk)
+
+        user = self.request.user
+        if user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user) or (user.role == User.SECRETARY and course.teacher.school == user.school):
+            serializer.save(belongs_to_course=course)
+        else:
+            raise PermissionDenied({'message': 'Du hast nicht die Berechtigung, Schüler zu diesem Kurs hinzuzufügen.'})
+
+
+class BulkCreateStudyStudentsView(APIView):
+    def post(self, request, pk):
+        course = get_object_or_404(Course, pk=pk)
+        number_of_students = request.data.get('number_of_students', 10)  # Default to 10 if not specified
+        study_students = []
+        max_number_of_students = 100
+
+        # Convert to integer and ensure it's within allowed bounds
+        try:
+            number_of_students = int(''.join(filter(str.isdigit, str(number_of_students))))
+        except ValueError:  # In case of conversion failure
+            number_of_students = 10  # Default back to 10
+
+        # Adjust number to not exceed maximum allowed students per course
+        number_of_students = min(number_of_students, max_number_of_students - course.students.count())
+
+        with transaction.atomic():
+            for _ in range(number_of_students):
+                username = self.generate_random_username()
+                study_student = User.objects.create(
+                    username=f"{username}@studie.aussprachetrainer.org",
+                    school=course.teacher.school,
+                    role=User.STUDYSTUDENT,
+                    belongs_to_course=course,
+                    is_active=True,
+                )
+                study_student.set_password(username)
+                study_student.save()
+                study_students.append(study_student)
+
+        return Response({'message': f'{number_of_students} study students created successfully for course {course.name}.'},
+                        status=status.HTTP_201_CREATED)
+
+    def generate_random_username(self):
+        while True:
+            username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+            if not User.objects.filter(username=f"{username}@studie.aussprachetrainer.org").exists():
+                return username
