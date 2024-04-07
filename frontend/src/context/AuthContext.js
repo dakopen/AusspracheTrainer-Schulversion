@@ -32,6 +32,10 @@ export const AuthProvider = ({ children }) => {
 
 	let sendToStudyStudentLogin = async (e) => {
 		e.preventDefault();
+		let username =
+			e.target.username.value + "@studie.aussprachetrainer.org";
+		let password = e.target.username.value;
+		await loginUserWithCredentials(username, password);
 	};
 
 	let loginUserWithCredentials = async (username, password) => {
@@ -119,6 +123,7 @@ export const AuthProvider = ({ children }) => {
 		loginUser: loginUser,
 		logoutUser: logoutUser,
 		sendToLogin: sendToLogin,
+		sendToStudyStudentLogin: sendToStudyStudentLogin,
 		loginUserWithCredentials: loginUserWithCredentials,
 	};
 

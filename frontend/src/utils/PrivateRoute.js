@@ -16,11 +16,11 @@ const TeacherOrSecretaryOrAdminRoute = ({ element: Element, ...rest }) => {
 	}, [user, addNotification]);
 
 	if (!user) {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	} else if (user.role === 1 || user.role === 2 || user.role === 3) {
 		return <Element {...rest} />;
 	} else {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	}
 };
 
@@ -37,11 +37,11 @@ const AdminRoute = ({ element: Element, ...rest }) => {
 	}, [user, addNotification]);
 
 	if (!user) {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	} else if (user.role === 3) {
 		return <Element {...rest} />;
 	} else {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	}
 };
 
@@ -58,11 +58,11 @@ const SecretaryOrAdminRoute = ({ element: Element, ...rest }) => {
 	}, [user, addNotification]);
 
 	if (!user) {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	} else if (user.role === 2 || user.role === 3) {
 		return <Element {...rest} />;
 	} else {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	}
 };
 
@@ -79,11 +79,11 @@ const TeacherOrAdminRoute = ({ element: Element, ...rest }) => {
 	}, [user, addNotification]);
 
 	if (!user) {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	} else if (user.role === 1 || user.role === 3) {
 		return <Element {...rest} />;
 	} else {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	}
 };
 
@@ -101,9 +101,9 @@ const TeacherRoute = ({ element: Element, ...rest }) => {
 	}, [user, addNotification]);
 
 	if (!user) {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	} else if (user.role !== 1) {
-		return <Navigate to="/login" />;
+		return <Navigate to="/rolelogin" />;
 	} else {
 		return <Element {...rest} />;
 	}

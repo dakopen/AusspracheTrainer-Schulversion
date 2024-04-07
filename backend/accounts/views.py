@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
@@ -20,6 +21,8 @@ logger = logging.getLogger(__name__)
 
 import random
 import string
+
+from backend.settings import DEBUG
 
 User = get_user_model()
 
@@ -175,7 +178,6 @@ class BulkCreateStudyStudentsView(APIView):
     def post(self, request, pk):
         course = get_object_or_404(Course, pk=pk)
         number_of_students = request.data.get('number_of_students', 10)  # Default to 10 if not specified
-        study_students = []
         max_number_of_students = 100
 
         # Convert to integer and ensure it's within allowed bounds
@@ -187,19 +189,39 @@ class BulkCreateStudyStudentsView(APIView):
         # Adjust number to not exceed maximum allowed students per course
         number_of_students = min(number_of_students, max_number_of_students - course.students.count())
 
-        with transaction.atomic():
+        if DEBUG:  # TODO: Change later, but db.sqlite does not allow autoincrement for bulk_create
+            with transaction.atomic():
+                for _ in range(number_of_students):
+                    username = self.generate_random_username()
+                    study_student = User.objects.create(
+                        username=f"{username}@studie.aussprachetrainer.org",
+                        school=course.teacher.school,
+                        role=User.STUDYSTUDENT,
+                        belongs_to_course=course,
+                        is_active=True,
+                    )
+                    study_student.set_password(username)
+                    study_student.save()
+
+        else:
+            study_students = []
             for _ in range(number_of_students):
                 username = self.generate_random_username()
+
                 study_student = User.objects.create(
+                    
                     username=f"{username}@studie.aussprachetrainer.org",
+                    password=make_password(username),
                     school=course.teacher.school,
                     role=User.STUDYSTUDENT,
                     belongs_to_course=course,
                     is_active=True,
                 )
-                study_student.set_password(username)
-                study_student.save()
                 study_students.append(study_student)
+
+            with transaction.atomic():
+                User.objects.bulk_create(study_students)
+
 
         return Response({'message': f'{number_of_students} study students created successfully for course {course.name}.'},
                         status=status.HTTP_201_CREATED)

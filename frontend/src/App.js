@@ -18,6 +18,7 @@ import "./components/Notification.css";
 import SetPassword from "./pages/SetPassword";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import StudyStudentLogin from "./pages/StudyStudentLogin";
 import Courses from "./pages/Courses";
 import CreateTeacher from "./pages/CreateTeacher";
 import CreateAnyRole from "./pages/CreateAnyRole";
@@ -40,7 +41,14 @@ function App() {
 									element={<AdminRoute element={HomePage} />}
 									path="/adminroute"
 								/>
-								<Route element={<LoginPage />} path="/login" />
+								<Route
+									element={<LoginPage />}
+									path="/rolelogin"
+								/>
+								<Route
+									element={<StudyStudentLogin />}
+									path="/login"
+								/>
 								<Route
 									element={
 										<SecretaryOrAdminRoute
