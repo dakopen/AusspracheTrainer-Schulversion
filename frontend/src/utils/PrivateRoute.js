@@ -13,7 +13,7 @@ const TeacherOrSecretaryOrAdminRoute = ({ element: Element, ...rest }) => {
 		} else if (!(user.role === 1 || user.role === 2 || user.role === 3)) {
 			addNotification("Nicht die nötige Berechtigung.", "error");
 		}
-	}, []);
+	}, [user, addNotification]);
 
 	if (!user) {
 		return <Navigate to="/login" />;
@@ -34,7 +34,7 @@ const AdminRoute = ({ element: Element, ...rest }) => {
 		} else if (user.role !== 3) {
 			addNotification("Nicht die nötige Berechtigung.", "error");
 		}
-	}, []);
+	}, [user, addNotification]);
 
 	if (!user) {
 		return <Navigate to="/login" />;
@@ -55,11 +55,32 @@ const SecretaryOrAdminRoute = ({ element: Element, ...rest }) => {
 		} else if (!(user.role === 2 || user.role === 3)) {
 			addNotification("Nicht die nötige Berechtigung.", "error");
 		}
-	}, []);
+	}, [user, addNotification]);
 
 	if (!user) {
 		return <Navigate to="/login" />;
 	} else if (user.role === 2 || user.role === 3) {
+		return <Element {...rest} />;
+	} else {
+		return <Navigate to="/login" />;
+	}
+};
+
+const TeacherOrAdminRoute = ({ element: Element, ...rest }) => {
+	const { user } = useContext(AuthContext);
+	const { addNotification } = useNotification();
+
+	useEffect(() => {
+		if (!user) {
+			addNotification("Bitte logge dich zuerst ein!", "error");
+		} else if (!(user.role === 1 || user.role === 3)) {
+			addNotification("Nicht die nötige Berechtigung.", "error");
+		}
+	}, [user, addNotification]);
+
+	if (!user) {
+		return <Navigate to="/login" />;
+	} else if (user.role === 1 || user.role === 3) {
 		return <Element {...rest} />;
 	} else {
 		return <Navigate to="/login" />;
@@ -77,7 +98,7 @@ const TeacherRoute = ({ element: Element, ...rest }) => {
 			console.log("User not logged in");
 			addNotification("Nicht die nötige Berechtigung.", "error");
 		}
-	}, []);
+	}, [user, addNotification]);
 
 	if (!user) {
 		return <Navigate to="/login" />;
@@ -91,6 +112,7 @@ const TeacherRoute = ({ element: Element, ...rest }) => {
 export {
 	AdminRoute,
 	TeacherOrSecretaryOrAdminRoute,
+	TeacherOrAdminRoute,
 	SecretaryOrAdminRoute,
 	TeacherRoute,
 };

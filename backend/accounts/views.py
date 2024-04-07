@@ -2,10 +2,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_decode
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, views, generics
 from rest_framework.views import APIView
+from rest_framework.exceptions import PermissionDenied
 
 from .models import School, Course
 from .serializers import UserSerializer, SchoolSerializer, CourseSerializer
@@ -113,3 +115,23 @@ class CourseCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(teacher=self.request.user)
+
+
+class CourseDetailView(generics.RetrieveAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    permission_classes = [IsTeacherOrAdmin]
+
+    def get_object(self):
+        """
+        Override the get_object method to ensure that we can fetch the course
+        instance based on the provided `pk` in the URL.
+        """
+        pk = self.kwargs.get('pk')
+        course = get_object_or_404(Course, pk=pk)
+
+        user = self.request.user
+        if user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user):
+            return course
+        else:
+            raise PermissionDenied({'message': 'Du hast nicht die Berechtigung, diesen Kurs anzuzeigen.'})

@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
 	AdminRoute,
 	SecretaryOrAdminRoute,
-	TeacherOrSecretaryOrAdminRoute,
+	TeacherOrAdminRoute,
 	TeacherRoute,
 } from "./utils/PrivateRoute";
 
@@ -15,13 +15,14 @@ import axios from "axios";
 import Header from "./components/Header";
 import "./components/Notification.css";
 
+import SetPassword from "./pages/SetPassword";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import Courses from "./pages/Courses";
 import CreateTeacher from "./pages/CreateTeacher";
 import CreateAnyRole from "./pages/CreateAnyRole";
 import CreateSchool from "./pages/CreateSchool";
-import CreateCourse from "./pages/CreateCourse";
-import SetPassword from "./pages/SetPassword";
+import ShowCourse from "./pages/ShowCourse";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
@@ -66,9 +67,19 @@ function App() {
 								/>
 								<Route
 									element={
-										<TeacherRoute element={CreateCourse} />
+										<TeacherOrAdminRoute
+											element={Courses}
+										/>
 									}
-									path="/create-course"
+									path="/courses"
+								/>
+								<Route
+									element={
+										<TeacherOrAdminRoute
+											element={ShowCourse}
+										/>
+									}
+									path="/courses/:courseId"
 								/>
 							</Routes>
 						</AuthProvider>
