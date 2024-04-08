@@ -4,6 +4,7 @@ import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
 import { useNotification } from "../context/NotificationContext";
 import { fetchSchool } from "../utils/api";
+import SchoolTeachers from "../components/SchoolTeachers";
 
 const ShowSchool = () => {
 	const { schoolId } = useParams(); // Assuming the URL parameter is named shortId
@@ -39,6 +40,7 @@ const ShowSchool = () => {
 					<p>
 						<strong>Short ID:</strong> {school.short_id}
 					</p>
+					<SchoolTeachers />
 				</>
 			) : (
 				<p>Loading school details...</p>

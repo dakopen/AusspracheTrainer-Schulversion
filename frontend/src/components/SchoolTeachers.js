@@ -3,45 +3,45 @@ import { useParams } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
 import { useNotification } from "../context/NotificationContext";
-import { fetchStudentsByCourse } from "../utils/api";
+import { fetchTeachersBySchool } from "../utils/api";
 
-const CourseStudents = () => {
-	const { courseId } = useParams();
-	const [students, setStudents] = useState([]);
+const SchoolTeachers = () => {
+	const { schoolId } = useParams();
+	const [teachers, setTeachers] = useState([]);
 	const { authTokens } = useContext(AuthContext);
 	const { addNotification } = useNotification();
 
-    useEffect(() => {
+	useEffect(() => {
 		const loadData = async () => {
 			try {
-				const fetchedStudents = await fetchStudentsByCourse(authTokens, courseId);
-				setStudents(fetchedStudents);
+				const fetchedTeachers = await fetchTeachersBySchool(
+					authTokens,
+					schoolId
+				);
+				setTeachers(fetchedTeachers);
 			} catch (error) {
 				console.error("Error loading data:", error);
 			}
 		};
-		if (courseId) {
+		if (schoolId) {
 			loadData();
 		}
-	}, [courseId, authTokens]);
+	}, [schoolId, authTokens]);
 
 	return (
 		<div>
-			<h3>Course Students: {students.length}</h3>
-			{students.length > 0 ? (
+			<h3>School teachers: {teachers.length}</h3>
+			{teachers.length > 0 ? (
 				<ul>
-					{students.map((student) => (
-						<li key={student.id}>
-							{student.username.substring(0, 10)}
-						</li>
+					{teachers.map((teacher) => (
+						<li key={teacher.id}>{teacher.username}</li>
 					))}
 				</ul>
 			) : (
-				<p>Bisher keine Schüleraccounts hinzugefügt.</p>
+				<p>Bisher keine Lehrer hinzugefügt.</p>
 			)}
-			<CreateBulkStudents />
 		</div>
 	);
 };
 
-export default CourseStudents;
+export default SchoolTeachers;
