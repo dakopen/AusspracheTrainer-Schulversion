@@ -23,7 +23,7 @@ const Header = () => {
 			<br></br>
 			<Link to="/create-any-role">Create any role</Link>
 			<br></br>
-			<Link to="/create-school">Create School</Link>
+			<Link to="/schools">Schulen</Link>
 			<br></br>
 			<Link to="/courses">Kurse</Link>
 			<hr></hr>

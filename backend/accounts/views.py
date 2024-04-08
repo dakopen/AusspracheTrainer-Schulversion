@@ -13,7 +13,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from .models import School, Course
 from .serializers import UserSerializer, SchoolSerializer, CourseSerializer
-from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, \
+from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsSecretaryOrAdmin, \
                         IsTeacher, IsTeacherOrAdmin, IsTeacherOrSecretaryOrAdmin
 
 import logging
@@ -96,12 +96,53 @@ class SchoolListView(generics.ListAPIView):
     serializer_class = SchoolSerializer
     permission_classes = [IsAdmin]
 
-
 class SchoolCreateView(generics.CreateAPIView):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
     permission_classes = [IsAdmin]
 
+class SchoolDetailView(generics.RetrieveAPIView):
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+    permission_classes = [IsSecretaryOrAdmin]
+    
+    def get_object(self):
+        """
+        Override the get_object method to ensure that we can fetch the course
+        instance based on the provided `pk` in the URL.
+        """
+        pk = self.kwargs.get('pk')
+        school = get_object_or_404(School, pk=pk)
+
+        user = self.request.user
+        if user.role == User.ADMIN or (user.role == User.SECRETARY and school == user.school):
+            return school
+        else:
+            raise PermissionDenied({'message': 'Du hast nicht die Berechtigung, diese Schule anzuzeigen.'})
+
+class SchoolTeacherListView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsSecretaryOrAdmin]
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        school = get_object_or_404(School, pk=pk)
+
+        user = self.request.user
+        if user.role == User.ADMIN or (user.role == User.SECRETARY and school == user.school):
+            return User.objects.filter(school=school, role=User.TEACHER)
+        else:
+            raise PermissionDenied({'message': 'Du hast nicht die Berechtigung, die Lehrer dieser Schule anzuzeigen.'})
+
+class SchoolSecretaryListView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAdmin]
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        school = get_object_or_404(School, pk=pk)
+
+        return User.objects.filter(school=school, role=User.SECRETARY)
 
 class CourseListView(generics.ListAPIView):
     serializer_class = CourseSerializer

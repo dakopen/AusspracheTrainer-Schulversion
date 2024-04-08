@@ -4,41 +4,27 @@ import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
 import { useNotification } from "../context/NotificationContext";
 import CourseStudents from "../components/CourseStudents";
+import { fetchCourse } from "../utils/api";
 
 const ShowCourse = () => {
 	const { courseId } = useParams(); // Get courseId from the URL if using React Router
 	const [course, setCourse] = useState(null);
 	const { authTokens } = useContext(AuthContext);
-	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
 	const { addNotification } = useNotification();
 
 	useEffect(() => {
-		const fetchCourse = async () => {
-			const url = `${ACCOUNT_BASE_URL}/courses/${courseId}/`; // Adjust the URL based on your actual API endpoint
+		const loadData = async () => {
 			try {
-				const response = await fetch(url, {
-					headers: {
-						Authorization: "Bearer " + String(authTokens.access),
-					},
-				});
-
-				if (!response.ok) {
-					addNotification("Course data fetch failed.", "error");
-					throw new Error("Course data fetch failed.");
-				}
-
-				const data = await response.json();
-				setCourse(data);
+				const fetchedCourse = await fetchCourse(authTokens, courseId);
+				setCourse(fetchedCourse);
 			} catch (error) {
-				addNotification("Course data fetch failed.", "error");
-				console.error("Error fetching course:", error.message);
+				console.error("Error loading data:", error);
 			}
 		};
-
 		if (courseId) {
-			fetchCourse();
+			loadData();
 		}
-	}, [courseId, authTokens, ACCOUNT_BASE_URL, addNotification]);
+	}, [courseId, authTokens]);
 
 	return (
 		<div>

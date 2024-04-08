@@ -4,7 +4,6 @@ import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
 import { useNotification } from "../context/NotificationContext";
 import { fetchStudentsByCourse } from "../utils/api";
-import CreateBulkStudents from "./CreateBulkStudents";
 
 const CourseStudents = () => {
 	const { courseId } = useParams();
@@ -12,23 +11,19 @@ const CourseStudents = () => {
 	const { authTokens } = useContext(AuthContext);
 	const { addNotification } = useNotification();
 
-	useEffect(() => {
+    useEffect(() => {
+		const loadData = async () => {
+			try {
+				const fetchedStudents = await fetchStudentsByCourse(authTokens, courseId);
+				setStudents(fetchedStudents);
+			} catch (error) {
+				console.error("Error loading data:", error);
+			}
+		};
 		if (courseId) {
-			refreshCourseStudents();
+			loadData();
 		}
 	}, [courseId, authTokens]);
-
-	const refreshCourseStudents = async () => {
-		try {
-			const fetchedStudents = await fetchStudentsByCourse(
-				authTokens,
-				courseId
-			);
-			setStudents(fetchedStudents);
-		} catch (error) {
-			console.error("Error refreshing data:", error);
-		}
-	};
 
 	return (
 		<div>
@@ -44,7 +39,7 @@ const CourseStudents = () => {
 			) : (
 				<p>Bisher keine Schüleraccounts hinzugefügt.</p>
 			)}
-			<CreateBulkStudents refreshStudents={refreshCourseStudents} />
+			<CreateBulkStudents />
 		</div>
 	);
 };

@@ -40,6 +40,7 @@ class UserSerializer(serializers.ModelSerializer):
         else:
             user = User.objects.create_user(
                 username=validated_data.get('username'),  # username is the email
+                email=validated_data.get('username'),
                 password=None,  # User is created without a password
                 school=school,
                 role=role,

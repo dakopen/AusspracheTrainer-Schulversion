@@ -26,7 +26,7 @@ const CreateAnyRole = () => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const url = "http://127.0.0.1:8000/accounts/create-any-role/";
+		const url = "http://127.0.0.1:8000/accounts/create-any-role";
 		const data = JSON.stringify({
 			username: email,
 			school: selectedSchool,

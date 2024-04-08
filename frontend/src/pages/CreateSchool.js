@@ -11,7 +11,7 @@ const CreateSchool = () => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const url = `${ACCOUNT_BASE_URL}/schools/create/`; // Adjust this URL to your actual endpoint
+		const url = `${ACCOUNT_BASE_URL}/schools/create`; // Adjust this URL to your actual endpoint
 		const data = JSON.stringify({
 			name,
 			address,

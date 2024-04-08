@@ -37,3 +37,7 @@ class IsTeacherOrAdmin(permissions.BasePermission):
 class IsTeacherOrSecretaryOrAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.role in [User.TEACHER, User.SECRETARY, User.ADMIN]
+    
+class IsSecretaryOrAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role in [User.SECRETARY, User.ADMIN]

@@ -3,18 +3,20 @@ import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
 import { fetchCourses } from "../utils/api";
 
-const CreateCourse = ({ setCourses }) => {
+const CreateSchool = ({ setCourses }) => {
 	const [name, setName] = useState("");
-	const [language, setLanguage] = useState(1); // Default to English
+	const [address, setAddress] = useState("");
+	const [shortId, setShortId] = useState("");
 	const { authTokens } = useContext(AuthContext);
 	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const url = `${ACCOUNT_BASE_URL}/courses/create`;
+		const url = `${ACCOUNT_BASE_URL}/schools/create`;
 		const data = JSON.stringify({
 			name,
-			language,
+			address,
+			short_id: shortId,
 		});
 
 		try {
@@ -28,20 +30,16 @@ const CreateCourse = ({ setCourses }) => {
 			});
 
 			if (response.status === 201) {
-				alert("Course created successfully.");
+				alert("School created successfully.");
 				// Optionally reset form fields
 				setName("");
-				setLanguage(1); // Reset to default language
-
-				// refetch courses
-				const fetchedCourses = await fetchCourses(authTokens);
-				setCourses(fetchedCourses);
+				setAddress("");
+				setShortId("");
 			} else {
 				const responseData = await response.json();
-				console.log(responseData);
 				throw new Error(
 					responseData.detail ||
-						"An error occurred while creating the course."
+						"An error occurred while creating the school."
 				);
 			}
 		} catch (error) {
@@ -62,19 +60,27 @@ const CreateCourse = ({ setCourses }) => {
 				/>
 			</label>
 			<label>
-				Language:
-				<select
-					value={language}
-					onChange={(e) => setLanguage(e.target.value)}
+				Address:
+				<textarea
+					value={address}
+					onChange={(e) => setAddress(e.target.value)}
 					required
-				>
-					<option value={1}>Englisch</option>
-					<option value={2}>Französisch</option>
-				</select>
+				/>
 			</label>
-			<button type="submit">Create Course</button>
+			<label>
+				Short ID:
+				<input
+					type="text"
+					value={shortId}
+					onChange={(e) => setShortId(e.target.value)}
+					required
+					pattern="^[A-Z]+$"
+					title="Short ID must be uppercase letters only"
+				/>
+			</label>
+			<button type="submit">Create School</button>
 		</form>
 	);
 };
 
-export default CreateCourse;
+export default CreateSchool;

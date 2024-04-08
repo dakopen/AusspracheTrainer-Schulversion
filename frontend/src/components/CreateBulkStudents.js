@@ -4,7 +4,7 @@ import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
 import { useNotification } from "../context/NotificationContext";
 
-const CreateBulkStudents = () => {
+const CreateBulkStudents = ({ refreshStudents }) => {
 	const { courseId } = useParams();
 	const [numberOfStudents, setNumberOfStudents] = useState(10); // Default to 10 students
 	const { authTokens } = useContext(AuthContext);
@@ -32,8 +32,10 @@ const CreateBulkStudents = () => {
 
 			const data = await response.json();
 			addNotification(data.message, "success");
-			// Optionally reset the form or redirect the user
-			setNumberOfStudents(10); // Reset to default or consider redirecting
+			// reset the form to default
+			setNumberOfStudents(10);
+
+			refreshStudents(); // Trigger the refresh
 		} catch (error) {
 			addNotification("Failed to create students.", "error");
 			console.error("Error creating students:", error.message);
