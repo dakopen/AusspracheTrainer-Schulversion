@@ -12,9 +12,11 @@ from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
 
 from .models import School, Course
-from .serializers import UserSerializer, SchoolSerializer, CourseSerializer
+from .serializers import UserEmailSerializer, UserSerializer, SchoolSerializer, CourseSerializer
 from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsSecretaryOrAdmin, \
-                        IsTeacher, IsTeacherOrAdmin, IsTeacherOrSecretaryOrAdmin
+                        IsTeacher, IsTeacherOrAdmin, IsTeacherOrSecretaryOrAdmin, IsStudystudent
+
+from todo.views import complete_user_todo_user_and_standard_todo
 
 import logging
 logger = logging.getLogger(__name__)
@@ -277,3 +279,20 @@ class BulkCreateStudyStudentsView(APIView):
             username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
             if not User.objects.filter(username=f"{username}@studie.aussprachetrainer.org").exists():
                 return username
+
+class SubmitStudyStudentEmailView(APIView):
+    permission_classes = [IsStudystudent]  # Ensure the user is authenticated
+
+    def post(self, request):
+        user = request.user  # Obtain the user from the request
+        serializer = UserEmailSerializer(user, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save() 
+
+            # complete the todo
+            complete_user_todo_user_and_standard_todo(user, 1)
+
+            return Response({'message': 'Email address updated successfully.'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

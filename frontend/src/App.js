@@ -29,6 +29,7 @@ import Courses from "./pages/Courses";
 import ShowCourse from "./pages/ShowCourse";
 
 import FirstQuestionnaire from "./pages/FirstQuestionnaire";
+import EmailQuestionnaire from "./pages/EmailQuestionnaire";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
@@ -111,10 +112,10 @@ function App() {
 								<Route
 									element={
 										<StudentRoute
-											element={FirstQuestionnaire}
+											element={EmailQuestionnaire}
 										/>
 									}
-									path="/password-questionnaire/"
+									path="/set-email/"
 								/>
 							</Routes>
 						</AuthProvider>

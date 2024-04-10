@@ -51,7 +51,7 @@ def complete_user_todo_by_id(user_todo_id):
     user_todo.save()
 
 
-def complete_user_todo_user_and_priority(user, standard_todo):
+def complete_user_todo_user_and_standard_todo(user, standard_todo):
     """
     Marks a UserToDo as complete and sets the completion date.
     """

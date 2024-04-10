@@ -6,7 +6,7 @@ urlpatterns = [
     path('create-teacher', views.CreateTeacherView.as_view(), name='create-teacher'),  # überarbeiten
     path('set-password/', views.SetPasswordView.as_view(), name='set-password'),
     path('create-any-role', views.CreateAnyRoleView.as_view(), name='create-any-role'),  # überarbeiten
-
+    path('submit-studystudent-email/', views.SubmitStudyStudentEmailView.as_view(), name='submit-studystudent-email'),
 
     path('schools/', views.SchoolListView.as_view(), name='school-list'),
     path('schools/create', views.SchoolCreateView.as_view(), name='school-create'),
