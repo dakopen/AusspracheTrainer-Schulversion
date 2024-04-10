@@ -15,7 +15,6 @@ import axios from "axios";
 
 import Header from "./components/Header";
 import "./components/Notification.css";
-import FirstQuestionnaire from "./components/FirstQuestionnaire";
 
 import SetPassword from "./pages/SetPassword";
 import LoginPage from "./pages/LoginPage";
@@ -28,6 +27,8 @@ import Schools from "./pages/Schools";
 import ShowSchool from "./pages/ShowSchool";
 import Courses from "./pages/Courses";
 import ShowCourse from "./pages/ShowCourse";
+
+import FirstQuestionnaire from "./pages/FirstQuestionnaire";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
@@ -105,7 +106,15 @@ function App() {
 											element={FirstQuestionnaire}
 										/>
 									}
-									path="/first-questionnaire"
+									path="/first-questionnaire/"
+								/>
+								<Route
+									element={
+										<StudentRoute
+											element={FirstQuestionnaire}
+										/>
+									}
+									path="/password-questionnaire/"
 								/>
 							</Routes>
 						</AuthProvider>

@@ -60,7 +60,6 @@ const FirstQuestionnaire = () => {
 					type="number"
 					value={age}
 					onChange={(e) => setAge(e.target.value)}
-					required
 					min="1"
 					max="99"
 				/>
@@ -70,7 +69,6 @@ const FirstQuestionnaire = () => {
 				<select
 					value={sex}
 					onChange={(e) => setSex(e.target.value)}
-					required
 				>
 					<option value="">Auswählen</option>
 					<option value="m">männlich</option>
@@ -85,7 +83,6 @@ const FirstQuestionnaire = () => {
 					type="range"
 					value={pronunciationSkill}
 					onChange={(e) => setPronunciationSkill(e.target.value)}
-					required
 					min="1"
 					max="10"
 				/>
@@ -99,7 +96,6 @@ const FirstQuestionnaire = () => {
 					onChange={(e) =>
 						setWeeklyLanguageContactHours(e.target.value)
 					}
-					required
 					min="0"
 				/>
 			</label>

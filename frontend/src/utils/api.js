@@ -1,5 +1,7 @@
 const API_BASE_URL = "http://127.0.0.1:8000"; // Adjust this to your actual API base URL
 const ACCOUNT_BASE_URL = "accounts";
+const STUDYDATA_BASE_URL = "studydata";
+const TODO_BASE_URL = "todo";
 
 export const fetchSchools = async (authTokens) => {
 	try {
@@ -147,6 +149,28 @@ export const fetchTeachersBySchool = async (authTokens, schoolId) => {
 		return data;
 	} catch (error) {
 		console.error("Error fetching teachers:", error);
+		throw error;
+	}
+};
+
+export const fetchLowestPriorityUserToDo = async (authTokens) => {
+	try {
+		const response = await fetch(`${API_BASE_URL}/${TODO_BASE_URL}/`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + String(authTokens.access),
+			},
+		});
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch user ToDo");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching user ToDo:", error);
 		throw error;
 	}
 };

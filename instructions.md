@@ -1,11 +1,14 @@
 1. split terminal
 
 2. Terminal 1
-- activate venv: `source venv/bin/activate`
-- change directory to project: `cd backend`
-- start server: `python manage.py runserver`
+
+-   activate venv: `source venv/bin/activate`
+-   change directory to project: `cd backend`
+-   start server: `python manage.py runserver`
 
 3. Terminal 2:
-- `cd frontend`
-- `npm start`
 
+-   `cd frontend`
+-   `npm start`
+
+4. `python manage.py populate_standard_todos`
