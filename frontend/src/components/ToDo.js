@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { fetchLowestPriorityUserToDo } from "../utils/api";
+import { Link } from "react-router-dom";
 
 const UserToDoComponent = () => {
 	const [userToDo, setUserToDo] = useState(null);
@@ -30,7 +31,7 @@ const UserToDoComponent = () => {
 		return <div>Lädt...</div>;
 	}
 
-	if (!userToDo) {
+	if (!userToDo || Object.keys(userToDo).length === 0) {
 		return <div>Nichts zu tun.</div>;
 	}
 
@@ -42,7 +43,7 @@ const UserToDoComponent = () => {
 			<p>Priority: {userToDo.priority}</p>
 			<p>
 				Action Link:{" "}
-				<a href={userToDo.action_relative_link}>verlinkt</a>
+				<Link to={userToDo.action_relative_link}>verlinkt</Link>
 			</p>
 		</div>
 	);

@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
+import { useNotification } from "../context/NotificationContext";
+import { useNavigate } from "react-router-dom";
 
 const FirstQuestionnaire = () => {
 	const [age, setAge] = useState("");
@@ -9,6 +11,8 @@ const FirstQuestionnaire = () => {
 	const [weeklyLanguageContactHours, setWeeklyLanguageContactHours] =
 		useState("");
 	let { authTokens, user } = useContext(AuthContext);
+	const { addNotification } = useNotification();
+	const navigate = useNavigate();
 
 	const { STUDYDATA_BASE_URL } = useContext(UrlContext);
 
@@ -33,12 +37,15 @@ const FirstQuestionnaire = () => {
 			});
 
 			if (response.status === 201) {
-				alert("Questionnaire submitted successfully.");
-				// Optionally reset form fields
+				addNotification(
+					"Questionnaire submitted successfully.",
+					"success"
+				);
 				setAge("");
 				setSex("");
 				setPronunciationSkill("");
 				setWeeklyLanguageContactHours("");
+				navigate("/");
 			} else {
 				const responseData = await response.json();
 				throw new Error(
@@ -66,10 +73,7 @@ const FirstQuestionnaire = () => {
 			</label>
 			<label>
 				Geschlecht:
-				<select
-					value={sex}
-					onChange={(e) => setSex(e.target.value)}
-				>
+				<select value={sex} onChange={(e) => setSex(e.target.value)}>
 					<option value="">Auswählen</option>
 					<option value="m">männlich</option>
 					<option value="w">weiblich</option>

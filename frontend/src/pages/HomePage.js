@@ -20,7 +20,6 @@ const HomePage = () => {
 				Show Error
 			</button>
 			{isStudyStudent(user) && <ToDo />}
-			{isStudyStudent(user) && <FirstQuestionnaire />}
 		</div>
 	);
 };

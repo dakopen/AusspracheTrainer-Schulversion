@@ -24,6 +24,8 @@ class SingleUserToDoView(APIView):
     def get(self, request):
         todos = UserToDo.objects.filter(user=request.user, completed=False)
         lowest_prio_todo = todos.order_by('standard_todo__priority').first()
+        if lowest_prio_todo is None:
+            return Response({})
         serializer = StandardToDoSerializer(lowest_prio_todo.standard_todo)
         return Response(serializer.data)
 
