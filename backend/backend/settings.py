@@ -23,6 +23,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
+    'studydata.apps.StudydataConfig',
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',

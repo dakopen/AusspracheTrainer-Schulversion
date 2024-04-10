@@ -62,7 +62,15 @@ const Header = () => {
 					<Link to="/login">Login</Link>
 				</>
 			)}
-			{user && <p>Hello user with Role: {user.role}</p>}
+			{user && (
+				<p>
+					Hello user with Role: {user.role} with the study language:{" "}
+					{user.language === 1 ? "Englisch" : "Französisch"} and{" "}
+					{user.full_access_group == true
+						? "Full Access"
+						: "Restricted Access"}
+				</p>
+			)}
 			<hr></hr>
 		</div>
 	);

@@ -47,6 +47,9 @@ class User(AbstractUser):
 
     belongs_to_course = models.ForeignKey('Course', on_delete=models.PROTECT, null=True, blank=True, related_name='students')
 
+    language = models.PositiveSmallIntegerField(choices=Course.LANGUAGE_CHOICES, null=True, blank=True)
+    full_access_group = models.BooleanField(default=True, null=True, blank=True)
+
     USERNAME_FIELD = 'username'
 
     REQUIRED_FIELDS = []

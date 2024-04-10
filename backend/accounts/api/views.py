@@ -12,6 +12,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['role'] = user.role
+        token['language'] = user.language
+        token['full_access_group'] = user.full_access_group
         # ...
 
         return token

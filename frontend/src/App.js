@@ -4,6 +4,7 @@ import {
 	SecretaryOrAdminRoute,
 	TeacherOrAdminRoute,
 	TeacherRoute,
+	StudentRoute,
 } from "./utils/PrivateRoute";
 
 import { AuthProvider } from "./context/AuthContext";
@@ -14,6 +15,7 @@ import axios from "axios";
 
 import Header from "./components/Header";
 import "./components/Notification.css";
+import FirstQuestionnaire from "./components/FirstQuestionnaire";
 
 import SetPassword from "./pages/SetPassword";
 import LoginPage from "./pages/LoginPage";
@@ -96,6 +98,14 @@ function App() {
 										/>
 									}
 									path="/courses/:courseId"
+								/>
+								<Route
+									element={
+										<StudentRoute
+											element={FirstQuestionnaire}
+										/>
+									}
+									path="/first-questionnaire"
 								/>
 							</Routes>
 						</AuthProvider>

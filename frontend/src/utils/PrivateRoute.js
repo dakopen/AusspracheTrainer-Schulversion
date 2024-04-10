@@ -109,10 +109,32 @@ const TeacherRoute = ({ element: Element, ...rest }) => {
 	}
 };
 
+const StudentRoute = ({ element: Element, ...rest }) => {
+	const { user } = useContext(AuthContext);
+	const { addNotification } = useNotification();
+
+	useEffect(() => {
+		if (!user) {
+			addNotification("Bitte logge dich zuerst ein!", "error");
+		} else if (user.role !== 10) {
+			addNotification("Nicht die nötige Berechtigung.", "error");
+		}
+	}, [user, addNotification]);
+
+	if (!user) {
+		return <Navigate to="/login" />;
+	} else if (user.role !== 10) {
+		return <Navigate to="/login" />;
+	} else {
+		return <Element {...rest} />;
+	}
+};
+
 export {
 	AdminRoute,
 	TeacherOrSecretaryOrAdminRoute,
 	TeacherOrAdminRoute,
 	SecretaryOrAdminRoute,
 	TeacherRoute,
+	StudentRoute,
 };

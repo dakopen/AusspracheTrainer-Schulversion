@@ -232,7 +232,8 @@ class BulkCreateStudyStudentsView(APIView):
 
         if DEBUG:  # TODO: Change later, but db.sqlite does not allow autoincrement for bulk_create
             with transaction.atomic():
-                for _ in range(number_of_students):
+                zero_or_one = random.randint(0, 1)
+                for i in range(number_of_students):
                     username = self.generate_random_username()
                     study_student = User.objects.create(
                         username=f"{username}@studie.aussprachetrainer.org",
@@ -240,23 +241,27 @@ class BulkCreateStudyStudentsView(APIView):
                         role=User.STUDYSTUDENT,
                         belongs_to_course=course,
                         is_active=True,
+                        language=course.language,
+                        full_access_group=(i % 2 == zero_or_one),  # so when only 1 student is created, it's still random
                     )
                     study_student.set_password(username)
                     study_student.save()
 
         else:
             study_students = []
+            zero_or_one = random.randint(0, 1)
             for _ in range(number_of_students):
                 username = self.generate_random_username()
-
-                study_student = User.objects.create(
-                    
+                study_student = User.objects.create( 
                     username=f"{username}@studie.aussprachetrainer.org",
                     password=make_password(username),
                     school=course.teacher.school,
                     role=User.STUDYSTUDENT,
                     belongs_to_course=course,
                     is_active=True,
+                    language=course.language,
+                    full_access_group=(i % 2 == zero_or_one),  # so when only 1 student is created, it's still random
+
                 )
                 study_students.append(study_student)
 
