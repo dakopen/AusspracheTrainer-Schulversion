@@ -5,11 +5,11 @@ import { useNotification } from "../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
 
 const FirstQuestionnaire = () => {
-	const [age, setAge] = useState("");
-	const [sex, setSex] = useState("");
-	const [pronunciationSkill, setPronunciationSkill] = useState(5);
+	const [age, setAge] = useState(null);
+	const [sex, setSex] = useState(null);
+	const [pronunciationSkill, setPronunciationSkill] = useState(null);
 	const [weeklyLanguageContactHours, setWeeklyLanguageContactHours] =
-		useState("");
+		useState(null);
 	let { authTokens, user } = useContext(AuthContext);
 	const { addNotification } = useNotification();
 	const navigate = useNavigate();
@@ -18,33 +18,40 @@ const FirstQuestionnaire = () => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const url = `${STUDYDATA_BASE_URL}/submit-first-questionnaire/`;
-		const data = JSON.stringify({
-			age,
-			sex,
-			pronunciation_skill: pronunciationSkill,
-			weekly_language_contact_hours: weeklyLanguageContactHours,
-		});
+
+		const payload = {
+			age: age ? parseInt(age) : null,
+			sex: sex || null,
+			pronunciation_skill: pronunciationSkill || null,
+			weekly_language_contact_hours: weeklyLanguageContactHours
+				? parseInt(weeklyLanguageContactHours)
+				: null,
+		};
+
+		const data = JSON.stringify(payload);
 
 		try {
-			const response = await fetch(url, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authTokens.access}`,
-				},
-				body: data,
-			});
+			const response = await fetch(
+				`${STUDYDATA_BASE_URL}/submit-first-questionnaire/`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${authTokens.access}`,
+					},
+					body: data,
+				}
+			);
 
 			if (response.status === 201) {
 				addNotification(
 					"Questionnaire submitted successfully.",
 					"success"
 				);
-				setAge("");
-				setSex("");
-				setPronunciationSkill("");
-				setWeeklyLanguageContactHours("");
+				setAge(null);
+				setSex(null);
+				setPronunciationSkill(null);
+				setWeeklyLanguageContactHours(null);
 				navigate("/");
 			} else {
 				const responseData = await response.json();
@@ -62,10 +69,10 @@ const FirstQuestionnaire = () => {
 	return (
 		<form onSubmit={handleSubmit}>
 			<label>
-				Age:
+				Alter:
 				<input
 					type="number"
-					value={age}
+					value={age || ""}
 					onChange={(e) => setAge(e.target.value)}
 					min="1"
 					max="99"
@@ -73,7 +80,10 @@ const FirstQuestionnaire = () => {
 			</label>
 			<label>
 				Geschlecht:
-				<select value={sex} onChange={(e) => setSex(e.target.value)}>
+				<select
+					value={sex || ""}
+					onChange={(e) => setSex(e.target.value)}
+				>
 					<option value="">Auswählen</option>
 					<option value="m">männlich</option>
 					<option value="w">weiblich</option>
@@ -85,7 +95,7 @@ const FirstQuestionnaire = () => {
 				{user.language}:
 				<input
 					type="range"
-					value={pronunciationSkill}
+					value={pronunciationSkill || 5}
 					onChange={(e) => setPronunciationSkill(e.target.value)}
 					min="1"
 					max="10"
@@ -96,7 +106,7 @@ const FirstQuestionnaire = () => {
 				etc.) mit {user.language}:
 				<input
 					type="number"
-					value={weeklyLanguageContactHours}
+					value={weeklyLanguageContactHours || ""}
 					onChange={(e) =>
 						setWeeklyLanguageContactHours(e.target.value)
 					}
