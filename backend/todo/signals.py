@@ -10,10 +10,10 @@ User = get_user_model()
 @receiver(post_save, sender=User)
 def link_initial_todos_to_student(sender, instance, created, **kwargs):
     if created and instance.role == User.STUDYSTUDENT:
-        # Filter StandardToDo items by id: 1, 2 and 3
-        priority_todos = StandardToDo.objects.filter(id__in=[1, 2, 3])
 
-        for std_todo in priority_todos:
+        initial_todos = StandardToDo.objects.filter(id__in=[1, 2, 3, 4])
+
+        for std_todo in initial_todos:
             UserToDo.objects.create(
                 user=instance,
                 standard_todo=std_todo,

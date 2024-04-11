@@ -1,0 +1,21 @@
+#textarea {
+	resize: none;
+	display: inline-block;
+	resize: none;
+	padding-left: 0.35em;
+	padding-right: 0.15em;
+	line-height: 1em;
+	padding-top: 0.2em;
+	padding-bottom: 0em;
+	vertical-align: middle;
+	border-radius: 25px;
+	border: solid 4px var(--rosa);
+	font-size: max(min(3vw, 45px), 30px);
+	outline: none;
+	height: 1.6em;
+	overflow: hidden;
+	white-space: break-spaces;
+	font-family: "Montserrat";
+	font-weight: 400;
+	max-width: 800px;
+}

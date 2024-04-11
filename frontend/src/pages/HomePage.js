@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
 import { useNotification } from "../context/NotificationContext";
 import { isStudyStudent } from "../utils/RoleChecks";
-import FirstQuestionnaire from "./FirstQuestionnaire";
 import ToDo from "../components/ToDo";
 import AuthContext from "../context/AuthContext";
+
+import Textarea from "../components/Textarea";
 
 const HomePage = () => {
 	const { addNotification } = useNotification();
@@ -20,6 +21,9 @@ const HomePage = () => {
 				Show Error
 			</button>
 			{isStudyStudent(user) && <ToDo />}
+			{/*<Textarea textareaValue="This is a text area" />*/}
+			<br></br>
+			<Textarea textareaValue="This is another text area but with text so long that it wraps into multiple lines letting me test advanced things." />
 		</div>
 	);
 };

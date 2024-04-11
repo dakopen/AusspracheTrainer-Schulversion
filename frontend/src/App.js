@@ -31,6 +31,8 @@ import ShowCourse from "./pages/ShowCourse";
 import FirstQuestionnaire from "./pages/FirstQuestionnaire";
 import EmailQuestionnaire from "./pages/EmailQuestionnaire";
 
+import "./App.css";
+
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
 function App() {
