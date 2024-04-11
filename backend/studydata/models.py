@@ -7,7 +7,7 @@ User = get_user_model()
 class FirstQuestionnaire(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_submitted = models.DateTimeField(auto_now_add=True)
-    age = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)])
+    age = models.PositiveSmallIntegerField(validators=[MaxValueValidator(99)], null=True, blank=True)
     sex = models.CharField(
         max_length=1, 
         choices=[

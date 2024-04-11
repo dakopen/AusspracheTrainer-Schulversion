@@ -19,6 +19,21 @@ const FirstQuestionnaire = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
+		// Check if all fields are null and prompt for confirmation if they are
+		if (
+			!age &&
+			!sex &&
+			!pronunciationSkill &&
+			!weeklyLanguageContactHours
+		) {
+			const isConfirmed = window.confirm(
+				"Du hast keine Angaben gemacht. Möchtest du dennoch fortfahren?"
+			);
+			if (!isConfirmed) {
+				return; // Early return if the user cancels
+			}
+		}
+
 		const payload = {
 			age: age ? parseInt(age) : null,
 			sex: sex || null,
@@ -45,9 +60,10 @@ const FirstQuestionnaire = () => {
 
 			if (response.status === 201) {
 				addNotification(
-					"Questionnaire submitted successfully.",
+					"Fragebogen erfolgreich eingereicht.",
 					"success"
 				);
+				// Reset the form fields to null after successful submission
 				setAge(null);
 				setSex(null);
 				setPronunciationSkill(null);
@@ -55,9 +71,10 @@ const FirstQuestionnaire = () => {
 				navigate("/");
 			} else {
 				const responseData = await response.json();
-				throw new Error(
-					responseData.detail ||
-						"An error occurred while submitting the questionnaire."
+				addNotification(
+					responseData[0] ||
+						"Beim Einreichen des Fragebogens ist ein Fehler aufgetreten.",
+					"error"
 				);
 			}
 		} catch (error) {
@@ -112,7 +129,7 @@ const FirstQuestionnaire = () => {
 					}
 					min="0"
 				/>
-			</label>
+			</label>{" "}
 			<button type="submit">Fragebogen abschicken</button>
 		</form>
 	);
