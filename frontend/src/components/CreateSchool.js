@@ -7,6 +7,8 @@ const CreateSchool = ({ setCourses }) => {
 	const [name, setName] = useState("");
 	const [address, setAddress] = useState("");
 	const [shortId, setShortId] = useState("");
+	const [englishSinceGrade, setEnglishSinceGrade] = useState(5);
+	const [frenchSinceGrade, setFrenchSinceGrade] = useState(6);
 	const { authTokens } = useContext(AuthContext);
 	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
 
@@ -17,6 +19,8 @@ const CreateSchool = ({ setCourses }) => {
 			name,
 			address,
 			short_id: shortId,
+			english_since_grade: englishSinceGrade,
+			french_since_grade: frenchSinceGrade,
 		});
 
 		try {
@@ -77,6 +81,42 @@ const CreateSchool = ({ setCourses }) => {
 					pattern="^[A-Z]+$"
 					title="Short ID must be uppercase letters only"
 				/>
+			</label>
+			<label>
+				Seit welche Stufe bietet die Schule Englisch an:
+				<select
+					value={englishSinceGrade}
+					onChange={(e) => setEnglishSinceGrade(e.target.value)}
+					required
+				>
+					<option value={5}>5. Klasse</option>
+					<option value={6}>6. Klasse</option>
+					<option value={7}>7. Klasse</option>
+					<option value={8}>8. Klasse</option>
+					<option value={9}>9. Klasse</option>
+					<option value={10}>10. Klasse</option>
+					<option value={11}>11. Klasse</option>
+					<option value={12}>12. Klasse</option>
+					<option value={13}>13. Klasse</option>
+				</select>
+			</label>
+			<label>
+				Seit welche Stufe bietet die Schule Französisch an:
+				<select
+					value={frenchSinceGrade}
+					onChange={(e) => setFrenchSinceGrade(e.target.value)}
+					required
+				>
+					<option value={5}>5. Klasse</option>
+					<option value={6}>6. Klasse</option>
+					<option value={7}>7. Klasse</option>
+					<option value={8}>8. Klasse</option>
+					<option value={9}>9. Klasse</option>
+					<option value={10}>10. Klasse</option>
+					<option value={11}>11. Klasse</option>
+					<option value={12}>12. Klasse</option>
+					<option value={13}>13. Klasse</option>
+				</select>
 			</label>
 			<button type="submit">Create School</button>
 		</form>

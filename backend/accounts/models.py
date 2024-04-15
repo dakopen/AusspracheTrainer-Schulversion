@@ -8,6 +8,8 @@ class School(models.Model):
     name = models.CharField(max_length=255)
     address = models.TextField()
     short_id = models.CharField(max_length=10, unique=True, validators=[RegexValidator(r'^[A-Z]+$')])
+    english_since_grade = models.PositiveSmallIntegerField(default=5)
+    french_since_grade = models.PositiveSmallIntegerField(default=6)
 
 class Course(models.Model):
     name = models.CharField(max_length=255)
@@ -18,7 +20,7 @@ class Course(models.Model):
         (ENGLISH, 'English'),
         (FRENCH, 'French'),
     )
-
+    grade = models.PositiveSmallIntegerField(default=5)
     language = models.PositiveSmallIntegerField(choices=LANGUAGE_CHOICES, default=ENGLISH)
     teacher = models.ForeignKey('User', on_delete=models.PROTECT, related_name='courses')
     

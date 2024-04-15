@@ -97,3 +97,7 @@ const SpeechSynthesis = ({ audioUrl }) => {
 };
 
 export default SpeechSynthesis;
+
+// IDEA: the audioUrl is created when the sentences are set in the database
+// this way they do not have to be auto-generated every time a user wants
+// to hear the correct pronunciation (still in progress -> TODO)

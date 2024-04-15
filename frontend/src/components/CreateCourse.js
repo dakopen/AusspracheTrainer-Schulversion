@@ -6,6 +6,8 @@ import { fetchCourses } from "../utils/api";
 const CreateCourse = ({ setCourses }) => {
 	const [name, setName] = useState("");
 	const [language, setLanguage] = useState(1); // Default to English
+	const [grade, setGrade] = useState(5); // Default to 5th grade
+
 	const { authTokens } = useContext(AuthContext);
 	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
 
@@ -15,6 +17,7 @@ const CreateCourse = ({ setCourses }) => {
 		const data = JSON.stringify({
 			name,
 			language,
+			grade,
 		});
 
 		try {
@@ -70,6 +73,24 @@ const CreateCourse = ({ setCourses }) => {
 				>
 					<option value={1}>Englisch</option>
 					<option value={2}>Französisch</option>
+				</select>
+			</label>
+			<label>
+				Stufe:
+				<select
+					value={language}
+					onChange={(e) => setGrade(e.target.value)}
+					required
+				>
+					<option value={5}>5. Klasse</option>
+					<option value={6}>6. Klasse</option>
+					<option value={7}>7. Klasse</option>
+					<option value={8}>8. Klasse</option>
+					<option value={9}>9. Klasse</option>
+					<option value={10}>10. Klasse</option>
+					<option value={11}>11. Klasse</option>
+					<option value={12}>12. Klasse</option>
+					<option value={13}>13. Klasse</option>
 				</select>
 			</label>
 			<button type="submit">Create Course</button>
