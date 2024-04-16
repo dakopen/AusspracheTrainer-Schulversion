@@ -12,3 +12,9 @@ class FirstQuestionnaireSerializer(serializers.ModelSerializer):
         if FirstQuestionnaire.objects.filter(user=user).exists():
             raise serializers.ValidationError('You have already submitted the questionnaire.')
         return FirstQuestionnaire.objects.create(**validated_data, user=user)
+
+
+class AudioAnalysisSerializer(serializers.Serializer):
+    audio = serializers.FileField()
+    text = serializers.CharField()
+    audio_mimetype = serializers.CharField()

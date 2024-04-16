@@ -50,3 +50,16 @@ tmp_email/
 .direnv
 .envrc
 .tool-versions
+
+
+# audios
+*.mp3
+*.wav
+*.ogg
+*.flac
+*.aiff
+*.aac
+*.mp4
+
+# the media folder
+media/
