@@ -37,10 +37,10 @@ class AudioAnalysisView(APIView):
         serializer = AudioAnalysisSerializer(data=request.data)
         if serializer.is_valid():
             audio_file = request.FILES['audio']
-            text = serializer.validated_data['text']
+            sentence_id = serializer.validated_data['text']  # TODO: Change later to sentence_id
             audio_mimetype = serializer.validated_data['audio_mimetype']
 
-            logger.warn(f"Initiating analysis for {text} with mimetype {audio_mimetype}")
+            logger.warn(f"Initiating analysis for sentence with id {sentence_id} with mimetype {audio_mimetype}")
 
             # Create an AudioSegment instance from the uploaded file depending on the MIME type
             try:
@@ -76,8 +76,10 @@ class AudioAnalysisView(APIView):
             with open(file_path, 'wb+') as destination:
                 destination.write(content_file.read())
             
+
+            sentence_id = 6  # TODO: Delete later
             # Dispatch the pronunciation assessment task to Celery
-            task = async_pronunciation_assessment.delay(file_path, text, request.user.belongs_to_course.language, user=request.user)
+            task = async_pronunciation_assessment.delay(file_path, sentence_id, request.user.belongs_to_course.language, user_id=request.user.id)
 
             return Response({'task_id': task.id}, status=status.HTTP_200_OK)
         else:

@@ -34,7 +34,7 @@ class PronunciationAssessmentResult(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_submitted = models.DateTimeField(auto_now_add=True)
     
-    sentence_id = models.IntegerField()
+    sentence = models.ForeignKey('StudySentences', on_delete=models.SET_NULL, null=True, blank=True)
     recognized_sentence = models.TextField(null=True, blank=True)
     
 

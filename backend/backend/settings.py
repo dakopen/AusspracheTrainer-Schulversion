@@ -18,7 +18,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MS_SPEECH_SERVICES_API_KEY = get_secret("AzureSpeechKey1")
+MS_SPEECH_SERVICES_REGION = "germanywestcentral"
 
+DELETE_AUDIO_FILE_AFTER_ANALYSIS = True
 # Application definition
 
 INSTALLED_APPS = [

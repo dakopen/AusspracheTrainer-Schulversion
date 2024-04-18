@@ -75,7 +75,7 @@ const AudioRecorder = () => {
 		console.log("Submitting audio blob:", blob);
 		formData.append("audio", blob);
 		formData.append("audio_mimetype", audioType);
-		formData.append("text", "Test Text");
+		formData.append("text", "This is another text area but with text");
 		console.log("Submitting form data:", formData);
 		try {
 			const response = await fetch(
