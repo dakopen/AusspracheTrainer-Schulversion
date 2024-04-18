@@ -26,6 +26,8 @@ const Header = () => {
 					<Link to="/">Home</Link>
 					<br></br>
 					<Link to="/courses">Kurse</Link>
+					<br></br>
+					<Link to="/sentences">Sätze</Link>
 				</>
 			)}
 			{isSecretary(user) && (
@@ -35,6 +37,8 @@ const Header = () => {
 					<Link to="/create-teacher">Lehreraccount erstellen</Link>
 					<br></br>
 					<Link to="/courses">Kurse</Link>
+					<br></br>
+					<Link to="/sentences">Sätze</Link>
 				</>
 			)}
 			{isAdmin(user) && (
@@ -47,8 +51,9 @@ const Header = () => {
 					<br></br>
 					<Link to="/courses">Kurse</Link>
 					<span> | </span>
-
 					<Link to="/schools">Schulen</Link>
+					<br></br>
+					<Link to="/sentences">Sätze</Link>
 				</>
 			)}
 

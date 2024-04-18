@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FirstQuestionnaire
+from .models import FirstQuestionnaire, StudySentences
 
 class FirstQuestionnaireSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,3 +18,10 @@ class AudioAnalysisSerializer(serializers.Serializer):
     audio = serializers.FileField()
     text = serializers.CharField()
     audio_mimetype = serializers.CharField()
+
+
+class StudySentencesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudySentences
+        fields = '__all__'
+        read_only_fields = ('id', )

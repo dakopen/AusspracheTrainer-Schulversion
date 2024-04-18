@@ -5,6 +5,7 @@ import {
 	TeacherOrAdminRoute,
 	TeacherRoute,
 	StudentRoute,
+	TeacherOrSecretaryOrAdminRoute,
 } from "./utils/PrivateRoute";
 
 import { AuthProvider } from "./context/AuthContext";
@@ -27,6 +28,7 @@ import Schools from "./pages/Schools";
 import ShowSchool from "./pages/ShowSchool";
 import Courses from "./pages/Courses";
 import ShowCourse from "./pages/ShowCourse";
+import StudySentences from "./pages/StudySentences";
 
 import FirstQuestionnaire from "./pages/FirstQuestionnaire";
 import EmailQuestionnaire from "./pages/EmailQuestionnaire";
@@ -118,6 +120,14 @@ function App() {
 										/>
 									}
 									path="/set-email/"
+								/>
+								<Route
+									element={
+										<TeacherOrSecretaryOrAdminRoute
+											element={StudySentences}
+										/>
+									}
+									path="/sentences"
 								/>
 							</Routes>
 						</AuthProvider>

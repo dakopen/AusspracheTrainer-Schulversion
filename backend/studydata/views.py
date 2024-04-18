@@ -7,13 +7,13 @@ import io
 from pydub import AudioSegment
 from django.core.files.base import ContentFile
 
-from accounts.permissions import IsStudystudent
+from accounts.permissions import IsStudystudent, IsAuthenticated, IsTeacherOrSecretaryOrAdmin, IsAdmin
 from todo.views import complete_user_todo_user_and_standard_todo
 import backend.settings
 
 from .tasks import async_pronunciation_assessment
-from .models import FirstQuestionnaire
-from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer
+from .models import FirstQuestionnaire, StudySentences
+from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, StudySentencesSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -76,12 +76,70 @@ class AudioAnalysisView(APIView):
             with open(file_path, 'wb+') as destination:
                 destination.write(content_file.read())
             
-            logger.warn(f"Saved audio file to {file_path}")
-
             # Dispatch the pronunciation assessment task to Celery
-            task = async_pronunciation_assessment.delay(file_path, text, request.user.belongs_to_course.language, user_id=request.user.id)
+            task = async_pronunciation_assessment.delay(file_path, text, request.user.belongs_to_course.language, user=request.user)
 
             return Response({'task_id': task.id}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class StudySentencesListView(APIView):
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.request.method == "GET":
+            self.permission_classes = [IsTeacherOrSecretaryOrAdmin]
+        else:  # For POST, PUT, DELETE methods
+            self.permission_classes = [IsAdmin]
+        return super().get_permissions()
+
+    def get(self, request, *args, **kwargs):
+        study_sentences = StudySentences.objects.all()
+        serializer = StudySentencesSerializer(study_sentences, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = StudySentencesSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def put(self, request, *args, **kwargs):
+        sentence_id = kwargs.get('sentence_id')
+        try:
+            study_sentence = StudySentences.objects.get(id=sentence_id)
+        except StudySentences.DoesNotExist:
+            return Response({'error': 'Study sentence not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = StudySentencesSerializer(study_sentence, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    def delete(self, request, *args, **kwargs):
+        sentence_id = kwargs.get('sentence_id')
+        try:
+            study_sentence = StudySentences.objects.get(id=sentence_id)
+            study_sentence.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except StudySentences.DoesNotExist:
+            return Response({'error': 'Study sentence not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class RetrieveStudySentenceById(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        sentence_id = kwargs.get('sentence_id')
+        try:
+            study_sentence = StudySentences.objects.get(id=sentence_id)
+            serializer = StudySentencesSerializer(study_sentence)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except StudySentences.DoesNotExist:
+            return Response({'error': 'Study sentence not found'}, status=status.HTTP_404_NOT_FOUND)

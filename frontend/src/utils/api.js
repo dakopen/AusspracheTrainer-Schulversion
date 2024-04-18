@@ -174,3 +174,102 @@ export const fetchLowestPriorityUserToDo = async (authTokens) => {
 		throw error;
 	}
 };
+
+export const fetchSentences = async (authTokens) => {
+	try {
+		const response = await fetch(
+			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/sentences/`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch sentences");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching sentences:", error);
+		throw error;
+	}
+};
+
+export const createSentence = async (sentence, authTokens) => {
+	try {
+		const response = await fetch(
+			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/sentences/`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+				},
+				body: JSON.stringify(sentence),
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to create sentence");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error creating sentence:", error);
+		throw error;
+	}
+};
+
+export const updateSentence = async (sentence, id, authTokens) => {
+	try {
+		const response = await fetch(
+			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/sentences/${id}/`,
+			{
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+				},
+				body: JSON.stringify(sentence),
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to update sentence");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error updating sentence:", error);
+		throw error;
+	}
+};
+
+export const deleteSentence = async (id, authTokens) => {
+	try {
+		const response = await fetch(
+			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/sentences/${id}/`,
+			{
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to delete sentence");
+		}
+	} catch (error) {
+		console.error("Error deleting sentence:", error);
+		throw error;
+	}
+};
