@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
 
-
 def pronunciation_assessment_continuous_from_file(filename, reference_text, language):
     """Performs continuous pronunciation assessment asynchronously with input from an audio file.
         See more information at https://aka.ms/csspeech/pa"""
