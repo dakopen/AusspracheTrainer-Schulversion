@@ -160,5 +160,4 @@ def pronunciation_assessment_continuous_from_file(filename, reference_text, lang
         }
         results['Words'].append(word_info)
 
-
     return results, word_offset_duration, phoneme_dicts, jo

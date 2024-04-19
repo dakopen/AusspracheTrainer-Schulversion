@@ -7,6 +7,9 @@ from .pronunciation_assessment import pronunciation_assessment_continuous_from_f
 
 User = get_user_model()
 
+import logging
+logger = logging.getLogger(__name__)
+
 def retrieve_study_sentence_by_id(sentence_id):
     try:
         study_sentence = StudySentences.objects.get(id=sentence_id).sentence
@@ -28,9 +31,10 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id):
 
     result, word_offset_duration, phoneme_dicts, json_response = pronunciation_assessment_continuous_from_file(filename, reference_text, human_readable_language)
 
-    json_response = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]  
+    if not json_response:
+        json_response = ["No response from the API"]
 
-    
+        
     user = User.objects.get(id=user_id) if user_id is not None else None
 
     try:
