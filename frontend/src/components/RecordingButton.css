@@ -1,0 +1,22 @@
+.recording-button-container {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    display: flex;
+}
+
+
+.recording-button {
+    position: relative;
+    z-index: 2; 
+}
+
+.cancel-recording-button {
+    position: absolute;
+    right: 40%; 
+    top: 50%; 
+    transform: translateY(-50%);  
+    z-index: 1;
+    transition: opacity 0.3s ease;  
+}
