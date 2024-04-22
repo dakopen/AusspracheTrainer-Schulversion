@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 import { useAudioRecording } from '../context/AudioRecordingContext';
+import "./AudioVisualizer.css";
+
 
 const AudioVisualizer = () => {
     const { isRecording, audioContext, recordingState, source, audioBlob, starttimeRecording, endtimeRecording } = useAudioRecording(); // Get necessary items from context
@@ -17,6 +19,14 @@ const AudioVisualizer = () => {
     const realPixelsPerSecondRef = useRef(null);
     const animationFrameIdRef = useRef(null);
     const recordedAudioRef = useRef(new Audio());
+    const replayXRef = useRef(0);
+    const justResumedRef = useRef(false);
+    const isPlayingRef = useRef(false);
+    const replayAnimationFrameIdRef = useRef(null);
+    const lastTimestampRef = useRef(0);
+    const replayButtonRef = useRef(null);
+    const replayLineRef = useRef(null);
+
 
     let lastMeanFrequency = 0;
     let counter = 0;
@@ -29,10 +39,9 @@ const AudioVisualizer = () => {
     let dataArray = new Uint8Array(bufferLength);
 
 
-    let replayX = 0;
-
     useEffect(() => {
         if (audioBlob) {
+            console.log("audioBlob", audioBlob)
             recordedAudioRef.current.src = URL.createObjectURL(audioBlob);
             recordedAudioRef.current.onloadedmetadata = () => {
                 const audioDuration = (endtimeRecording - starttimeRecording) / 1000;
@@ -84,10 +93,11 @@ const AudioVisualizer = () => {
                 offscreenCanvasRef.current.id = canvasRef.current.id // keep the same id
                 canvasRef.current = offscreenCanvasRef.current;
 
-                offscreenCanvasRef.current.style.cssText = "left: 50%; transform: translateX(-50%);";
+                offscreenCanvasRef.current.style.cssText = "left: 50%; transform: translateX(-50%); top: 0%";
             }
             resizeAndCopyCanvasContent();
 
+            showReplayButtonAndReplayLine();
         }
     }, [recordingState]);
 
@@ -208,10 +218,99 @@ const AudioVisualizer = () => {
         offscreenCtxRef.current.drawImage(tempCanvas, 0, 0, newWidth, newHeight);
     }
 
+    const moveReplayLine = (timestamp) => {
+        if (!lastTimestampRef.current || justResumedRef.current) {
+            lastTimestampRef.current = timestamp;
+            justResumedRef.current = false;
+        }
+
+        const deltaTime = (timestamp - lastTimestampRef.current) / 1000;
+        lastTimestampRef.current = timestamp;
+
+        replayXRef.current += pixelsPerSecondRef.current * deltaTime * 2;
+        replayControl.updateReplayLinePosition();
+
+        if (replayXRef.current * 1 / 2 < (Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) - 2)) {
+            replayAnimationFrameIdRef.current = requestAnimationFrame(moveReplayLine);
+        } else {
+            replayControl.stop();
+        }
+    }
+
+    const replayControl = {
+        start() {
+            recordedAudioRef.current.play();
+            isPlayingRef.current = true;
+            replayButtonRef.current.style.backgroundColor = "var(--lila)";
+            justResumedRef.current = true;
+            replayAnimationFrameIdRef.current = requestAnimationFrame(moveReplayLine);
+        },
+        pause() {
+            recordedAudioRef.current.pause();
+            isPlayingRef.current = false;
+            cancelAnimationFrame(replayAnimationFrameIdRef.current);
+            replayButtonRef.current.style.backgroundColor = "var(--black)";
+        },
+        stop() {
+            recordedAudioRef.current.pause();
+            recordedAudioRef.current.currentTime = 0;
+            isPlayingRef.current = false;
+            replayButtonRef.current.style.backgroundColor = "var(--black)";
+            cancelAnimationFrame(replayAnimationFrameIdRef.current);
+            replayXRef.current = 0;
+            lastTimestampRef.current = 0;
+            this.updateReplayLinePosition();
+        },
+
+        updateReplayLinePosition() {
+            replayLineRef.current.style.marginRight = `${Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) - replayXRef.current - 2}px`;
+        }
+    }
+
+
+    useEffect(() => {
+        if (replayButtonRef.current) {
+            const replayButton = replayButtonRef.current;
+
+            const handleReplayButtonClick = () => {
+                if (isPlayingRef.current) {
+                    replayControl.pause();
+                } else {
+                    replayControl.start();
+                }
+            };
+
+            replayButton.addEventListener('click', handleReplayButtonClick);
+
+            return () => {
+                replayButton.removeEventListener('click', handleReplayButtonClick);
+            };
+        }
+    }, []);
+
+
+    const showReplayButtonAndReplayLine = () => {
+        replayButtonRef.current.style.display = "block";
+        replayButtonRef.current.style.marginRight = (Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) + 20) + "px";
+        replayLineRef.current.style.display = "block";
+        replayControl.updateReplayLinePosition();
+    }
 
     return (
         <div id="canvas-parent-container">
             <canvas className="canvas-visualizer" ref={canvasRef} width="800" height="200"></canvas>
+
+            <button id="replay-button" ref={replayButtonRef}></button>
+            <div id="replay-line" ref={replayLineRef}></div>
+            {/*
+            {recordingState === 2 && (
+                <>
+                    <button id="replay-button" ref={replayButtonRef} style={{ marginRight: Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) + "px" }}></button>
+                    <div id="replay-line" ref={replayLineRef}></div>
+                </>
+            )
+            }
+            */}
         </div>
     );
 

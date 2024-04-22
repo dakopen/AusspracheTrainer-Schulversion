@@ -1,0 +1,38 @@
+#canvas-parent-container {
+	position: relative;
+	justify-content: center;
+	height: 130px;
+	display: flex;
+	align-items: center;
+}
+
+#canvas-parent-container canvas {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#replay-button {
+	flex-shrink: 0;
+	border-radius: 50%;
+	border-color: var(--lila);
+	background-color: (--red);
+	width: 20px;
+	height: 20px;
+	z-index: 11;
+
+	/* Flexbox styles to center content */
+	justify-content: center;
+	align-items: center;
+	display: none;
+}
+
+#replay-line {
+	position: absolute;
+	height: 130px;
+	width: 2px;
+	background-color: coral;
+	z-index: 10;
+	display: none;
+}
