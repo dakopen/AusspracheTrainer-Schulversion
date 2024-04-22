@@ -3,13 +3,16 @@ import { useAudioRecording } from '../context/AudioRecordingContext';
 import "./RecordingButton.css";
 
 const AudioRecorder = () => {
-    const { isRecording, startRecording, stopRecording, cancelRecording } = useAudioRecording();
+    const { isRecording, startRecording, stopRecording, cancelRecording, recordingState } = useAudioRecording();
 
     const handleToggleRecording = () => {
         if (!isRecording) {
             startRecording();
+            console.log(recordingState, "RECSTATE INITIAL")
         } else {
             stopRecording();
+            console.log(recordingState, "RECSTATE")
+
         }
     };
 

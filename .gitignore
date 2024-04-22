@@ -63,3 +63,5 @@ tmp_email/
 
 # the media folder
 media/
+
+dump.rdb

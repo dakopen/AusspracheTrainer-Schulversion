@@ -1,26 +1,48 @@
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, useState } from 'react';
 import { useAudioRecording } from '../context/AudioRecordingContext';
 
 const AudioVisualizer = () => {
-    const { isRecording, audioContext, analyser } = useAudioRecording(); // Get necessary items from context
+    const { isRecording, audioContext, recordingState, source, audioBlob, starttimeRecording, endtimeRecording } = useAudioRecording(); // Get necessary items from context
+
     const canvasRef = useRef(null);
-    const requestRef = useRef();
+    const ctxRef = useRef(null);
+    const offscreenCanvasRef = useRef(null);
+    const offscreenCtxRef = useRef(null);
 
-    // Canvas elements
-    let canvas, ctx;
-    let offscreenCanvas, offscreenCtx, offscreenX;
-    let x, y, yMirrored;
-    let pixelsPerSecond, realPixelsPerSecond;
+    const offscreenXRef = useRef(0);
+    const xRef = useRef(null);
+    const yRef = useRef(null);
+    const yMirroredRef = useRef(null);
+    const pixelsPerSecondRef = useRef(null);
+    const realPixelsPerSecondRef = useRef(null);
+    const animationFrameIdRef = useRef(null);
+    const recordedAudioRef = useRef(new Audio());
+
+    let lastMeanFrequency = 0;
+    let counter = 0;
+
+    let analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
 
 
-    function createCanvas(width, height, marginTop = '36px', addClass = 'canvas-visualizer') {
-        canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        canvas.style.marginTop = marginTop;
-        canvas.classList.add(addClass);
-        return canvas;
-    }
+    let bufferLength = analyser.frequencyBinCount;
+    let dataArray = new Uint8Array(bufferLength);
+
+
+    let replayX = 0;
+
+    useEffect(() => {
+        if (audioBlob) {
+            recordedAudioRef.current.src = URL.createObjectURL(audioBlob);
+            recordedAudioRef.current.onloadedmetadata = () => {
+                const audioDuration = (endtimeRecording - starttimeRecording) / 1000;
+                pixelsPerSecondRef.current = Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) / audioDuration;
+                realPixelsPerSecondRef.current = offscreenCanvasRef.current.width / audioDuration;
+            };
+
+        }
+    }, [audioBlob]);
+
 
     function clearAndAppendCanvas(parentSelector, newCanvas, classToRemove) {
         const parent = document.getElementById(parentSelector);
@@ -34,16 +56,55 @@ const AudioVisualizer = () => {
         return Math.min(window.outerWidth - 50, window.innerWidth - 50, 800);
     }
 
-
     useEffect(() => {
-        initializeCanvasAndOffscreen();
-    }, []);
+        console.log(recordingState, "recording state updated")
+        console.log("offscreenX", offscreenXRef.current)
+        if (recordingState === 0) {
+
+            if (animationFrameIdRef.current) {
+                cancelAnimationFrame(animationFrameIdRef.current);
+            }
+            initializeCanvasAndOffscreen();
+
+        } else if (recordingState === 1) {
+
+            initializeCanvasAndOffscreen();
+            source.connect(analyser);
+            animationFrameIdRef.current = requestAnimationFrame(draw)
+
+        } else if (recordingState === 2) {
+
+            if (animationFrameIdRef.current) {
+                cancelAnimationFrame(animationFrameIdRef.current);
+            }
+            resizeOffscreenCanvas();
+            console.log(canvasRef.current, offscreenCanvasRef.current, "CANVAS")
+            if (canvasRef.current.parentNode && offscreenCanvasRef.current) {
+                canvasRef.current.parentNode.replaceChild(offscreenCanvasRef.current, canvasRef.current);
+                offscreenCanvasRef.current.id = canvasRef.current.id // keep the same id
+                canvasRef.current = offscreenCanvasRef.current;
+
+                offscreenCanvasRef.current.style.cssText = "left: 50%; transform: translateX(-50%);";
+            }
+            resizeAndCopyCanvasContent();
+
+        }
+    }, [recordingState]);
 
     function initializeCanvasAndOffscreen() {
-        canvas = createCanvas(getResponsiveCanvasWidth(), 130);
-        clearAndAppendCanvas('canvas-parent-container', canvas, 'canvas-visualizer');
-        ctx = canvas.getContext('2d', { willReadFrequently: true });
 
+        console.log('initializeCanvasAndOffscreen')
+
+        canvasRef.current = document.createElement('canvas');
+        canvasRef.current.width = getResponsiveCanvasWidth();
+        canvasRef.current.height = 130;
+        canvasRef.current.marginTop = '36px';
+        canvasRef.current.classList.add('canvas-visualizer');
+
+        clearAndAppendCanvas('canvas-parent-container', canvasRef.current, 'canvas-visualizer');
+        ctxRef.current = canvasRef.current.getContext('2d', { willReadFrequently: true });
+        ctxRef.current.strokeStyle = 'var(--lila)';
+        ctxRef.current.lineWidth = 1.3;
 
 
         const previousOffscreenCanvas = document.querySelector('.offscreen-canvas-class');
@@ -51,56 +112,109 @@ const AudioVisualizer = () => {
             previousOffscreenCanvas.remove();
         }
 
-        offscreenCanvas = document.createElement('canvas');
-        offscreenCtx = offscreenCanvas.getContext('2d', { willReadFrequently: true });
-        offscreenCanvas.width = 30000;  // more than enough
-        offscreenCanvas.height = canvas.height;
-        offscreenCanvas.className = 'offscreen-canvas-class';
+        offscreenCanvasRef.current = document.createElement('canvas');
+        offscreenCtxRef.current = offscreenCanvasRef.current.getContext('2d', { willReadFrequently: true });
+        offscreenCtxRef.current.strokeStyle = 'var(--lila)';
+        offscreenCtxRef.current.lineWidth = 1.3;
 
-        offscreenX = 0;
-        x = getResponsiveCanvasWidth() / 2 - document.getElementById("recording-button").offsetWidth / 2;
+
+        offscreenCanvasRef.current.width = 30000;  // more than enough
+        offscreenCanvasRef.current.height = canvasRef.current.height;
+        offscreenCanvasRef.current.className = 'offscreen-canvas-class';
+
+        offscreenXRef.current = 0;
+        xRef.current = getResponsiveCanvasWidth() / 2 - document.getElementById("recording-button").offsetWidth / 2;
     }
 
     const draw = () => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
+        if (!isRecording) return;
+        let width = getResponsiveCanvasWidth();
+        const imageData = ctxRef.current.getImageData(0, 0, width, canvasRef.current.height);
+        ctxRef.current.clearRect(0, 0, width, canvasRef.current.height);
+        ctxRef.current.putImageData(imageData, -1, 0);
 
         analyser.getByteFrequencyData(dataArray);
+        const meanFrequency = dataArray.reduce((a, b) => a + b) / bufferLength;
 
-        ctx.fillStyle = 'rgb(0, 0, 0)';
-        ctx.fillRect(0, 0, width, height);
+        const smoothFrequency = (lastMeanFrequency + meanFrequency) / 2;
 
-        const barWidth = (width / bufferLength) * 2.5;
-        let x = 0;
+        if (counter <= 1) {
+            const yHeight = Math.max((smoothFrequency / 64) * canvasRef.current.height / 2, 1);
+            yRef.current = (canvasRef.current.height / 2) - yHeight;
+            yMirroredRef.current = (canvasRef.current.height / 2) + yHeight;
 
-        for (let i = 0; i < bufferLength; i++) {
-            const barHeight = dataArray[i] / 2;
-            ctx.fillStyle = 'rgb(' + (barHeight + 100) + ', 50, 50)';
-            ctx.fillRect(x, height - barHeight, barWidth, barHeight);
-            x += barWidth + 1;
+
+            ctxRef.current.beginPath();
+            ctxRef.current.moveTo(xRef.current, yRef.current);
+            ctxRef.current.lineTo(xRef.current, yMirroredRef.current);
+
+            ctxRef.current.stroke();
+
+            // draw on offscreen canvas
+            offscreenCtxRef.current.beginPath();
+            offscreenCtxRef.current.moveTo(offscreenXRef.current, yRef.current);
+            offscreenCtxRef.current.lineTo(offscreenXRef.current, yMirroredRef.current);
+            offscreenCtxRef.current.stroke();
+            offscreenXRef.current += 4;
+        } else if (counter <= 3) {
+            // GAP
+        } else {
+            counter = 0;
         }
+        counter++;
+        lastMeanFrequency = meanFrequency;
+        animationFrameIdRef.current = requestAnimationFrame(draw);
 
-        requestRef.current = requestAnimationFrame(draw);
     };
 
-    useEffect(() => {
-        if (isRecording) {
-            initializeCanvasAndOffscreen();
 
-            requestRef.current = requestAnimationFrame(draw);
-        }
-        return () => cancelAnimationFrame(requestRef.current);
-    }, [isRecording]);
+    const resizeOffscreenCanvas = () => {
+        const tempCanvas = document.createElement("canvas");
+        const tempCtx = tempCanvas.getContext("2d", { willReadFrequently: true });
+
+        // Set the temporary canvas dimensions to match the offscreen canvas
+        tempCanvas.width = offscreenCanvasRef.current.width;
+        tempCanvas.height = offscreenCanvasRef.current.height;
+
+        // Copy the current content of the offscreen canvas to the temporary canvas
+        tempCtx.drawImage(offscreenCanvasRef.current, 0, 0);
+
+        // Resize the offscreen canvas to fit the actual used width
+        offscreenCanvasRef.current.width = offscreenXRef.current;
+
+        // Draw the content back from the temporary canvas to the resized offscreen canvas
+        offscreenCtxRef.current.drawImage(tempCanvas, 0, 0);
+    };
+
+    const resizeAndCopyCanvasContent = () => {
+
+        const maxWidth = getResponsiveCanvasWidth();
+        const aspectRatio = offscreenCanvasRef.current.width / offscreenCanvasRef.current.height;
+        const newWidth = Math.min(maxWidth, offscreenXRef.current);
+        const newHeight = newWidth / aspectRatio;
+        console.log(newWidth, newHeight, aspectRatio, "NEW")
+        // create a temporary canvas to hold current content
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = offscreenCanvasRef.current.width; // original dimensions
+        tempCanvas.height = offscreenCanvasRef.current.height;
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.drawImage(offscreenCanvasRef.current, 0, 0); // copy content
+
+        // resize offscreen canvas
+        offscreenCanvasRef.current.width = newWidth;
+        offscreenCanvasRef.current.height = newHeight;
+
+        // copy content back to the resized offscreen canvas
+        offscreenCtxRef.current.drawImage(tempCanvas, 0, 0, newWidth, newHeight);
+    }
+
 
     return (
         <div id="canvas-parent-container">
-            <canvas ref={canvasRef} width="800" height="200"></canvas>
+            <canvas className="canvas-visualizer" ref={canvasRef} width="800" height="200"></canvas>
         </div>
     );
+
 };
 
 export default AudioVisualizer;

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import AuthContext from "../context/AuthContext";
 
 const AudioRecordingContext = createContext();
@@ -11,14 +11,18 @@ export const AudioRecordingProvider = ({ children }) => {
     const [audioType, setAudioType] = useState('');
     const [recordingState, setRecordingState] = useState(0); // 0: idle, 1: recording, 2: submitted
     const { authTokens } = useContext(AuthContext);
+    const [source, setSource] = useState(null);
+    const [audioContext, setAudioContext] = useState(new AudioContext());
+    const [audioBlob, setAudioBlob] = useState(null);
+    const [starttimeRecording, setStarttimeRecording] = useState(0);
+    const [endtimeRecording, setEndtimeRecording] = useState(0);
 
-    let audioContext = new AudioContext();
-    let analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
+    const recordingStateRef = useRef(recordingState);
+    recordingStateRef.current = recordingState;
+
 
     useEffect(() => {
         determineAudioOptions();
-
     }, []);
 
 
@@ -36,10 +40,11 @@ export const AudioRecordingProvider = ({ children }) => {
 
     const startRecording = async () => {
         if (!audioType) return;
-
+        setStarttimeRecording(Date.now());
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const source = audioContext.createMediaStreamSource(stream);
-        source.connect(analyser);
+        //source = audioContext.createMediaStreamSource(stream);
+        setSource(audioContext.createMediaStreamSource(stream));
+        // source.connect(analyser);
         const recorder = new MediaRecorder(stream, { mimeType: audioType });
         let chunks = [];
 
@@ -50,29 +55,39 @@ export const AudioRecordingProvider = ({ children }) => {
         };
 
         recorder.onstop = async () => {
-            if (recordingState === 1) { // recording was not cancelled
-                const blob = new Blob(chunks, { type: audioType });
-                handleSubmit(blob);
+            console.log("onstop", recordingStateRef.current)
+            if (recordingStateRef.current === 1) { // recording was not cancelled
+                setAudioBlob(new Blob(chunks, { type: audioType }));
+                handleSubmit(audioBlob);
                 setRecordingState(2);
+                console.log("Audio Blob:", audioBlob);
             }
             setIsRecording(false);
             chunks = [];
         };
 
+
+
         recorder.start();  // TODO?: add 10ms to avoid missing the first part of the audio
         setMediaRecorder(recorder);
         setIsRecording(true);
+        console.log("STARTING RECORDING", recordingState)
         setRecordingState(1);
     };
 
     const stopRecording = () => {
+        console.log(recordingState, "RECSTATESTOP")
         if (mediaRecorder) {
             mediaRecorder.stop();
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
+        console.log("stopped", recordingState)
+
+        setEndtimeRecording(Date.now());
     };
 
     const cancelRecording = () => {
+        console.log("CANCEL")
         if (mediaRecorder) {
             setRecordingState(0); // Reset to idle state
             mediaRecorder.stop();
@@ -111,7 +126,11 @@ export const AudioRecordingProvider = ({ children }) => {
         stopRecording,
         cancelRecording,
         recordingState,
-        analyser
+        source,
+        audioContext,
+        audioBlob,
+        starttimeRecording,
+        endtimeRecording
     };
 
     return (
