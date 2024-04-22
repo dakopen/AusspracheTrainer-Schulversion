@@ -294,7 +294,21 @@ const AudioVisualizer = () => {
         replayButtonRef.current.style.marginRight = (Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) + 20) + "px";
         replayLineRef.current.style.display = "block";
         replayControl.updateReplayLinePosition();
+
+        offscreenCanvasRef.current.addEventListener('click', handleCanvasClick);
     }
+
+
+    const handleCanvasClick = (event) => {
+        event.preventDefault();
+        const rect = offscreenCanvasRef.current.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        replayXRef.current = x * 2; // Adjust if necessary for your visualization scale
+        const marginRight = Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) - replayXRef.current;
+        replayLineRef.current.style.marginRight = `${marginRight}px`;
+        recordedAudioRef.current.currentTime = x / pixelsPerSecondRef.current;
+    }
+
 
     return (
         <div id="canvas-parent-container">
@@ -302,15 +316,6 @@ const AudioVisualizer = () => {
 
             <button id="replay-button" ref={replayButtonRef}></button>
             <div id="replay-line" ref={replayLineRef}></div>
-            {/*
-            {recordingState === 2 && (
-                <>
-                    <button id="replay-button" ref={replayButtonRef} style={{ marginRight: Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) + "px" }}></button>
-                    <div id="replay-line" ref={replayLineRef}></div>
-                </>
-            )
-            }
-            */}
         </div>
     );
 
