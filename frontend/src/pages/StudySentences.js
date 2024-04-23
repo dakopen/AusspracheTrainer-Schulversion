@@ -114,7 +114,14 @@ const StudySentences = () => {
 							{sentence.sentence} -{" "}
 							{sentence.language === 1
 								? "Englisch"
-								: "Französisch"}
+								: "Französisch"} -
+							{sentence.synth_filename && (
+								<audio
+									controls
+									src={sentence.synth_filename}
+								></audio>
+
+							)}
 						</p>
 					)}
 					{isAdmin(user) && (

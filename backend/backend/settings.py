@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'studydata.apps.StudydataConfig',
     'todo.apps.TodoConfig',
+    'storages',
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
@@ -121,8 +122,35 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
+# MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# AWS Settings
+AWS_ACCESS_KEY_ID = get_secret("lightsail-storage-key-id")
+AWS_SECRET_ACCESS_KEY = get_secret("lightsail-storage-access-key")
+AWS_STORAGE_BUCKET_NAME = 'aussprachetrainer-schulversion-bucket'
+AWS_S3_REGION_NAME = 'eu-central-1'  # e.g., 'us-west-2'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+
+# Static files (CSS, JavaScript, Images)
+STATIC_LOCATION = 'static'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+
 MEDIA_ROOT = BASE_DIR / 'media'
+
+SYNTH_LOCATION = 'synthed_speech'
+SYNTH_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{SYNTH_LOCATION}/'
+SYNTHFILES_STORAGE = 'custom_storages.SynthStorage'
+
+
+# Media files
+#MEDIA_LOCATION = 'media'
+#MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+#DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

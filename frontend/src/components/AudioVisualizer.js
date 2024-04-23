@@ -303,7 +303,7 @@ const AudioVisualizer = () => {
         event.preventDefault();
         const rect = offscreenCanvasRef.current.getBoundingClientRect();
         const x = event.clientX - rect.left;
-        replayXRef.current = x * 2; // Adjust if necessary for your visualization scale
+        replayXRef.current = x * 2;
         const marginRight = Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) - replayXRef.current;
         replayLineRef.current.style.marginRight = `${marginRight}px`;
         recordedAudioRef.current.currentTime = x / pixelsPerSecondRef.current;
