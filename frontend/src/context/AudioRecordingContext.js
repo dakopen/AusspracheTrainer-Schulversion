@@ -55,12 +55,10 @@ export const AudioRecordingProvider = ({ children }) => {
         };
 
         recorder.onstop = async () => {
-            console.log("onstop", recordingStateRef.current)
             if (recordingStateRef.current === 1) { // recording was not cancelled
                 setAudioBlob(new Blob(chunks, { type: audioType }));
                 handleSubmit(audioBlob);
                 setRecordingState(2);
-                console.log("Audio Blob:", audioBlob);
             }
             setIsRecording(false);
             chunks = [];
@@ -71,23 +69,19 @@ export const AudioRecordingProvider = ({ children }) => {
         recorder.start();  // TODO?: add 10ms to avoid missing the first part of the audio
         setMediaRecorder(recorder);
         setIsRecording(true);
-        console.log("STARTING RECORDING", recordingState)
         setRecordingState(1);
     };
 
     const stopRecording = () => {
-        console.log(recordingState, "RECSTATESTOP")
         if (mediaRecorder) {
             mediaRecorder.stop();
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
-        console.log("stopped", recordingState)
 
         setEndtimeRecording(Date.now());
     };
 
     const cancelRecording = () => {
-        console.log("CANCEL")
         if (mediaRecorder) {
             setRecordingState(0); // Reset to idle state
             mediaRecorder.stop();
@@ -114,7 +108,6 @@ export const AudioRecordingProvider = ({ children }) => {
                 body: formData,
             });
             const data = await response.json();
-            console.log("Submission Successful:", data);
         } catch (error) {
             console.error("Error submitting form:", error);
         }

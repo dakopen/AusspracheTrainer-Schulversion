@@ -41,7 +41,6 @@ const AudioVisualizer = () => {
 
     useEffect(() => {
         if (audioBlob) {
-            console.log("audioBlob", audioBlob)
             recordedAudioRef.current.src = URL.createObjectURL(audioBlob);
             recordedAudioRef.current.onloadedmetadata = () => {
                 const audioDuration = (endtimeRecording - starttimeRecording) / 1000;
@@ -66,8 +65,6 @@ const AudioVisualizer = () => {
     }
 
     useEffect(() => {
-        console.log(recordingState, "recording state updated")
-        console.log("offscreenX", offscreenXRef.current)
         if (recordingState === 0) {
 
             if (animationFrameIdRef.current) {
@@ -87,7 +84,6 @@ const AudioVisualizer = () => {
                 cancelAnimationFrame(animationFrameIdRef.current);
             }
             resizeOffscreenCanvas();
-            console.log(canvasRef.current, offscreenCanvasRef.current, "CANVAS")
             if (canvasRef.current.parentNode && offscreenCanvasRef.current) {
                 canvasRef.current.parentNode.replaceChild(offscreenCanvasRef.current, canvasRef.current);
                 offscreenCanvasRef.current.id = canvasRef.current.id // keep the same id
@@ -102,8 +98,6 @@ const AudioVisualizer = () => {
     }, [recordingState]);
 
     function initializeCanvasAndOffscreen() {
-
-        console.log('initializeCanvasAndOffscreen')
 
         canvasRef.current = document.createElement('canvas');
         canvasRef.current.width = getResponsiveCanvasWidth();
@@ -202,7 +196,6 @@ const AudioVisualizer = () => {
         const aspectRatio = offscreenCanvasRef.current.width / offscreenCanvasRef.current.height;
         const newWidth = Math.min(maxWidth, offscreenXRef.current);
         const newHeight = newWidth / aspectRatio;
-        console.log(newWidth, newHeight, aspectRatio, "NEW")
         // create a temporary canvas to hold current content
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = offscreenCanvasRef.current.width; // original dimensions
@@ -292,7 +285,6 @@ const AudioVisualizer = () => {
     const showReplayButtonAndReplayLine = () => {
 
         // change position of the replay button height accordingly:
-        console.log(`${canvasRef.current.height / 2.6}%`, "CANVAS HEIGHT")
         replayButtonRef.current.style.top = `${canvasRef.current.height / 2.6}%`
 
         // change height of the replay line:
