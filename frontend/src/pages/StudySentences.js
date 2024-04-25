@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import {
 	fetchSentences,
-	createSentence,
+	createSentences,
 	updateSentence,
 	deleteSentence,
 } from "../utils/api";
@@ -39,27 +39,34 @@ const StudySentences = () => {
 		}
 	};
 
-	const handleAddOrUpdate = async (id) => {
-		const sentence = {
-			sentence: id ? editText : newSentence,
-			language: id ? editLanguage : newLanguage,
-		};
-		try {
-			const updatedSentence = id
-				? await updateSentence(sentence, id, authTokens)
-				: await createSentence(sentence, authTokens);
-			if (id) {
-				setSentences(
-					sentences.map((s) => (s.id === id ? updatedSentence : s))
-				);
-			} else {
-				setSentences([...sentences, updatedSentence]);
+	const handleAddOrUpdate = async () => {
+		if (editId) {
+			const sentence = {
+				sentence: editText,
+				language: editLanguage,
+			};
+			try {
+				const updatedSentence = await updateSentence(sentence, editId, authTokens);
+				setSentences(sentences.map((s) => (s.id === editId ? updatedSentence : s)));
+				setEditId(null);
+				setEditText("");
+				setEditLanguage("1");
+			} catch (error) {
+				console.error("Failed to update the sentence:", error);
 			}
-			setEditId(null);
-			setNewSentence("");
-			setNewLanguage("1");
-		} catch (error) {
-			console.error("Failed to add or update the sentence:", error);
+		} else {
+			// Parsing newSentence input on line breaks and creating multiple sentences
+			const sentenceObjects = newSentence.split('\n').map(sentenceText => ({
+				sentence: sentenceText,
+				language: newLanguage,
+			}));
+			try {
+				const createdSentences = await createSentences(sentenceObjects, authTokens);
+				setSentences([...sentences, ...createdSentences]);
+				setNewSentence("");
+			} catch (error) {
+				console.error("Failed to create sentences:", error);
+			}
 		}
 	};
 
@@ -67,21 +74,20 @@ const StudySentences = () => {
 		<div>
 			{isAdmin(user) && (
 				<div>
-					<input
-						type="text"
+					<textarea
 						value={newSentence}
 						onChange={(e) => setNewSentence(e.target.value)}
-						placeholder="Add a new sentence"
+						placeholder="Add new sentences (one per line)"
 					/>
 					<select
 						value={newLanguage}
 						onChange={(e) => setNewLanguage(e.target.value)}
 					>
-						<option value="1">Englisch</option>
-						<option value="2">Französisch</option>
+						<option value="1">English</option>
+						<option value="2">French</option>
 					</select>
-					<button onClick={() => handleAddOrUpdate()}>
-						Add New Sentence
+					<button onClick={handleAddOrUpdate}>
+						Add New Sentences
 					</button>
 				</div>
 			)}
@@ -100,8 +106,8 @@ const StudySentences = () => {
 									setEditLanguage(e.target.value)
 								}
 							>
-								<option value="1">Englisch</option>
-								<option value="2">Französisch</option>
+								<option value="1">English</option>
+								<option value="2">French</option>
 							</select>
 							<button
 								onClick={() => handleAddOrUpdate(sentence.id)}
@@ -113,8 +119,8 @@ const StudySentences = () => {
 						<p>
 							{sentence.sentence} -{" "}
 							{sentence.language === 1
-								? "Englisch"
-								: "Französisch"} -
+								? "English"
+								: "French"}
 							{sentence.synth_filename && (
 								<audio
 									controls

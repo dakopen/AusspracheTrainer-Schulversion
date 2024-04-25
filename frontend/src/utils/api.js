@@ -200,7 +200,7 @@ export const fetchSentences = async (authTokens) => {
 	}
 };
 
-export const createSentence = async (sentence, authTokens) => {
+export const createSentences = async (sentences, authTokens) => {
 	try {
 		const response = await fetch(
 			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/sentences/`,
@@ -210,21 +210,23 @@ export const createSentence = async (sentence, authTokens) => {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
 				},
-				body: JSON.stringify(sentence),
+				body: JSON.stringify(sentences),
 			}
 		);
 
 		if (!response.ok) {
-			throw new Error("Failed to create sentence");
+			throw new Error("Failed to create sentences");
 		}
 
 		const data = await response.json();
 		return data;
 	} catch (error) {
-		console.error("Error creating sentence:", error);
+		console.error("Error creating sentences:", error);
 		throw error;
 	}
 };
+
+
 
 export const updateSentence = async (sentence, id, authTokens) => {
 	try {
