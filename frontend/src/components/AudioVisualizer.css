@@ -3,29 +3,34 @@
 	justify-content: center;
 	height: 130px;
 	display: flex;
-	align-items: center;
+	align-items: flex-start; /* Keeps items aligned at the top */
 }
 
 #canvas-parent-container canvas {
 	position: absolute;
 	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
+	top: 0; /* Aligns top edge with container top */
+	transform: translateX(-50%); /* Only shifts horizontally */
 }
 
 #replay-button {
 	flex-shrink: 0;
 	border-radius: 50%;
 	border-color: var(--lila);
-	background-color: (--red);
+	background-color: var(--black);
 	width: 20px;
 	height: 20px;
 	z-index: 11;
 
 	/* Flexbox styles to center content */
+	display: none;
 	justify-content: center;
 	align-items: center;
-	display: none;
+
+	/* Additional styling for vertical centering */
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 #replay-line {

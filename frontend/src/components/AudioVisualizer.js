@@ -290,6 +290,14 @@ const AudioVisualizer = () => {
 
 
     const showReplayButtonAndReplayLine = () => {
+
+        // change position of the replay button height accordingly:
+        console.log(`${canvasRef.current.height / 2.6}%`, "CANVAS HEIGHT")
+        replayButtonRef.current.style.top = `${canvasRef.current.height / 2.6}%`
+
+        // change height of the replay line:
+        replayLineRef.current.style.height = `${canvasRef.current.height}px`;
+
         replayButtonRef.current.style.display = "block";
         replayButtonRef.current.style.marginRight = (Math.min(offscreenCanvasRef.current.width, getResponsiveCanvasWidth()) + 20) + "px";
         replayLineRef.current.style.display = "block";
