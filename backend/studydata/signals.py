@@ -4,16 +4,21 @@ from .models import StudySentences
 from .synth_speech import synthesize_speech
 
 @receiver(pre_save, sender=StudySentences)
-def create_synth_speech(sender, instance, created, **kwargs):
-    # Check if it has been updated
-    if not created:
-        old_instance = StudySentences.objects.get(id=instance.id)
-        
-        # Check if 'sentence' or 'language' fields have changed
-        if instance.sentence != old_instance.sentence or instance.language != old_instance.language:
-            instance.synth_filename = synthesize_speech(instance.id)
-            instance.save(update_fields=["synth_filename"])
+def create_synth_speech(sender, instance, **kwargs):
+    # Prevent recursion by checking if we are already processing
+    if hasattr(instance, '_processing'):
+        return
+    setattr(instance, '_processing', True)
 
+    try:
+        if instance.id is not None:
+            # Instance is being updated
+            old_instance = StudySentences.objects.get(id=instance.id)
+            if instance.sentence != old_instance.sentence or instance.language != old_instance.language:
+                instance.synth_filename = synthesize_speech(instance.id, text=instance.sentence, language=instance.language)
+                instance.save(update_fields=["synth_filename"])
+    finally:
+        delattr(instance, '_processing')
 
 
 @receiver(post_save, sender=StudySentences)

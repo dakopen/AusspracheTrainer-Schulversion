@@ -21,18 +21,17 @@ speech_synthesizer_english = speechsdk.SpeechSynthesizer(speech_config=speech_co
 speech_config.speech_synthesis_voice_name = "fr-FR-DeniseNeural"
 speech_synthesizer_french = speechsdk.SpeechSynthesizer(speech_config=speech_config)
 
-def synthesize_speech(studysentence_id):
+def synthesize_speech(studysentence_id, text=None, language=None):
 
     synth_storage = SynthStorage()
 
     logger.warn("starting synthesize_speech")
     # check if the studysentence object already has a synth_filename
     studysentence = StudySentences.objects.get(id=studysentence_id)
-    if studysentence.synth_filename:
-        return
 
-    else:
+    if text is None:
         text = studysentence.sentence
+    if language is None:
         language = studysentence.language
 
 

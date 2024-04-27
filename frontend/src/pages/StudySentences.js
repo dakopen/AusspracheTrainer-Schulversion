@@ -16,6 +16,7 @@ const StudySentences = () => {
 	const [editId, setEditId] = useState(null);
 	const [editText, setEditText] = useState("");
 	const [editLanguage, setEditLanguage] = useState("1");
+	const [languageFilter, setLanguageFilter] = useState("all"); // New state for language filter
 
 	useEffect(() => {
 		const loadData = async () => {
@@ -31,11 +32,13 @@ const StudySentences = () => {
 	}, [authTokens]);
 
 	const handleDelete = async (id) => {
-		try {
-			await deleteSentence(id, authTokens);
-			setSentences(sentences.filter((sentence) => sentence.id !== id));
-		} catch (error) {
-			console.error("Failed to delete the sentence:", error);
+		if (window.confirm("Are you sure you want to delete this sentence?")) {
+			try {
+				await deleteSentence(id, authTokens);
+				setSentences(sentences.filter((sentence) => sentence.id !== id));
+			} catch (error) {
+				console.error("Failed to delete the sentence:", error);
+			}
 		}
 	};
 
@@ -55,7 +58,6 @@ const StudySentences = () => {
 				console.error("Failed to update the sentence:", error);
 			}
 		} else {
-			// Parsing newSentence input on line breaks and creating multiple sentences
 			const sentenceObjects = newSentence.split('\n').map(sentenceText => ({
 				sentence: sentenceText,
 				language: newLanguage,
@@ -91,63 +93,67 @@ const StudySentences = () => {
 					</button>
 				</div>
 			)}
-			{sentences.map((sentence) => (
-				<div key={sentence.id}>
-					{editId === sentence.id ? (
-						<div>
-							<input
-								type="text"
-								value={editText}
-								onChange={(e) => setEditText(e.target.value)}
-							/>
-							<select
-								value={editLanguage}
-								onChange={(e) =>
-									setEditLanguage(e.target.value)
-								}
-							>
-								<option value="1">English</option>
-								<option value="2">French</option>
-							</select>
-							<button
-								onClick={() => handleAddOrUpdate(sentence.id)}
-							>
-								Save
-							</button>
-						</div>
-					) : (
-						<p>
-							{sentence.sentence} -{" "}
-							{sentence.language === 1
-								? "English"
-								: "French"}
-							{sentence.synth_filename && (
-								<audio
-									controls
-									src={sentence.synth_filename}
-								></audio>
-
-							)}
-						</p>
-					)}
-					{isAdmin(user) && (
-						<div>
-							<button onClick={() => handleDelete(sentence.id)}>
-								Delete
-							</button>
-							<button
-								onClick={() => {
-									setEditId(sentence.id);
-									setEditText(sentence.sentence);
-									setEditLanguage(sentence.language);
-								}}
-							>
-								Edit
-							</button>
-						</div>
-					)}
-				</div>
-			))}
+			<select
+				value={languageFilter}
+				onChange={(e) => setLanguageFilter(e.target.value)}
+				style={{ marginBottom: "10px" }}
+			>
+				<option value="all">All Languages</option>
+				<option value="1">English</option>
+				<option value="2">French</option>
+			</select>
+			{sentences
+				.filter((sentence) => languageFilter === "all" || sentence.language.toString() === languageFilter)
+				.map((sentence) => (
+					<div key={sentence.id}>
+						{editId === sentence.id ? (
+							<div>
+								<input
+									type="text"
+									value={editText}
+									onChange={(e) => setEditText(e.target.value)}
+								/>
+								<select
+									value={editLanguage}
+									onChange={(e) => setEditLanguage(e.target.value)}
+								>
+									<option value="1">English</option>
+									<option value="2">French</option>
+								</select>
+								<button onClick={() => handleAddOrUpdate(sentence.id)}>
+									Save
+								</button>
+							</div>
+						) : (
+							<p>
+								{sentence.sentence} -{" "}
+								{sentence.language === 1 ? "English" : "French"}
+								{sentence.synth_filename && (
+									<audio
+										controls
+										src={sentence.synth_filename}
+									></audio>
+								)}
+							</p>
+						)}
+						{isAdmin(user) && (
+							<div>
+								<button onClick={() => handleDelete(sentence.id)}>
+									Delete
+								</button>
+								<button
+									onClick={() => {
+										setEditId(sentence.id);
+										setEditText(sentence.sentence);
+										setEditLanguage(sentence.language);
+									}}
+								>
+									Edit
+								</button>
+							</div>
+						)}
+					</div>
+				))}
 		</div>
 	);
 };
