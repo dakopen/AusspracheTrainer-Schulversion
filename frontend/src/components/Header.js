@@ -73,7 +73,7 @@ const Header = () => {
 				<p>
 					Hello user with Role: {user.role} with the study language:{" "}
 					{user.language === 1 ? "Englisch" : "Französisch"} and{" "}
-					{user.full_access_group == true
+					{user.full_access_group === true
 						? "Full Access"
 						: "Restricted Access"}
 				</p>

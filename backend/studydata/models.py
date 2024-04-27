@@ -55,8 +55,17 @@ class StudySentences(models.Model):
     sentence = models.TextField(unique=True)
     language = models.PositiveSmallIntegerField(choices=LANGUAGE_CHOICES)
     synth_filename = models.CharField(default=None, null=True, blank=True, max_length=255)
-    number_of_times_assigned = models.PositiveIntegerField(default=0)
-    number_of_times_completed = models.PositiveIntegerField(default=0)
+    number_of_times_assigned_as_test = models.PositiveIntegerField(default=0)
+    number_of_times_assigned_as_train = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Study Sentence in {self.get_language_display()}, with id {self.id}"
+
+
+class StudySentencesCourseAssignment(models.Model):
+    course = models.ForeignKey('accounts.Course', on_delete=models.CASCADE)
+    sentence = models.ForeignKey('StudySentences', on_delete=models.CASCADE)
+    location_value = models.PositiveSmallIntegerField(default=0)  # 1 - 20 are test sentences, then 21-30 are for week 1, 31-40 for week 2, etc.
+
+    def __str__(self):
+        return f"Assignment of Sentence {self.sentence.id} to Course {self.course.id}"
