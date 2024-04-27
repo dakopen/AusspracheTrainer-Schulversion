@@ -136,7 +136,7 @@ AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazo
 # Static files (CSS, JavaScript, Images)
 STATIC_LOCATION = 'static'
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
-STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+STATICFILES_STORAGE = 'backend.custom_storages.StaticStorage'  # or custom_storages.StaticStorage
 
 MEDIA_ROOT = BASE_DIR / 'media'
 

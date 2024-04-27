@@ -8,6 +8,10 @@ urlpatterns = [
     path('create-any-role', views.CreateAnyRoleView.as_view(), name='create-any-role'),  # überarbeiten
     path('submit-studystudent-email/', views.SubmitStudyStudentEmailView.as_view(), name='submit-studystudent-email'),
 
+    path('delete-account/', views.RequestDeleteAccountView.as_view(), name='delete-account'),
+    path('delete-account/confirm/<str:uidb64>/<str:token>/', views.DeleteAccountConfirmView.as_view(), name='delete_account_confirm'),
+    path('change-username/', views.ChangeUsernameView.as_view(), name='change-username'),
+
     path('schools/', views.SchoolListView.as_view(), name='school-list'),
     path('schools/create', views.SchoolCreateView.as_view(), name='school-create'),
     path('schools/<int:pk>/', views.SchoolDetailView.as_view(), name='school-detail'),

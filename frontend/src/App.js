@@ -29,6 +29,8 @@ import ShowSchool from "./pages/ShowSchool";
 import Courses from "./pages/Courses";
 import ShowCourse from "./pages/ShowCourse";
 import StudySentences from "./pages/StudySentences";
+import UserSettings from "./pages/UserSettings";
+import DeleteAccountConfirm from "./components/DeleteAccountConfirm";
 
 import FirstQuestionnaire from "./pages/FirstQuestionnaire";
 import EmailQuestionnaire from "./pages/EmailQuestionnaire";
@@ -129,7 +131,16 @@ function App() {
 									}
 									path="/sentences"
 								/>
+								<Route
+									element={<StudentRoute element={UserSettings} />}
+									path="/account-settings"
+								/>
+								<Route
+									element={<DeleteAccountConfirm />}
+									path="delete-account-confirm/:uidb64/:token/"
+								/>
 							</Routes>
+
 						</AuthProvider>
 					</NotificationProvider>
 				</UrlProvider>

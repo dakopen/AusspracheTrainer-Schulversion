@@ -2,15 +2,20 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
-from django.utils.http import urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.shortcuts import get_object_or_404
 from django.db import transaction
+from django.core.mail import send_mail
+from django.utils.encoding import force_bytes
+from django.urls import reverse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, views, generics
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
+from backend import settings
 
+from .utils import generate_random_username
 from .models import School, Course
 from .serializers import UserEmailSerializer, UserSerializer, SchoolSerializer, CourseSerializer
 from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsSecretaryOrAdmin, \
@@ -236,7 +241,7 @@ class BulkCreateStudyStudentsView(APIView):
             with transaction.atomic():
                 zero_or_one = random.randint(0, 1)
                 for i in range(number_of_students):
-                    username = self.generate_random_username()
+                    username = generate_random_username()
                     study_student = User.objects.create(
                         username=f"{username}@studie.aussprachetrainer.org",
                         school=course.teacher.school,
@@ -253,7 +258,7 @@ class BulkCreateStudyStudentsView(APIView):
             study_students = []
             zero_or_one = random.randint(0, 1)
             for _ in range(number_of_students):
-                username = self.generate_random_username()
+                username = generate_random_username()
                 study_student = User.objects.create( 
                     username=f"{username}@studie.aussprachetrainer.org",
                     password=make_password(username),
@@ -274,11 +279,6 @@ class BulkCreateStudyStudentsView(APIView):
         return Response({'message': f'{number_of_students} study students created successfully for course {course.name}.'},
                         status=status.HTTP_201_CREATED)
 
-    def generate_random_username(self):
-        while True:
-            username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-            if not User.objects.filter(username=f"{username}@studie.aussprachetrainer.org").exists():
-                return username
 
 class SubmitStudyStudentEmailView(APIView):
     permission_classes = [IsStudystudent]  # Ensure the user is authenticated
@@ -296,3 +296,78 @@ class SubmitStudyStudentEmailView(APIView):
             return Response({'message': 'Email address updated successfully.'}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+
+class RequestDeleteAccountView(APIView):
+    permission_classes = [IsStudystudent]
+
+    def post(self, request):
+        user = request.user
+        if not user.email:
+            return Response({"error": "No email address set for the user."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Generate a token and encode the user's ID
+        token = default_token_generator.make_token(user)
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+        
+        # Build the URL for the confirmation link
+        delete_url = f"http://127.0.0.1:3000/delete-account-confirm/{uidb64}/{token}/"
+        
+        # Send an email with the link
+        send_mail(
+            subject="Bestätigung der Löschung Ihres Kontos der AusspracheTrainer-Studie",
+            message=f"Bitte bestätigen Sie die Löschung Ihres Kontos der AusspracheTrainer-Studie, indem Sie auf diesen Link klicken: {delete_url} \n Ihre Daten werden unwiderruflich gelöscht.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+        
+        return Response({"message": "Der Bestätigungslink wird an Ihre E-Mail-Adresse gesendet."}, status=status.HTTP_200_OK)
+
+class DeleteAccountConfirmView(APIView):
+    def post(self, request, *args, **kwargs):
+        # get the uidb64 and token from the url
+        uidb64 = kwargs.get('uidb64')
+        token = kwargs.get('token')
+        
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError):
+            return Response({"error": "Invalid UID. Unable to decode UID."}, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({"error": "User does not exist. Invalid UID."}, status=status.HTTP_404_NOT_FOUND)
+
+        if not default_token_generator.check_token(user, token):
+            return Response({"error": "Invalid token or token has expired."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Deletes the user account
+        user.delete()
+        return Response({"message": "Your account has been successfully deleted."}, status=status.HTTP_200_OK)
+
+class ChangeUsernameView(APIView):
+    permission_classes = [IsStudystudent]
+
+    def post(self, request):
+        user = request.user
+        new_username = generate_random_username()
+
+        # Update the username in the database
+        user.username = f"{new_username}@studie.aussprachetrainer.org"
+        user.set_password(new_username)
+        
+        user.save(update_fields=['username', 'password'])
+
+        # Send an email with the new username
+        if user.email:
+            send_mail(
+                subject="Dein AusspracheTrainer Benutzername wurde geändert",
+                message=f"Hallo, dein neuer Benutzername für die Studie lautet: {new_username}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
+        return Response({"message": f"Dein Benutzername wurde geändert zu {new_username}."}, status=status.HTTP_200_OK)
