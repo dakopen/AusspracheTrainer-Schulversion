@@ -28,6 +28,7 @@ const CourseToDoDates = () => {
                 <ul>
                     {todoDates.map((date, index) => (
                         <li key={index}>
+                            StandardTodo: {date.standard_todo}{" | "}
                             Activation Date: {new Date(date.activation_date).toLocaleDateString()},
                             Due Date: {new Date(date.due_date).toLocaleDateString()}
                         </li>
