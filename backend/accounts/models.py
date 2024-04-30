@@ -23,6 +23,9 @@ class Course(models.Model):
     grade = models.PositiveSmallIntegerField(default=5)
     language = models.PositiveSmallIntegerField(choices=LANGUAGE_CHOICES, default=ENGLISH)
     teacher = models.ForeignKey('User', on_delete=models.PROTECT, related_name='courses')
+
+    start_date = models.DateField(default=None, null=True, blank=True)
+    study_started = models.BooleanField(default=False)
     
 
 class User(AbstractUser):

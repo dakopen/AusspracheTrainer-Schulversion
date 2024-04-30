@@ -10,6 +10,11 @@ from .models import Course, School
 import random
 import string
 import logging
+
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
@@ -57,7 +62,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     
     def send_password_setup_email(self, user):
-        # Logic remains the same
         token, uid = self.generate_password_reset_token(user)
         password_reset_link = f"{settings.FRONTEND_URL}/set-password/?token={token}&uid={uid}"
         send_mail(
@@ -69,10 +73,6 @@ class UserSerializer(serializers.ModelSerializer):
         )
     
     def generate_password_reset_token(self, user):
-        # Logic remains the same
-        from django.contrib.auth.tokens import default_token_generator
-        from django.utils.http import urlsafe_base64_encode
-        from django.utils.encoding import force_bytes
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         return token, uid
@@ -91,7 +91,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ('id', 'name', 'language', 'teacher', 'grade')
+        fields = ('id', 'name', 'language', 'teacher', 'grade', 'start_date', 'study_started')
         extra_kwargs = {'teacher': {'read_only': True}}
 
     def validate(self, attrs):

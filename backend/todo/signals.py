@@ -11,11 +11,26 @@ User = get_user_model()
 def link_initial_todos_to_student(sender, instance, created, **kwargs):
     if created and instance.role == User.STUDYSTUDENT:
 
+        """
         initial_todos = StandardToDo.objects.filter(id__in=[1, 2, 3, 4])
 
         for std_todo in initial_todos:
             UserToDo.objects.create(
                 user=instance,
                 standard_todo=std_todo,
-                due_date=timezone.now() + timezone.timedelta(days=365),  # due_data does not matter for these todos
+            )
+
+        weekly_todos_and_final_todos = StandardToDo.objects.filter(id__in=[5, 6, 7, 8, 9, 10, 11, 12, 13])
+
+        for std_todo in weekly_todos_and_final_todos:
+            UserToDo.objects.create(
+                user=instance,
+                standard_todo=std_todo,
+            )
+        """
+        
+        for std_todo in StandardToDo.objects.all():
+            UserToDo.objects.create(
+                user=instance,
+                standard_todo=std_todo,
             )

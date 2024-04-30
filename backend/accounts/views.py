@@ -14,6 +14,7 @@ from rest_framework import status, views, generics
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
 from backend import settings
+from datetime import date
 
 from .utils import generate_random_username
 from .models import School, Course
@@ -280,6 +281,33 @@ class BulkCreateStudyStudentsView(APIView):
                         status=status.HTTP_201_CREATED)
 
 
+class CourseUpdateView(APIView):
+    permission_classes = [IsTeacherOrSecretaryOrAdmin]
+
+    def patch(self, request, pk):
+        pk = self.kwargs.get('pk')
+        course = get_object_or_404(Course, pk=pk)
+        if not course:
+            return Response({'message': 'Course not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        user = self.request.user
+        if not (user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user) or (user.role == User.SECRETARY and course.teacher.school == user.school)):
+            raise PermissionDenied({'message': 'Du hast nicht die Berechtigung, Schüler zu diesem Kurs hinzuzufügen.'})
+        
+        if 'language' in request.data:
+            del request.data['language']  # Prevent changing the language of the course
+
+        if request.data.get('study_started') and request.data['study_started']:
+            request.data['start_date'] = date.today()
+
+        serializer = CourseSerializer(course, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
 class SubmitStudyStudentEmailView(APIView):
     permission_classes = [IsStudystudent]  # Ensure the user is authenticated
 
@@ -371,3 +399,4 @@ class ChangeUsernameView(APIView):
             )
 
         return Response({"message": f"Dein Benutzername wurde geändert zu {new_username}."}, status=status.HTTP_200_OK)
+
