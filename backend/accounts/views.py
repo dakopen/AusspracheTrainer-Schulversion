@@ -300,7 +300,7 @@ class CourseUpdateView(APIView):
         if request.data.get('study_started') and request.data['study_started']:
             request.data['start_date'] = date.today()
 
-        serializer = CourseSerializer(course, data=request.data, partial=True)
+        serializer = CourseSerializer(course, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

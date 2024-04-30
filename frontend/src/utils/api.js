@@ -128,6 +128,35 @@ export const fetchStudentsByCourse = async (authTokens, courseId) => {
 	}
 };
 
+export const updateCourseField = async (authTokens, courseId, data) => {
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/${ACCOUNT_BASE_URL}/courses/${courseId}/update`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + String(authTokens.access),
+                },
+                body: JSON.stringify(data)
+            }
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error("Failed to update course: " + errorData.detail || "Server responded with an error");
+        }
+
+        const updatedData = await response.json();
+        return updatedData;
+    } catch (error) {
+        console.error("Error updating course:", error);
+        throw error;
+    }
+};
+
+
+
 export const fetchTeachersBySchool = async (authTokens, schoolId) => {
 	try {
 		const response = await fetch(
