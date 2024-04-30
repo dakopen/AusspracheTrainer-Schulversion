@@ -129,30 +129,30 @@ export const fetchStudentsByCourse = async (authTokens, courseId) => {
 };
 
 export const updateCourseField = async (authTokens, courseId, data) => {
-    try {
-        const response = await fetch(
-            `${API_BASE_URL}/${ACCOUNT_BASE_URL}/courses/${courseId}/update`,
-            {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + String(authTokens.access),
-                },
-                body: JSON.stringify(data)
-            }
-        );
+	try {
+		const response = await fetch(
+			`${API_BASE_URL}/${ACCOUNT_BASE_URL}/courses/${courseId}/update`,
+			{
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+				},
+				body: JSON.stringify(data)
+			}
+		);
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error("Failed to update course: " + errorData.detail || "Server responded with an error");
-        }
+		if (!response.ok) {
+			const errorData = await response.json();
+			throw new Error("Failed to update course: " + errorData.detail || "Server responded with an error");
+		}
 
-        const updatedData = await response.json();
-        return updatedData;
-    } catch (error) {
-        console.error("Error updating course:", error);
-        throw error;
-    }
+		const updatedData = await response.json();
+		return updatedData;
+	} catch (error) {
+		console.error("Error updating course:", error);
+		throw error;
+	}
 };
 
 
@@ -181,6 +181,33 @@ export const fetchTeachersBySchool = async (authTokens, schoolId) => {
 		throw error;
 	}
 };
+export const fetchToDoDates = async (authTokens, courseId) => {
+	try {
+		const response = await fetch(
+			`${API_BASE_URL}/${TODO_BASE_URL}/courses/${courseId}/todo-dates/`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch ToDo dates");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching ToDo dates:", error);
+		throw error;
+	}
+};
+
+
+
 
 export const fetchLowestPriorityUserToDo = async (authTokens) => {
 	try {

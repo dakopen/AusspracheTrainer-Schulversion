@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { useNotification } from "../context/NotificationContext";
 import CourseStudents from "../components/CourseStudents";
-import { fetchCourse, updateCourseField } from "../utils/api"; // updateCourseField to handle field-specific updates
+import { fetchCourse, updateCourseField } from "../utils/api";
+import CourseToDoDates from "../components/CourseToDoDates";
 
 const ShowCourse = () => {
 	const { courseId } = useParams();
@@ -75,10 +76,14 @@ const ShowCourse = () => {
 					<p><strong>Language:</strong> {course.language}</p>
 					<p><strong>Teacher:</strong> {course.teacher}</p>
 					<CourseStudents />
+					<hr></hr>
+					{course.study_started && <CourseToDoDates />}
 				</>
+
 			) : (
 				<p>Loading course details...</p>
 			)}
+
 		</div>
 	);
 };

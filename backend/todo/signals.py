@@ -1,8 +1,10 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from .models import StandardToDo, UserToDo
+from .models import StandardToDo, UserToDo, ToDoDates
+
+from accounts.models import Course
 
 
 User = get_user_model()
@@ -34,3 +36,30 @@ def link_initial_todos_to_student(sender, instance, created, **kwargs):
                 user=instance,
                 standard_todo=std_todo,
             )
+
+
+@receiver(pre_save, sender=Course)
+def add_course_due_dates(sender, instance, **kwargs):
+    if instance.id is not None:
+        # Instance is being updated
+        old_instance = Course.objects.get(id=instance.id)
+        if instance.study_started != old_instance.study_started:
+            if instance.study_started:
+                today_00_01 = timezone.now().replace(hour=0, minute=1, second=0, microsecond=0)
+                today_16_59 = timezone.now().replace(hour=16, minute=59, second=0, microsecond=0)
+                today_17_00 = timezone.now().replace(hour=17, minute=0, second=0, microsecond=0)
+                
+                for todo_date in ToDoDates.objects.filter(course=instance):
+                    if todo_date.standard_todo.id in [1, 2, 3, 4]:
+                        todo_date.activation_date = timezone.now()
+                        todo_date.due_date = timezone.now() + timezone.timedelta(days=365)
+                    elif todo_date.standard_todo.id in [5, 6, 7, 8, 9, 10]:
+                        todo_date.activation_date = today_17_00 + timezone.timedelta(days=7*(todo_date.standard_todo.id - 5))  # 7 days * week
+                        todo_date.due_date = today_16_59 + timezone.timedelta(days=7*(todo_date.standard_todo.id - 4))   # 7 days * (week + 1) 
+                    elif todo_date.standard_todo.id in [11, 12, 13]:
+                        todo_date.activation_date = today_00_01 + timezone.timedelta(days=7*6)  # 7 days * 6
+                        todo_date.due_date = today_00_01 + timezone.timedelta(days=7*8)  # 7 days * 8 weeks, at latest
+                    todo_date.save()
+            else:
+                # ToDoDates.objects.filter(course=instance).delete()
+                pass
