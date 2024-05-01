@@ -20,9 +20,9 @@ class Command(BaseCommand):
         {'id': 9, 'title': 'Übung Woche 5', 'description': 'Trainiere deine Aussprache mit diesen 10 Übungssätzen.', 'priority': 50, 'action_relative_link': '/practice/'},
         {'id': 10, 'title': 'Übung Woche 6', 'description': 'Trainiere deine Aussprache mit diesen 10 Übungssätzen.', 'priority': 50, 'action_relative_link': '/practice/'},
 
-        {'id': 11, 'title': 'Tutorial starten', 'description': 'Bitte starte das Tutorium, um dich nochmal mit der Webseite vertraut zu machen', 'priority': 60, 'action_relative_link': '/tutorial/'},
-        {'id': 12, 'title': 'Abschließender Test', 'description': 'Die Studie nähert sich dem Ende. Bitte schließe diesen Aussprachetest ab, mit der mit deinem ersten Test verglichen wird.', 'priority': 70, 'action_relative_link': '/final-test/'},
-        {'id': 13, 'title': 'Abschließenden Fragebogen ausfüllen', 'description': 'Fülle den letzten Fragebogen dieser Studie aus. Danach erhälst du deine Ergebnisse und bist fertig mit der Studie.', 'priority': 80, 'action_relative_link': '/final-questionnaire/'},
+        {'id': 11, 'title': 'Tutorial starten', 'description': 'Bitte starte das Tutorium, um dich nochmal mit der Webseite vertraut zu machen', 'priority': 45, 'action_relative_link': '/tutorial/'},  # have priority lower than the practice todos
+        {'id': 12, 'title': 'Abschließender Test', 'description': 'Die Studie nähert sich dem Ende. Bitte schließe diesen Aussprachetest ab, mit der mit deinem ersten Test verglichen wird.', 'priority': 45, 'action_relative_link': '/final-test/'},
+        {'id': 13, 'title': 'Abschließenden Fragebogen ausfüllen', 'description': 'Fülle den letzten Fragebogen dieser Studie aus. Danach erhälst du deine Ergebnisse und bist fertig mit der Studie.', 'priority': 45, 'action_relative_link': '/final-questionnaire/'},
 
     ]
 

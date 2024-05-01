@@ -54,7 +54,7 @@ def add_course_due_dates(sender, instance, **kwargs):
                 
                 
                 # create a new ToDoDates instance for each StandardToDo 
-                for todo in StandardToDo.objects.all():
+                for todo in StandardToDo.objects.filter(id__in=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]):
                     if todo.id in [1, 2, 3, 4]:
                         todo_date = ToDoDates.objects.create(
                             course=instance,
@@ -70,14 +70,25 @@ def add_course_due_dates(sender, instance, **kwargs):
                             activation_date = today_17_00 + timezone.timedelta(days=7*(todo_date.standard_todo.id - 5)),  # 7 days * week
                             due_date = today_16_59 + timezone.timedelta(days=7*(todo_date.standard_todo.id - 4))   # 7 days * (week + 1)
                         )
-                    elif todo.id in [11, 12, 13]:
-                        todo_date = ToDoDates.objects.create(
-                            course=instance,
-                            standard_todo=todo,
-                            activation_date = today_00_01 + timezone.timedelta(days=7*6),  # 7 days * 6
-                            due_date =  today_00_01 + timezone.timedelta(days=7*9)  # 7 days * 9 weeks, at latest
-                        )
                     todo_date.save()
+                   
             else:
-                # ToDoDates.objects.filter(course=instance).delete()
+                # ToDoDates.objects.filter(course=instance).delete() // noch die Logik überlegen
                 pass
+
+        elif instance.activate_final_test != old_instance.activate_final_test and old_instance.study_started:
+            if instance.activate_final_test:
+
+                # for todo 11-13
+                for todo in StandardToDo.objects.filter(id__in=[11, 12, 13]):
+                    todo_date = ToDoDates.objects.create(
+                        course=instance,
+                        standard_todo=todo,
+                        activation_date = timezone.now(),
+                        due_date = timezone.now() + timezone.timedelta(days=21),
+                    )
+                    todo_date.save()                        
+
+            else:
+                ToDoDates.objects.filter(course=instance, standard_todo__in=[11, 12, 13]).delete()
+                

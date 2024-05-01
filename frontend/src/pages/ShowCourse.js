@@ -9,8 +9,11 @@ import CourseToDoDates from "../components/CourseToDoDates";
 const ShowCourse = () => {
 	const { courseId } = useParams();
 	const [course, setCourse] = useState(null);
-	const [editName, setEditName] = useState(false); // To toggle name editing
-	const [name, setName] = useState(""); // For handling the name input
+	const [editName, setEditName] = useState(false);
+	const [name, setName] = useState("");
+	const [editGrade, setEditGrade] = useState(false);
+	const [grade, setGrade] = useState("");
+	const [finalTestActivated, setFinalTestActivated] = useState(false);
 	const { authTokens } = useContext(AuthContext);
 	const { addNotification } = useNotification();
 
@@ -20,6 +23,8 @@ const ShowCourse = () => {
 				const fetchedCourse = await fetchCourse(authTokens, courseId);
 				setCourse(fetchedCourse);
 				setName(fetchedCourse.name);
+				setGrade(fetchedCourse.grade);
+				setFinalTestActivated(fetchedCourse.activate_final_test);
 			} catch (error) {
 				console.error("Error loading course data:", error);
 			}
@@ -42,6 +47,18 @@ const ShowCourse = () => {
 		}
 	};
 
+	const handleGradeChange = async () => {
+		try {
+			await updateCourseField(authTokens, courseId, { grade });
+			setCourse(prev => ({ ...prev, grade }));
+			setEditGrade(false);
+			addNotification("Course grade updated successfully", "success");
+		} catch (error) {
+			addNotification("Failed to update course grade", "error");
+			console.error("Error updating course grade:", error);
+		}
+	};
+
 	const toggleStudyStarted = async () => {
 		try {
 			const studyStarted = !course.study_started;
@@ -50,6 +67,18 @@ const ShowCourse = () => {
 			addNotification("Study status updated successfully", "success");
 		} catch (error) {
 			addNotification("Failed to update study status", "error");
+			console.error("Error updating study status:", error);
+		}
+	};
+
+	const toggleFinalTestActivation = async () => {
+		try {
+			setFinalTestActivated(!finalTestActivated);
+			const updatedCourse = await updateCourseField(authTokens, courseId, { activate_final_test: finalTestActivated });
+			setCourse(updatedCourse);
+			addNotification("Final Test activated successfully", "success");
+		} catch (error) {
+			addNotification("Failed to activate the final test", "error");
 			console.error("Error updating study status:", error);
 		}
 	};
@@ -70,20 +99,45 @@ const ShowCourse = () => {
 							</>
 						)}
 					</div>
+					<div>
+						<strong>Grade:</strong>
+						{editGrade ? (
+							<select value={grade} onChange={(e) => setGrade(e.target.value)} onBlur={handleGradeChange}>
+								<option value={5}>5. Klasse</option>
+								<option value={6}>6. Klasse</option>
+								<option value={7}>7. Klasse</option>
+								<option value={8}>8. Klasse</option>
+								<option value={9}>9. Klasse</option>
+								<option value={10}>10. Klasse</option>
+								<option value={11}>11. Klasse</option>
+								<option value={12}>12. Klasse</option>
+								<option value={13}>13. Klasse</option>
+							</select>
+						) : (
+							<>
+								{course.grade}
+								<button onClick={() => setEditGrade(true)}>Edit</button>
+							</>
+						)}
+					</div>
 					<button onClick={toggleStudyStarted}>
 						{course.study_started ? "Mark as Not Started" : "Mark as Started"}
 					</button>
 					<p><strong>Language:</strong> {course.language}</p>
 					<p><strong>Teacher:</strong> {course.teacher}</p>
 					<CourseStudents />
-					<hr></hr>
-					{course.study_started && <CourseToDoDates />}
-				</>
+					{course.study_started &&
+						<><CourseToDoDates final_test_activated={finalTestActivated} />
+							<button onClick={toggleFinalTestActivation}>
+								{course.activate_final_test ? "Finalen Test deaktivieren" : "Finalen Test aktivieren"}
+								{/*once pressed, it should update the finaltest_activated */}
+							</button>
+						</>}
 
+				</>
 			) : (
 				<p>Loading course details...</p>
 			)}
-
 		</div>
 	);
 };

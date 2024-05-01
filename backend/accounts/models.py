@@ -26,6 +26,8 @@ class Course(models.Model):
 
     start_date = models.DateField(default=None, null=True, blank=True)
     study_started = models.BooleanField(default=False)
+
+    activate_final_test = models.BooleanField(default=False)
     
 
 class User(AbstractUser):
