@@ -73,9 +73,10 @@ const ShowCourse = () => {
 
 	const toggleFinalTestActivation = async () => {
 		try {
-			setFinalTestActivated(!finalTestActivated);
-			const updatedCourse = await updateCourseField(authTokens, courseId, { activate_final_test: finalTestActivated });
+			const updatedCourse = await updateCourseField(authTokens, courseId, { activate_final_test: !finalTestActivated });
 			setCourse(updatedCourse);
+			setFinalTestActivated(!finalTestActivated);
+
 			addNotification("Final Test activated successfully", "success");
 		} catch (error) {
 			addNotification("Failed to activate the final test", "error");

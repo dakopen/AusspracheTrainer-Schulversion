@@ -206,7 +206,35 @@ export const fetchToDoDates = async (authTokens, courseId) => {
 	}
 };
 
+export const updateToDoDates = async (authTokens, courseId, standard_todo, dateData) => {
+	try {
+		const response = await fetch(
+			`${API_BASE_URL}/${TODO_BASE_URL}/courses/${courseId}/todo-dates/${standard_todo}/update`,
+			{
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authTokens.access}`,
+				},
+				body: JSON.stringify({
+					activation_date: dateData.activation_date,
+					due_date: dateData.due_date
+				})
+			}
+		);
 
+		if (!response.ok) {
+			const errorData = await response.json();
+			throw new Error("Failed to update ToDo dates: " + (errorData.detail || "Server responded with an error"));
+		}
+
+		const updatedData = await response.json();
+		return updatedData;
+	} catch (error) {
+		console.error("Error updating ToDo dates:", error);
+		throw error;
+	}
+};
 
 
 export const fetchLowestPriorityUserToDo = async (authTokens) => {

@@ -8,10 +8,15 @@ from rest_framework import status
 from accounts.permissions import IsStudystudentOrTeacher, IsTeacherOrSecretaryOrAdmin
 from .models import StandardToDo, UserToDo, ToDoDates
 from .serializers import StandardToDoSerializer, UserToDoSerializer, ToDoDatesSerializer
+from datetime import timedelta, datetime
+import logging
+
+from django.utils.dateparse import parse_datetime
 
 from accounts.models import Course
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 class UserToDoView(APIView):
     permission_classes = [IsStudystudentOrTeacher]
@@ -112,3 +117,47 @@ class ToDoDatesView(APIView):
         todo_dates = ToDoDates.objects.filter(course=course)
         serializer = ToDoDatesSerializer(todo_dates, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def patch(self, request, course_id, standard_todo):
+        logger.warn("ToDoDatesView patch")
+        logger.warn(f"Course ID: {course_id}")
+        logger.warn(f"Standard ToDo: {standard_todo}")
+        
+        try:
+            course = Course.objects.get(id=course_id)
+        except Course.DoesNotExist:
+            return Response({'message': 'Course not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        user = request.user
+        if not (user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user) or (user.role == User.SECRETARY and course.teacher.school == user.school)):
+            return Response({'message': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            date_instance = ToDoDates.objects.get(standard_todo=standard_todo, course=course)
+        except ToDoDates.DoesNotExist:
+            return Response({'message': 'ToDo Date not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Deserialize data and update ToDoDates
+        serializer = ToDoDatesSerializer(date_instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            # Adjust the time for activation_date and due_date
+            if 'activation_date' in request.data:
+                activation_time = parse_datetime(request.data['activation_date'])
+                if activation_time:
+                    activation_time = activation_time.replace(hour=17, minute=0, second=0, microsecond=0)
+                    serializer.validated_data['activation_date'] = activation_time
+
+            if 'due_date' in request.data:
+                due_time = parse_datetime(request.data['due_date'])
+                if due_time:
+                    due_time = due_time.replace(hour=16, minute=59, second=0, microsecond=0)
+                    serializer.validated_data['due_date'] = due_time
+            
+            serializer.save()
+            # Log the successful update
+            logger.warn("ToDo date updated successfully")
+            return Response({'message': 'ToDoDates updated successfully', 'data': serializer.data}, status=status.HTTP_200_OK)
+        else:
+            # Log the errors
+            logger.warn("Serializer errors: " + str(serializer.errors))
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

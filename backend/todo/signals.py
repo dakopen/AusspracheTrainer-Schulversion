@@ -67,8 +67,8 @@ def add_course_due_dates(sender, instance, **kwargs):
                         todo_date = ToDoDates.objects.create(
                             course=instance,
                             standard_todo=todo,
-                            activation_date = today_17_00 + timezone.timedelta(days=7*(todo_date.standard_todo.id - 5)),  # 7 days * week
-                            due_date = today_16_59 + timezone.timedelta(days=7*(todo_date.standard_todo.id - 4))   # 7 days * (week + 1)
+                            activation_date = today_17_00 + timezone.timedelta(days=7*(todo.id - 5)),  # 7 days * week
+                            due_date = today_16_59 + timezone.timedelta(days=7*(todo.id - 4))   # 7 days * (week + 1)
                         )
                     todo_date.save()
                    
@@ -87,7 +87,7 @@ def add_course_due_dates(sender, instance, **kwargs):
                         activation_date = timezone.now(),
                         due_date = timezone.now() + timezone.timedelta(days=21),
                     )
-                    todo_date.save()                        
+                    todo_date.save()
 
             else:
                 ToDoDates.objects.filter(course=instance, standard_todo__in=[11, 12, 13]).delete()
