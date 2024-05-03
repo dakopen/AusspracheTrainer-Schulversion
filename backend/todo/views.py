@@ -26,6 +26,14 @@ class UserToDoView(APIView):
         serializer = UserToDoSerializer(todos, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        standard_todo_id = request.data.get('standard_todo')
+        standard_todo = get_object_or_404(StandardToDo, id=standard_todo_id)
+        user = request.user
+        complete_user_todo_user_and_standard_todo(user, standard_todo)
+        return Response({'message': 'UserToDo completed'}, status=status.HTTP_200_OK)
+
+
 class SingleUserToDoView(APIView):
     permission_classes = [IsStudystudentOrTeacher]
 
@@ -36,6 +44,7 @@ class SingleUserToDoView(APIView):
             return Response({})
         serializer = StandardToDoSerializer(lowest_prio_todo.standard_todo)
         return Response(serializer.data)
+    
 
 
 def create_user_todo_for_all_users_in_course(standard_todo_id, course_id, due_date=None):
@@ -161,3 +170,4 @@ class ToDoDatesView(APIView):
             # Log the errors
             logger.warn("Serializer errors: " + str(serializer.errors))
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        

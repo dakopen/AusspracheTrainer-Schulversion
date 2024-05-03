@@ -36,6 +36,7 @@ import FirstQuestionnaire from "./pages/FirstQuestionnaire";
 import EmailQuestionnaire from "./pages/EmailQuestionnaire";
 
 import "./App.css";
+import Tutorial from "./pages/Tutorial";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
@@ -138,6 +139,10 @@ function App() {
 								<Route
 									element={<DeleteAccountConfirm />}
 									path="delete-account-confirm/:uidb64/:token/"
+								/>
+								<Route
+									element={<Tutorial standardTodo={3} />}
+									path="/tutorial/"
 								/>
 							</Routes>
 

@@ -181,6 +181,7 @@ export const fetchTeachersBySchool = async (authTokens, schoolId) => {
 		throw error;
 	}
 };
+
 export const fetchToDoDates = async (authTokens, courseId) => {
 	try {
 		const response = await fetch(
@@ -348,6 +349,7 @@ export const deleteSentence = async (id, authTokens) => {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
 				},
+
 			}
 		);
 
@@ -356,6 +358,33 @@ export const deleteSentence = async (id, authTokens) => {
 		}
 	} catch (error) {
 		console.error("Error deleting sentence:", error);
+		throw error;
+	}
+};
+
+
+export const completeStandardTodo = async (standard_todo, authTokens) => {
+	try {
+		const response = await fetch(
+			`${API_BASE_URL}/${TODO_BASE_URL}/complete`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+				},
+				body: JSON.stringify({ standard_todo })
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to complete the tutorial");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error completing tutorial:", error);
 		throw error;
 	}
 };
