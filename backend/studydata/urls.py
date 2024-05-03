@@ -7,4 +7,5 @@ urlpatterns = [
     path('retrieve-sentence/<int:sentence_id>/', views.RetrieveStudySentenceById.as_view(), name='retrieve-sentence'),
     path('sentences/', views.StudySentencesListView.as_view(), name='sentences-list'),
     path('sentences/<int:sentence_id>/', views.StudySentencesListView.as_view(), name='sentences-update'),
+    path('course-assignments/', views.RetrieveStudySentencesByCourseAndLocation.as_view(), name='course-assignments-sentences'),
 ]

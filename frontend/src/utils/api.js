@@ -388,3 +388,32 @@ export const completeStandardTodo = async (standard_todo, authTokens) => {
 		throw error;
 	}
 };
+
+
+// fetch sentences in range of location_values for a specific course
+export const fetchSentencesByCourseAndLocation = async (startLocation, endLocation, authTokens) => {
+	try {
+		const response = await fetch(
+			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/course-assignments/`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+				},
+				body: JSON.stringify({ start_location: startLocation, end_location: endLocation })
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to retrieve sentences");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching sentences:", error);
+		throw error;
+	}
+};
+

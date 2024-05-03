@@ -7,17 +7,21 @@ import io
 from pydub import AudioSegment
 from django.core.files.base import ContentFile
 
-from accounts.permissions import IsStudystudent, IsAuthenticated, IsTeacherOrSecretaryOrAdmin, IsAdmin
+from accounts.permissions import IsStudystudent, IsAuthenticated, IsTeacherOrSecretaryOrAdmin, IsAdmin, IsStudystudentOrTeacher
 from todo.views import complete_user_todo_user_and_standard_todo
 import backend.settings
 
+from accounts.models import Course
 from .tasks import async_pronunciation_assessment
-from .models import FirstQuestionnaire, StudySentences
-from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, StudySentencesSerializer
-
+from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment
+from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, \
+    StudySentencesSerializer, StudySentencesCourseAssignmentSerializer
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 
 logger = logging.getLogger(__name__)
 
+User = get_user_model()
 
 class FirstQuestionnaireView(APIView):
     permission_classes = [IsStudystudent]
@@ -37,7 +41,7 @@ class AudioAnalysisView(APIView):
         serializer = AudioAnalysisSerializer(data=request.data)
         if serializer.is_valid():
             audio_file = request.FILES['audio']
-            sentence_id = serializer.validated_data['text']  # TODO: Change later to sentence_id
+            sentence_id = serializer.validated_data['sentence_id']  # TODO: Change later to sentence_id
             audio_mimetype = serializer.validated_data['audio_mimetype']
 
             logger.warn(f"Initiating analysis for sentence with id {sentence_id} with mimetype {audio_mimetype}")
@@ -77,7 +81,6 @@ class AudioAnalysisView(APIView):
                 destination.write(content_file.read())
             
 
-            sentence_id = 6  # TODO: Delete later
             # Dispatch the pronunciation assessment task to Celery
             task = async_pronunciation_assessment.delay(file_path, sentence_id, request.user.belongs_to_course.language, user_id=request.user.id)
 
@@ -152,3 +155,36 @@ class RetrieveStudySentenceById(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except StudySentences.DoesNotExist:
             return Response({'error': 'Study sentence not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class RetrieveStudySentencesByCourseAndLocation(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        if user.role in [User.TEACHER, User.SECRETARY, user.ADMIN]:
+            course_id = request.data.get('course_id')
+            course = get_object_or_404(Course, pk=course_id)
+        elif user.role == User.STUDYSTUDENT:
+            course = user.belongs_to_course
+        else:
+           return Response({'message': 'You do not have permission to view these sentences'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Retrieve start_location and end_location from request body
+        start_location = request.data.get('start_location')
+        end_location = request.data.get('end_location')
+
+        if not start_location or not end_location:
+            return Response({'error': 'start_location and end_location are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        sentences = StudySentencesCourseAssignment.objects.filter(
+            course=course,
+            location_value__range=(start_location, end_location)
+        )
+
+        serializer = StudySentencesCourseAssignmentSerializer(sentences, many=True)
+        return Response(serializer.data)
+    
+    # TODO: also retrieve the sentences not only the id of the sentences
+
+

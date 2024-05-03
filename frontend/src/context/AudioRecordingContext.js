@@ -5,7 +5,7 @@ const AudioRecordingContext = createContext();
 
 export const useAudioRecording = () => useContext(AudioRecordingContext);
 
-export const AudioRecordingProvider = ({ children }) => {
+export const AudioRecordingProvider = ({ children, sentenceId }) => {
     const [isRecording, setIsRecording] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioType, setAudioType] = useState('');
@@ -97,7 +97,7 @@ export const AudioRecordingProvider = ({ children }) => {
         const formData = new FormData();
         formData.append("audio", blob);
         formData.append("audio_mimetype", audioType);
-        formData.append("text", "This is another text area but with text");
+        formData.append("sentence_id", sentenceId);
 
         try {
             const response = await fetch("http://127.0.0.1:8000/studydata/audio-analysis/", {
