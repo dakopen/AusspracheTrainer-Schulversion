@@ -3,6 +3,9 @@ import { fetchSentencesByCourseAndLocation } from '../utils/api';
 import AuthContext from "../context/AuthContext";
 import AusspracheTrainer from '../components/AusspracheTrainer';
 import ProgressBar from '../components/ProgressBar';
+import { completeStandardTodo } from '../utils/api';
+import { useNotification } from '../context/NotificationContext';
+import { useNavigate } from "react-router-dom";
 
 const PronunciationTest = () => {
 	const { authTokens } = useContext(AuthContext);
@@ -10,6 +13,8 @@ const PronunciationTest = () => {
 	const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const { addNotification } = useNotification();
+	let navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -46,7 +51,9 @@ const PronunciationTest = () => {
 				setCurrentSentenceIndex(wrapAroundIndex);
 			} else {
 				// If no incomplete sentences are found at all, alert the user that the test is completed
-				alert('You have completed the pronunciation test!');
+				completeStandardTodo(4, authTokens);
+				navigate("/");
+
 			}
 		}
 	};

@@ -30,7 +30,8 @@ class UserToDoView(APIView):
         standard_todo_id = request.data.get('standard_todo')
         standard_todo = get_object_or_404(StandardToDo, id=standard_todo_id)
         user = request.user
-        complete_user_todo_user_and_standard_todo(user, standard_todo)
+
+        complete_user_todo_user_and_standard_todo(user, standard_todo=standard_todo)
         return Response({'message': 'UserToDo completed'}, status=status.HTTP_200_OK)
 
 
@@ -39,10 +40,10 @@ class SingleUserToDoView(APIView):
 
     def get(self, request):
         todos = UserToDo.objects.filter(user=request.user, completed=False)
-        lowest_prio_todo = todos.order_by('standard_todo__priority').first()
+        lowest_prio_todo = todos.order_by('todo_date__standard_todo__priority').first()
         if lowest_prio_todo is None:
             return Response({})
-        serializer = StandardToDoSerializer(lowest_prio_todo.standard_todo)
+        serializer = StandardToDoSerializer(lowest_prio_todo.todo_date.standard_todo)
         return Response(serializer.data)
     
 
@@ -69,8 +70,18 @@ def complete_user_todo_by_id(user_todo_id):
     user_todo.completion_date = timezone.now()
     user_todo.save()
 
+def complete_user_todo_user_and_standard_todo(user, standard_todo):
+    """
+    Marks a UserToDo as complete and sets the completion date.
+    """
+    course_todo = ToDoDates.objects.get(standard_todo=standard_todo, course=user.belongs_to_course)
+    user_todo = UserToDo.objects.get(user=user, todo_date=course_todo)
+    
+    user_todo.completed = True
+    user_todo.completion_date = timezone.now()
+    user_todo.save()
 
-def complete_user_todo_user_and_standard_todo(user, todo_date):
+def complete_user_todo_user_and_standard_todo_date(user, todo_date):
     """
     Marks a UserToDo as complete and sets the completion date.
     """

@@ -17,7 +17,7 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete }) => 
     const [audioBlob, setAudioBlob] = useState(null);
     const [starttimeRecording, setStarttimeRecording] = useState(0);
     const [endtimeRecording, setEndtimeRecording] = useState(0);
-    const { BASE_URL, STUDY_DATA_BASE_URL } = useContext(UrlContext);
+    const { BASE_URL, STUDYDATA_BASE_URL } = useContext(UrlContext);
 
     const recordingStateRef = useRef(recordingState);
     recordingStateRef.current = recordingState;
@@ -104,7 +104,7 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete }) => 
         formData.append("sentence_id", sentenceId);
 
         try {
-            const response = await fetch(`${STUDY_DATA_BASE_URL}/audio-analysis/`, {
+            const response = await fetch(`${STUDYDATA_BASE_URL}/audio-analysis/`, {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + authTokens.access,
