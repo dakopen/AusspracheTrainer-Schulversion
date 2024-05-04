@@ -188,7 +188,7 @@ class RetrieveStudySentencesByCourseAndLocation(APIView):
             location_value__range=(int(start_location), int(end_location))
         )
 
-        serializer = StudySentencesCourseAssignmentSerializer(sentences, many=True)
+        serializer = StudySentencesCourseAssignmentSerializer(sentences, many=True, context={'request': request})
         return Response(serializer.data)
     
 

@@ -5,7 +5,7 @@ const AudioRecordingContext = createContext();
 
 export const useAudioRecording = () => useContext(AudioRecordingContext);
 
-export const AudioRecordingProvider = ({ children, sentenceId }) => {
+export const AudioRecordingProvider = ({ children, sentenceId, onComplete }) => {
     const [isRecording, setIsRecording] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioType, setAudioType] = useState('');
@@ -96,7 +96,7 @@ export const AudioRecordingProvider = ({ children, sentenceId }) => {
 
     const handleSubmit = async (blob) => {
         const formData = new FormData();
-        console.log(blob);
+        console.log(blob, sentenceId);
         formData.append("audio", blob);
         formData.append("audio_mimetype", audioType);
         formData.append("sentence_id", sentenceId);
@@ -110,6 +110,10 @@ export const AudioRecordingProvider = ({ children, sentenceId }) => {
                 body: formData,
             });
             const data = await response.json();
+            if (response.ok) {
+                console.log("Complete")
+                onComplete(sentenceId)
+            }
         } catch (error) {
             console.error("Error submitting form:", error);
         }

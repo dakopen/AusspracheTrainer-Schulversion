@@ -7,7 +7,7 @@ import ProgressBar from '../components/ProgressBar';
 const PronunciationTest = () => {
 	const { authTokens } = useContext(AuthContext);
 	const [sentences, setSentences] = useState([]);
-	const [currentIndex, setCurrentIndex] = useState(0);
+	const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
@@ -15,6 +15,7 @@ const PronunciationTest = () => {
 		const fetchData = async () => {
 			try {
 				const result = await fetchSentencesByCourseAndLocation(1, 20, authTokens);
+				console.log("Fetched sentences:", result);
 				setSentences(result);
 				setLoading(false);
 			} catch (err) {
@@ -31,26 +32,50 @@ const PronunciationTest = () => {
 	if (error) return <div>Error: {error.message}</div>;
 
 	const handleNextSentence = () => {
-		if (currentIndex < sentences.length - 1) {
-			setCurrentIndex(currentIndex + 1);
+		// Find the next incomplete sentence starting from the sentence after the current one
+		const nextIndex = sentences.findIndex((sentence, index) => index > currentSentenceIndex && !sentence.completed);
+
+		if (nextIndex !== -1) {
+			// Set the next incomplete sentence if found
+			setCurrentSentenceIndex(nextIndex);
 		} else {
-			alert('You have completed the pronunciation test!');
+			// If no incomplete sentences are found after the current one, search from the beginning
+			const wrapAroundIndex = sentences.findIndex((sentence, index) => index <= currentSentenceIndex && !sentence.completed);
+
+			if (wrapAroundIndex !== -1) {
+				setCurrentSentenceIndex(wrapAroundIndex);
+			} else {
+				// If no incomplete sentences are found at all, alert the user that the test is completed
+				alert('You have completed the pronunciation test!');
+			}
 		}
 	};
 
-	const currentSentence = sentences[currentIndex];
+	const markSentenceAsCompleted = (sentenceId) => {
+		console.log("Marking sentence as completed:", sentenceId)
+		const updatedSentences = sentences.map(sentence =>
+			sentence.sentence === sentenceId ? { ...sentence, is_completed: true } : sentence
+		);
+		console.log(sentences, updatedSentences)
+		setSentences(updatedSentences);
+	};
 
-	const progressPercentage = ((currentIndex + 1) / sentences.length) * 100;
+	const handleSentenceClick = index => {
+		setCurrentSentenceIndex(index);
+	};
+
+	const currentSentence = sentences[currentSentenceIndex];
 
 	return (
 		<div>
-			<ProgressBar percentage={progressPercentage} /> {/* ProgressBar displaying current progress */}
+			<ProgressBar sentences={sentences.map(sentence => sentence.is_completed)} onSentenceClick={handleSentenceClick} />
 			{currentSentence ? (
 				<AusspracheTrainer
 					textareaText={currentSentence.sentence_as_text.sentence}
-					sentenceId={currentSentence.id}
+					sentenceId={currentSentence.sentence}
 					audioUrl={currentSentence.audioUrl}
 					onNextSentence={handleNextSentence} // Prop to handle moving to the next sentence
+					onComplete={markSentenceAsCompleted}
 				/>
 			) : (
 				<div>No sentences found</div>

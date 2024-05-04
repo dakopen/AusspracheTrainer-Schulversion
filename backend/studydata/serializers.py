@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment
+from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, PronunciationAssessmentResult
 
 class FirstQuestionnaireSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,9 +29,17 @@ class StudySentencesSerializer(serializers.ModelSerializer):
 
 class StudySentencesCourseAssignmentSerializer(serializers.ModelSerializer):
     sentence_as_text = StudySentencesSerializer(source='sentence', read_only=True)
+    is_completed = serializers.SerializerMethodField()
 
     class Meta:
         model = StudySentencesCourseAssignment
-        fields = ('id', 'course', 'sentence', 'location_value', 'sentence_as_text')
-        read_only_fields = ('id', 'course', 'sentence', 'location_value', 'sentence_as_text')
+        fields = ('id', 'course', 'sentence', 'location_value', 'sentence_as_text', 'is_completed')
+        read_only_fields = ('id', 'course', 'sentence', 'location_value', 'sentence_as_text', 'is_completed')
     
+    def get_is_completed(self, obj):
+        user = self.context['request'].user
+        completed = PronunciationAssessmentResult.objects.filter(
+            user=user, 
+            sentence=obj.sentence
+        ).exists()
+        return completed

@@ -28,7 +28,7 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id):
         human_readable_language = "en-US"
     elif language == 2:
         human_readable_language = "fr-FR"
-
+    
     result, word_offset_duration, phoneme_dicts, json_response = pronunciation_assessment_continuous_from_file(filename, reference_text, human_readable_language)
 
     if not json_response:

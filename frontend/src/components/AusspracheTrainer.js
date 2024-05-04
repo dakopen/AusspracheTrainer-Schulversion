@@ -7,17 +7,17 @@ import { AudioRecordingProvider } from "../context/AudioRecordingContext";
 import AuthContext from '../context/AuthContext';
 
 
-const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence }) => {
+const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence, onComplete }) => {
     const [recordingState, setRecordingState] = useState(0);
     const { user } = useContext(AuthContext);
-
 
 
     return (
         <>
             <Textarea textareaValue={textareaText} />
             <br></br>
-            <AudioRecordingProvider sentenceId={sentenceId}>
+            {console.log("sentence Id: ", sentenceId)}
+            <AudioRecordingProvider sentenceId={sentenceId} onComplete={onComplete}>
                 <RecordingButton setRecordingState={setRecordingState} />
                 <br></br>
                 <AudioVisualizer recordingState={recordingState} />
