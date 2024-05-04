@@ -33,14 +33,14 @@ const PronunciationTest = () => {
 
 	const handleNextSentence = () => {
 		// Find the next incomplete sentence starting from the sentence after the current one
-		const nextIndex = sentences.findIndex((sentence, index) => index > currentSentenceIndex && !sentence.completed);
+		const nextIndex = sentences.findIndex((sentence, index) => index > currentSentenceIndex && !sentence.is_completed);
 
 		if (nextIndex !== -1) {
 			// Set the next incomplete sentence if found
 			setCurrentSentenceIndex(nextIndex);
 		} else {
 			// If no incomplete sentences are found after the current one, search from the beginning
-			const wrapAroundIndex = sentences.findIndex((sentence, index) => index <= currentSentenceIndex && !sentence.completed);
+			const wrapAroundIndex = sentences.findIndex((sentence, index) => index <= currentSentenceIndex && !sentence.is_completed);
 
 			if (wrapAroundIndex !== -1) {
 				setCurrentSentenceIndex(wrapAroundIndex);
@@ -68,7 +68,7 @@ const PronunciationTest = () => {
 
 	return (
 		<div>
-			<ProgressBar sentences={sentences.map(sentence => sentence.is_completed)} onSentenceClick={handleSentenceClick} />
+			<ProgressBar sentences={sentences.map(sentence => sentence.is_completed)} onSentenceClick={handleSentenceClick} currentSentenceIndex={currentSentenceIndex} />
 			{currentSentence ? (
 				<AusspracheTrainer
 					textareaText={currentSentence.sentence_as_text.sentence}

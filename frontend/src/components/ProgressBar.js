@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProgressBar = ({ sentences, onSentenceClick }) => {
+const ProgressBar = ({ sentences, onSentenceClick, currentSentenceIndex }) => {
     return (
         <div style={{ display: 'flex', width: '100%', backgroundColor: '#ddd' }}>
             {console.log("completed: ", sentences, "new prop")}
@@ -9,9 +9,7 @@ const ProgressBar = ({ sentences, onSentenceClick }) => {
                 <div key={index} style={{
                     flexGrow: 1,
                     height: '24px',
-                    backgroundColor: completed ? 'green' : 'lightgray',
-                    display: 'flex',
-                    justifyContent: 'center',
+                    backgroundColor: index === currentSentenceIndex ? (completed ? '#4CAF50' : '#C8E6C9') : (completed ? 'green' : 'lightgray'), justifyContent: 'center',
                     alignItems: 'center',
                     position: 'relative',
                     cursor: 'pointer'
