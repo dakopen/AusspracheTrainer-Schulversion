@@ -8,7 +8,7 @@ const CreateBulkStudents = ({ refreshStudents }) => {
 	const { courseId } = useParams();
 	const [numberOfStudents, setNumberOfStudents] = useState(10); // Default to 10 students
 	const { authTokens } = useContext(AuthContext);
-	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
+	const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
 	const { addNotification } = useNotification();
 
 	const handleSubmit = async (event) => {

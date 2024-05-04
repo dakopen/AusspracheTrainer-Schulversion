@@ -9,7 +9,7 @@ function DeleteAccountConfirm() {
     const { uidb64, token } = useParams(); // Using useParams to extract parameters from the URL path
     const navigate = useNavigate();
     const { addNotification } = useNotification();
-    const { ACCOUNT_BASE_URL } = useContext(UrlContext);
+    const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
     const { logoutUser } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {

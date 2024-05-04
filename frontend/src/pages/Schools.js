@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const Schools = () => {
 	const [schools, setSchools] = useState([]);
 	const { authTokens } = useContext(AuthContext);
-	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
+	const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
 
 	useEffect(() => {
 		const loadData = async () => {

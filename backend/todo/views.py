@@ -47,15 +47,15 @@ class SingleUserToDoView(APIView):
     
 
 
-def create_user_todo_for_all_users_in_course(standard_todo_id, course_id, due_date=None):
+def create_user_todo_for_all_users_in_course(todo_date_id, course_id, due_date=None):
     """
     Create a UserToDo instance for all users based on a StandardToDo id.
     """
-    standard_todo = StandardToDo.objects.get(id=standard_todo_id)
+    todo_date = ToDoDates.objects.get(id=todo_date_id)
     users = User.objects.filter(course_id=course_id)
     
     user_todos = [
-        UserToDo(user=user, standard_todo=standard_todo, due_date=due_date or timezone.now() + timezone.timedelta(days=7))
+        UserToDo(user=user, todo_date=todo_date)
         for user in users
     ]
     UserToDo.objects.bulk_create(user_todos)
@@ -70,11 +70,11 @@ def complete_user_todo_by_id(user_todo_id):
     user_todo.save()
 
 
-def complete_user_todo_user_and_standard_todo(user, standard_todo):
+def complete_user_todo_user_and_standard_todo(user, todo_date):
     """
     Marks a UserToDo as complete and sets the completion date.
     """
-    user_todo = UserToDo.objects.get(user=user, standard_todo=standard_todo)
+    user_todo = UserToDo.objects.get(user=user, todo_date=todo_date)
     user_todo.completed = True
     user_todo.completion_date = timezone.now()
     user_todo.save()

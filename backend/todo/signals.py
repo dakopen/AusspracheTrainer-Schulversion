@@ -13,16 +13,16 @@ User = get_user_model()
 @receiver(post_save, sender=User)
 def link_initial_todos_to_student(sender, instance, created, **kwargs):
     if created and instance.role == User.STUDYSTUDENT:
-
+        pass
         """
-        initial_todos = StandardToDo.objects.filter(id__in=[1, 2, 3, 4])
+        initial_todos = StandardToDo.objects.filter(id__in=[1, 2, 3])
 
         for std_todo in initial_todos:
             UserToDo.objects.create(
                 user=instance,
                 standard_todo=std_todo,
             )
-
+        
         weekly_todos_and_final_todos = StandardToDo.objects.filter(id__in=[5, 6, 7, 8, 9, 10, 11, 12, 13])
 
         for std_todo in weekly_todos_and_final_todos:
@@ -31,13 +31,13 @@ def link_initial_todos_to_student(sender, instance, created, **kwargs):
                 standard_todo=std_todo,
             )
         """
-        
+        """
         for std_todo in StandardToDo.objects.all():
             UserToDo.objects.create(
                 user=instance,
                 standard_todo=std_todo,
             )
-
+        """
 
 @receiver(pre_save, sender=Course)
 def add_course_due_dates(sender, instance, **kwargs):
@@ -92,3 +92,12 @@ def add_course_due_dates(sender, instance, **kwargs):
             else:
                 ToDoDates.objects.filter(course=instance, standard_todo__in=[11, 12, 13]).delete()
                 
+
+@receiver(post_save, sender=ToDoDates)
+def add_todos_to_user(sender, instance, created, **kwargs):
+    if created:
+        for user in instance.course.students.all():
+            UserToDo.objects.create(
+                user=user,
+                todo_date=instance,
+            )

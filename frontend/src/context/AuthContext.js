@@ -1,7 +1,8 @@
-import { createContext, useState, useEffect, useCallback } from "react";
+import { createContext, useState, useEffect, useCallback, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "./NotificationContext";
+import { UrlContext } from "./UrlContext";
 
 const AuthContext = createContext();
 // import NotificationContext from './NotificationContext'
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
 	);
 	let [loading, setLoading] = useState(true);
 	const { addNotification } = useNotification();
+	const { BASE_URL, API_BASE_URL } = useContext(UrlContext);
 	const navigate = useNavigate();
 
 	let sendToLogin = async (e) => {
@@ -39,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	let loginUserWithCredentials = async (username, password) => {
-		let response = await fetch("http://localhost:8000/api/token/", {
+		let response = await fetch(`${API_BASE_URL}/token/`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -64,7 +66,7 @@ export const AuthProvider = ({ children }) => {
 
 	let loginUser = async (e) => {
 		e.preventDefault();
-		let response = await fetch("http://localhost:8000/api/token/", {
+		let response = await fetch(`${API_BASE_URL}/token/`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -95,7 +97,7 @@ export const AuthProvider = ({ children }) => {
 	let updateToken = useCallback(async () => {
 		console.log("Updated token!");
 
-		let response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+		let response = await fetch(`${API_BASE_URL}/token/refresh/`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

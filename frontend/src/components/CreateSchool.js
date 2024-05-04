@@ -10,7 +10,7 @@ const CreateSchool = ({ setCourses }) => {
 	const [englishSinceGrade, setEnglishSinceGrade] = useState(5);
 	const [frenchSinceGrade, setFrenchSinceGrade] = useState(6);
 	const { authTokens } = useContext(AuthContext);
-	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
+	const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();

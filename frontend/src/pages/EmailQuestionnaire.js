@@ -8,7 +8,7 @@ const EmailQuestionnaire = () => {
 	const [email, setEmail] = useState("");
 	const [confirmEmail, setConfirmEmail] = useState("");
 	let { authTokens } = useContext(AuthContext);
-	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
+	const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
 	const navigate = useNavigate();
 	const { addNotification } = useNotification();
 
@@ -28,6 +28,8 @@ const EmailQuestionnaire = () => {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${authTokens.access}`,
+					"ngrok-skip-browser-warning": "true",
+
 				},
 				body: data,
 			});

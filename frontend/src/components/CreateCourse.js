@@ -9,7 +9,7 @@ const CreateCourse = ({ setCourses }) => {
 	const [grade, setGrade] = useState(5); // Default to 5th grade
 
 	const { authTokens } = useContext(AuthContext);
-	const { ACCOUNT_BASE_URL } = useContext(UrlContext);
+	const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();

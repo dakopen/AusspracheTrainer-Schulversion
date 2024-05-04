@@ -39,8 +39,6 @@ import "./App.css";
 import Tutorial from "./pages/Tutorial";
 import PronunciationTest from "./pages/PronunciationTest";
 
-axios.defaults.baseURL = "http://127.0.0.1:8000/";
-
 function App() {
 	return (
 		<div>

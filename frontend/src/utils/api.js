@@ -1,17 +1,22 @@
-const API_BASE_URL = "http://127.0.0.1:8000"; // Adjust this to your actual API base URL
-const ACCOUNT_BASE_URL = "accounts";
-const STUDYDATA_BASE_URL = "studydata";
-const TODO_BASE_URL = "todo";
+//const API_BASE_URL = "http://127.0.0.1:8000"; // Adjust this to your actual API base URL
+
+
+//const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}:8000`;
+const API_BASE_URL = "https://tapir-perfect-thankfully.ngrok-free.app";
+const ACCOUNT_BASE_URL = `${API_BASE_URL}/accounts`;
+const STUDYDATA_BASE_URL = `${API_BASE_URL}/studydata`;
+const TODO_BASE_URL = `${API_BASE_URL}/todo`;
 
 export const fetchSchools = async (authTokens) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${ACCOUNT_BASE_URL}/schools/`,
+			`${ACCOUNT_BASE_URL}/schools/`,
 			{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
 				},
 			}
 		);
@@ -31,12 +36,13 @@ export const fetchSchools = async (authTokens) => {
 export const fetchCourses = async (authTokens) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${ACCOUNT_BASE_URL}/courses/`,
+			`${ACCOUNT_BASE_URL}/courses/`,
 			{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
 				},
 			}
 		);
@@ -56,12 +62,13 @@ export const fetchCourses = async (authTokens) => {
 export const fetchCourse = async (authTokens, courseId) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${ACCOUNT_BASE_URL}/courses/${courseId}/`,
+			`${ACCOUNT_BASE_URL}/courses/${courseId}/`,
 			{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
 				},
 			}
 		);
@@ -81,12 +88,14 @@ export const fetchCourse = async (authTokens, courseId) => {
 export const fetchSchool = async (authTokens, schoolId) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${ACCOUNT_BASE_URL}/schools/${schoolId}/`,
+			`${ACCOUNT_BASE_URL}/schools/${schoolId}/`,
 			{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 			}
 		);
@@ -106,12 +115,14 @@ export const fetchSchool = async (authTokens, schoolId) => {
 export const fetchStudentsByCourse = async (authTokens, courseId) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${ACCOUNT_BASE_URL}/courses/${courseId}/students/`,
+			`${ACCOUNT_BASE_URL}/courses/${courseId}/students/`,
 			{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 			}
 		);
@@ -131,12 +142,14 @@ export const fetchStudentsByCourse = async (authTokens, courseId) => {
 export const updateCourseField = async (authTokens, courseId, data) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${ACCOUNT_BASE_URL}/courses/${courseId}/update`,
+			`${ACCOUNT_BASE_URL}/courses/${courseId}/update`,
 			{
 				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 				body: JSON.stringify(data)
 			}
@@ -160,12 +173,14 @@ export const updateCourseField = async (authTokens, courseId, data) => {
 export const fetchTeachersBySchool = async (authTokens, schoolId) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${ACCOUNT_BASE_URL}/schools/${schoolId}/teachers/`,
+			`${ACCOUNT_BASE_URL}/schools/${schoolId}/teachers/`,
 			{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 			}
 		);
@@ -185,12 +200,14 @@ export const fetchTeachersBySchool = async (authTokens, schoolId) => {
 export const fetchToDoDates = async (authTokens, courseId) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${TODO_BASE_URL}/courses/${courseId}/todo-dates/`,
+			`${TODO_BASE_URL}/courses/${courseId}/todo-dates/`,
 			{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 			}
 		);
@@ -210,12 +227,14 @@ export const fetchToDoDates = async (authTokens, courseId) => {
 export const updateToDoDates = async (authTokens, courseId, standard_todo, dateData) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${TODO_BASE_URL}/courses/${courseId}/todo-dates/${standard_todo}/update`,
+			`${TODO_BASE_URL}/courses/${courseId}/todo-dates/${standard_todo}/update`,
 			{
 				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${authTokens.access}`,
+					"ngrok-skip-browser-warning": "true",
+
 				},
 				body: JSON.stringify({
 					activation_date: dateData.activation_date,
@@ -240,11 +259,13 @@ export const updateToDoDates = async (authTokens, courseId, standard_todo, dateD
 
 export const fetchLowestPriorityUserToDo = async (authTokens) => {
 	try {
-		const response = await fetch(`${API_BASE_URL}/${TODO_BASE_URL}/`, {
+		const response = await fetch(`${TODO_BASE_URL}/`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: "Bearer " + String(authTokens.access),
+				"ngrok-skip-browser-warning": "true",
+
 			},
 		});
 
@@ -263,12 +284,14 @@ export const fetchLowestPriorityUserToDo = async (authTokens) => {
 export const fetchSentences = async (authTokens) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/sentences/`,
+			`${STUDYDATA_BASE_URL}/sentences/`,
 			{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 			}
 		);
@@ -288,12 +311,14 @@ export const fetchSentences = async (authTokens) => {
 export const createSentences = async (sentences, authTokens) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/sentences/`,
+			`${STUDYDATA_BASE_URL}/sentences/`,
 			{
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 				body: JSON.stringify(sentences),
 			}
@@ -316,12 +341,14 @@ export const createSentences = async (sentences, authTokens) => {
 export const updateSentence = async (sentence, id, authTokens) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/sentences/${id}/`,
+			`${STUDYDATA_BASE_URL}/sentences/${id}/`,
 			{
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 				body: JSON.stringify(sentence),
 			}
@@ -342,12 +369,14 @@ export const updateSentence = async (sentence, id, authTokens) => {
 export const deleteSentence = async (id, authTokens) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/sentences/${id}/`,
+			`${STUDYDATA_BASE_URL}/sentences/${id}/`,
 			{
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 
 			}
@@ -366,12 +395,14 @@ export const deleteSentence = async (id, authTokens) => {
 export const completeStandardTodo = async (standard_todo, authTokens) => {
 	try {
 		const response = await fetch(
-			`${API_BASE_URL}/${TODO_BASE_URL}/complete`,
+			`${TODO_BASE_URL}/complete`,
 			{
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 				body: JSON.stringify({ standard_todo })
 			}
@@ -392,7 +423,7 @@ export const completeStandardTodo = async (standard_todo, authTokens) => {
 export const fetchSentencesByCourseAndLocation = async (startLocation, endLocation, authTokens, courseId = null) => {
 	try {
 		// Construct the URL with query parameters for GET request
-		const url = new URL(`${API_BASE_URL}/${STUDYDATA_BASE_URL}/course-assignments/`);
+		const url = new URL(`${STUDYDATA_BASE_URL}/course-assignments/`);
 		if (courseId) {
 			url.searchParams.append('course_id', courseId);
 		}
@@ -404,6 +435,8 @@ export const fetchSentencesByCourseAndLocation = async (startLocation, endLocati
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: "Bearer " + String(authTokens.access),
+				"ngrok-skip-browser-warning": "true",
+
 			}
 		});
 

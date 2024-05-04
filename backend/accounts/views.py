@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
 from backend import settings
 from datetime import date
+from django.db import connection
 
 from .utils import generate_random_username
 from .models import School, Course
@@ -238,7 +239,7 @@ class BulkCreateStudyStudentsView(APIView):
         # Adjust number to not exceed maximum allowed students per course
         number_of_students = min(number_of_students, max_number_of_students - course.students.count())
 
-        if DEBUG:  # TODO: Change later, but db.sqlite does not allow autoincrement for bulk_create
+        if DEBUG or connection.vendor == "sqlite":  # TODO: Change later, but db.sqlite does not allow autoincrement for bulk_create
             with transaction.atomic():
                 zero_or_one = random.randint(0, 1)
                 for i in range(number_of_students):

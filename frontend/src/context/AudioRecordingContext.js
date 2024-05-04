@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import AuthContext from "../context/AuthContext";
+import { UrlContext } from "../context/UrlContext";
 
 const AudioRecordingContext = createContext();
 
@@ -16,6 +17,7 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete }) => 
     const [audioBlob, setAudioBlob] = useState(null);
     const [starttimeRecording, setStarttimeRecording] = useState(0);
     const [endtimeRecording, setEndtimeRecording] = useState(0);
+    const { BASE_URL, STUDY_DATA_BASE_URL } = useContext(UrlContext);
 
     const recordingStateRef = useRef(recordingState);
     recordingStateRef.current = recordingState;
@@ -102,7 +104,7 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete }) => 
         formData.append("sentence_id", sentenceId);
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/studydata/audio-analysis/", {
+            const response = await fetch(`${STUDY_DATA_BASE_URL}/audio-analysis/`, {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + authTokens.access,

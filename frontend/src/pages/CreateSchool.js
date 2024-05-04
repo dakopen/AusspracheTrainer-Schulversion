@@ -7,7 +7,7 @@ const CreateSchool = () => {
 	const [address, setAddress] = useState("");
 	const [shortId, setShortId] = useState("");
 	const { authTokens } = useContext(AuthContext);
-	const { API_BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
+	const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -24,6 +24,8 @@ const CreateSchool = () => {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 				body: data,
 			});

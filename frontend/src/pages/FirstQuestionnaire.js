@@ -14,7 +14,7 @@ const FirstQuestionnaire = () => {
 	const { addNotification } = useNotification();
 	const navigate = useNavigate();
 
-	const { STUDYDATA_BASE_URL } = useContext(UrlContext);
+	const { BASE_URL, STUDYDATA_BASE_URL } = useContext(UrlContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -53,6 +53,8 @@ const FirstQuestionnaire = () => {
 					headers: {
 						"Content-Type": "application/json",
 						Authorization: `Bearer ${authTokens.access}`,
+						"ngrok-skip-browser-warning": "true",
+
 					},
 					body: data,
 				}

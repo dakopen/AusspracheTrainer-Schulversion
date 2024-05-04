@@ -1,12 +1,14 @@
 import React, { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
+import { UrlContext } from "../context/UrlContext";
 
 function SetPassword() {
 	const [password, setPassword] = useState("");
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { addNotification } = useNotification();
+	const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -17,11 +19,13 @@ function SetPassword() {
 
 		try {
 			const response = await fetch(
-				"http://127.0.0.1:8000/accounts/set-password/",
+				`${ACCOUNT_BASE_URL}/set-password/`,
 				{
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
+						"ngrok-skip-browser-warning": "true",
+
 					},
 					body: JSON.stringify({ uid, token, password }),
 				}

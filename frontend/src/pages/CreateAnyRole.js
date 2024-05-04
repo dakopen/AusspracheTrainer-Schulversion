@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import { UrlContext } from "../context/UrlContext";
 import { fetchSchools } from "../utils/api";
 
 const CreateAnyRole = () => {
@@ -7,6 +8,7 @@ const CreateAnyRole = () => {
 	const [selectedSchool, setSelectedSchool] = useState("");
 	const [selectedRole, setSelectedRole] = useState("");
 	const [schools, setSchools] = useState([]);
+	const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
 	const roles = ["Teacher", "Secretary", "Admin"]; // change later
 
 	const { authTokens } = useContext(AuthContext);
@@ -26,7 +28,7 @@ const CreateAnyRole = () => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const url = "http://127.0.0.1:8000/accounts/create-any-role";
+		const url = `${ACCOUNT_BASE_URL}/create-any-role`;
 		const data = JSON.stringify({
 			username: email,
 			school: selectedSchool,
@@ -39,6 +41,8 @@ const CreateAnyRole = () => {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+
 				},
 				body: data,
 			});
@@ -51,7 +55,7 @@ const CreateAnyRole = () => {
 				const responseData = await response.json();
 				throw new Error(
 					responseData.detail ||
-						"An error occurred while creating the user."
+					"An error occurred while creating the user."
 				);
 			}
 		} catch (error) {

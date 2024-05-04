@@ -4,7 +4,7 @@ import { UrlContext } from "../context/UrlContext";
 
 const ChangeUsername = () => {
     const { authTokens } = useContext(AuthContext);
-    const { ACCOUNT_BASE_URL } = useContext(UrlContext);
+    const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
