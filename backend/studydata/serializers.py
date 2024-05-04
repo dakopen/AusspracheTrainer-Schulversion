@@ -28,8 +28,10 @@ class StudySentencesSerializer(serializers.ModelSerializer):
 
 
 class StudySentencesCourseAssignmentSerializer(serializers.ModelSerializer):
+    sentence_as_text = StudySentencesSerializer(source='sentence', read_only=True)
+
     class Meta:
         model = StudySentencesCourseAssignment
-        fields = ('id', 'course', 'sentence', 'location_value')
-        read_only_fields = ('id', 'course', 'sentence', 'location_value')
+        fields = ('id', 'course', 'sentence', 'location_value', 'sentence_as_text')
+        read_only_fields = ('id', 'course', 'sentence', 'location_value', 'sentence_as_text')
     

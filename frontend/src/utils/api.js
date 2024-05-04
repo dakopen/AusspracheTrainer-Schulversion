@@ -389,21 +389,23 @@ export const completeStandardTodo = async (standard_todo, authTokens) => {
 	}
 };
 
-
-// fetch sentences in range of location_values for a specific course
-export const fetchSentencesByCourseAndLocation = async (startLocation, endLocation, authTokens) => {
+export const fetchSentencesByCourseAndLocation = async (startLocation, endLocation, authTokens, courseId = null) => {
 	try {
-		const response = await fetch(
-			`${API_BASE_URL}/${STUDYDATA_BASE_URL}/course-assignments/`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: "Bearer " + String(authTokens.access),
-				},
-				body: JSON.stringify({ start_location: startLocation, end_location: endLocation })
+		// Construct the URL with query parameters for GET request
+		const url = new URL(`${API_BASE_URL}/${STUDYDATA_BASE_URL}/course-assignments/`);
+		if (courseId) {
+			url.searchParams.append('course_id', courseId);
+		}
+		url.searchParams.append('start_location', startLocation);
+		url.searchParams.append('end_location', endLocation);
+
+		const response = await fetch(url, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + String(authTokens.access),
 			}
-		);
+		});
 
 		if (!response.ok) {
 			throw new Error("Failed to retrieve sentences");
@@ -416,4 +418,3 @@ export const fetchSentencesByCourseAndLocation = async (startLocation, endLocati
 		throw error;
 	}
 };
-

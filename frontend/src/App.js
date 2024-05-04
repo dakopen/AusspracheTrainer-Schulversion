@@ -146,7 +146,11 @@ function App() {
 									path="/tutorial/"
 								/>
 								<Route
-									element={<PronunciationTest />}
+									element={
+										<StudentRoute
+											element={PronunciationTest}
+										/>
+									}
 									path="first-test/"
 								/>
 							</Routes>

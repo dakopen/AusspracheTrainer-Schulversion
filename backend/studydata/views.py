@@ -44,6 +44,7 @@ class AudioAnalysisView(APIView):
             sentence_id = serializer.validated_data['sentence_id']  # TODO: Change later to sentence_id
             audio_mimetype = serializer.validated_data['audio_mimetype']
 
+
             logger.warn(f"Initiating analysis for sentence with id {sentence_id} with mimetype {audio_mimetype}")
 
             # Create an AudioSegment instance from the uploaded file depending on the MIME type
@@ -160,31 +161,34 @@ class RetrieveStudySentenceById(APIView):
 class RetrieveStudySentencesByCourseAndLocation(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def get(self, request):  # Changed from post to get for semantic correctness
         user = request.user
-        if user.role in [User.TEACHER, User.SECRETARY, user.ADMIN]:
-            course_id = request.data.get('course_id')
+        if user.role not in [User.TEACHER, User.SECRETARY, User.ADMIN, User.STUDYSTUDENT]:
+            return Response({'message': 'You do not have permission to view these sentences'}, status=status.HTTP_403_FORBIDDEN)
+
+        # Determine the course based on the user role
+        if user.role in [User.TEACHER, User.SECRETARY, User.ADMIN]:
+            course_id = request.query_params.get('course_id')
             course = get_object_or_404(Course, pk=course_id)
         elif user.role == User.STUDYSTUDENT:
             course = user.belongs_to_course
         else:
-           return Response({'message': 'You do not have permission to view these sentences'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'message': 'Invalid user role'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Retrieve start_location and end_location from request body
-        start_location = request.data.get('start_location')
-        end_location = request.data.get('end_location')
+        # Retrieve start_location and end_location from query parameters
+        start_location = request.query_params.get('start_location')
+        end_location = request.query_params.get('end_location')
 
         if not start_location or not end_location:
-            return Response({'error': 'start_location and end_location are required'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Start and end location are required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        sentences = StudySentencesCourseAssignment.objects.filter(
+        # Fetch sentences with optimization
+        sentences = StudySentencesCourseAssignment.objects.select_related('sentence').filter(
             course=course,
-            location_value__range=(start_location, end_location)
+            location_value__range=(int(start_location), int(end_location))
         )
 
         serializer = StudySentencesCourseAssignmentSerializer(sentences, many=True)
         return Response(serializer.data)
     
-    # TODO: also retrieve the sentences not only the id of the sentences
-
 

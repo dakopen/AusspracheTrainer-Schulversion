@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import Textarea from "../components/Textarea";
 import SpeechSynthesis from "../components/SpeechSynthesis";
 import RecordingButton from "../components/RecordingButton";
 import AudioVisualizer from "../components/AudioVisualizer";
 import { AudioRecordingProvider } from "../context/AudioRecordingContext";
+import AuthContext from '../context/AuthContext';
 
-const AusspracheTrainer = ({ restricted, textareaText, sentenceId, audioUrl }) => {
+
+const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence }) => {
     const [recordingState, setRecordingState] = useState(0);
+    const { user } = useContext(AuthContext);
 
 
 
@@ -19,7 +22,8 @@ const AusspracheTrainer = ({ restricted, textareaText, sentenceId, audioUrl }) =
                 <br></br>
                 <AudioVisualizer recordingState={recordingState} />
             </AudioRecordingProvider>
-            {!restricted && <SpeechSynthesis audioUrl={audioUrl} />}
+            {user.full_access_group && <SpeechSynthesis audioUrl={audioUrl} />}
+            <button onClick={onNextSentence}>Next Sentence</button> {/* Button to proceed to the next sentence */}
         </>
     )
 }
