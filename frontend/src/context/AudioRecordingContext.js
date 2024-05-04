@@ -11,12 +11,21 @@ export const AudioRecordingProvider = ({ children, sentenceId }) => {
     const [audioType, setAudioType] = useState('');
     const [recordingState, setRecordingState] = useState(0); // 0: idle, 1: recording, 2: submitted
     const { authTokens } = useContext(AuthContext);
-    const audioContext = useRef(new AudioContext()); // Use useRef to persist the instance without re-creating on re-renders
+    const [source, setSource] = useState(null);
+    const [audioContext, setAudioContext] = useState(new AudioContext());
     const [audioBlob, setAudioBlob] = useState(null);
+    const [starttimeRecording, setStarttimeRecording] = useState(0);
+    const [endtimeRecording, setEndtimeRecording] = useState(0);
+
+    const recordingStateRef = useRef(recordingState);
+    recordingStateRef.current = recordingState;
+
 
     useEffect(() => {
         determineAudioOptions();
     }, []);
+
+
 
     const determineAudioOptions = () => {
         const audioTypes = ["audio/ogg", "audio/wav", "audio/mp4", "audio/webm", "audio/mpeg"];
@@ -31,20 +40,24 @@ export const AudioRecordingProvider = ({ children, sentenceId }) => {
 
     const startRecording = async () => {
         if (!audioType) return;
+        setStarttimeRecording(Date.now());
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        //source = audioContext.createMediaStreamSource(stream);
+        setSource(audioContext.createMediaStreamSource(stream));
+        // source.connect(analyser);
         const recorder = new MediaRecorder(stream, { mimeType: audioType });
         let chunks = [];
 
-        recorder.ondataavailable = event => {
+        recorder.ondataavailable = (event) => {
             if (event.data.size > 0) {
                 chunks.push(event.data);
             }
         };
 
         recorder.onstop = async () => {
-            const blob = new Blob(chunks, { type: audioType });
-            setAudioBlob(blob);
-            if (recordingState === 1) { // recording was not cancelled
+            if (recordingStateRef.current === 1) { // recording was not cancelled
+                let blob = new Blob(chunks, { type: audioType });
+                setAudioBlob(blob);
                 handleSubmit(blob);
                 setRecordingState(2);
             }
@@ -52,7 +65,9 @@ export const AudioRecordingProvider = ({ children, sentenceId }) => {
             chunks = [];
         };
 
-        recorder.start();
+
+
+        recorder.start();  // TODO?: add 10ms to avoid missing the first part of the audio
         setMediaRecorder(recorder);
         setIsRecording(true);
         setRecordingState(1);
@@ -60,22 +75,30 @@ export const AudioRecordingProvider = ({ children, sentenceId }) => {
 
     const stopRecording = () => {
         if (mediaRecorder) {
-            mediaRecorder.stop(); // This triggers the onstop event
+            mediaRecorder.stop();
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
+
+        setEndtimeRecording(Date.now());
     };
 
     const cancelRecording = () => {
         if (mediaRecorder) {
             setRecordingState(0); // Reset to idle state
-            mediaRecorder.stop(); // This also triggers the onstop but without submitting
+            mediaRecorder.stop();
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
     };
 
+
+
+
+
     const handleSubmit = async (blob) => {
         const formData = new FormData();
-        formData.append("audio", blob, `audio.${audioType.split('/')[1]}`); // Ensure file has an extension
+        console.log(blob);
+        formData.append("audio", blob);
+        formData.append("audio_mimetype", audioType);
         formData.append("sentence_id", sentenceId);
 
         try {
@@ -87,7 +110,6 @@ export const AudioRecordingProvider = ({ children, sentenceId }) => {
                 body: formData,
             });
             const data = await response.json();
-            console.log(data);
         } catch (error) {
             console.error("Error submitting form:", error);
         }
@@ -99,9 +121,11 @@ export const AudioRecordingProvider = ({ children, sentenceId }) => {
         stopRecording,
         cancelRecording,
         recordingState,
-        source: audioContext.current,
+        source,
+        audioContext,
         audioBlob,
-        audioType
+        starttimeRecording,
+        endtimeRecording
     };
 
     return (
