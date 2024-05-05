@@ -4,9 +4,9 @@
 //const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}:8000`;
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 // const API_BASE_URL = "https://tapir-perfect-thankfully.ngrok-free.app";
-const ACCOUNT_BASE_URL = `${API_BASE_URL}accounts`;
-const STUDYDATA_BASE_URL = `${API_BASE_URL}studydata`;
-const TODO_BASE_URL = `${API_BASE_URL}todo`;
+const ACCOUNT_BASE_URL = `${API_BASE_URL}/accounts`;
+const STUDYDATA_BASE_URL = `${API_BASE_URL}/studydata`;
+const TODO_BASE_URL = `${API_BASE_URL}/todo`;
 
 export const fetchSchools = async (authTokens) => {
 	try {
