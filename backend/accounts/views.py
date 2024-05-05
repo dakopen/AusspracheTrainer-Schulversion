@@ -31,8 +31,6 @@ logger = logging.getLogger(__name__)
 import random
 import string
 
-from backend.settings import DEBUG
-
 User = get_user_model()
 
 @api_view(['GET'])
@@ -239,7 +237,7 @@ class BulkCreateStudyStudentsView(APIView):
         # Adjust number to not exceed maximum allowed students per course
         number_of_students = min(number_of_students, max_number_of_students - course.students.count())
 
-        if DEBUG or connection.vendor == "sqlite":  # TODO: Change later, but db.sqlite does not allow autoincrement for bulk_create
+        if settings.DEBUG or connection.vendor == "sqlite":  # TODO: Change later, but db.sqlite does not allow autoincrement for bulk_create
             with transaction.atomic():
                 zero_or_one = random.randint(0, 1)
                 for i in range(number_of_students):
@@ -401,3 +399,41 @@ class ChangeUsernameView(APIView):
 
         return Response({"message": f"Dein Benutzername wurde geändert zu {new_username}."}, status=status.HTTP_200_OK)
 
+
+class PasswordResetRequestView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        logger.warn("email: %s", email)
+        try:
+            user = User.objects.get(username=email)
+            uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            password_reset_link = f"{settings.FRONTEND_URL}/set-password/?token={token}&uid={uidb64}"
+
+            send_mail(
+                subject='Passwort zurücksetzen',
+                message=f'Klicke auf diesen Link um dein Passwort zurückzusetzen: {password_reset_link}',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.username],
+                fail_silently=False,
+            )
+            return Response({'message': 'Password reset link has been sent to your email.'}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'error': 'No user found with this email address.'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class PasswordResetView(APIView):
+    def post(self, request, uidb64, token):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = get_user_model().objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
+            return Response({"error": "Invalid or expired link."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not default_token_generator.check_token(user, token):
+            return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+
+        password = request.data.get('password')
+        user.set_password(password)
+        user.save()
+        return Response({"success": "Your password has been reset successfully."}, status=status.HTTP_200_OK)

@@ -40,6 +40,7 @@ import Tutorial from "./pages/Tutorial";
 import PronunciationTest from "./pages/PronunciationTest";
 import PronunciationPractice from "./pages/PronunciationPractice";
 import FinalQuestionnaire from "./pages/FinalQuestionnaire";
+import RequestPasswordReset from "./pages/RequestPasswordReset";
 
 function App() {
 	return (
@@ -164,6 +165,10 @@ function App() {
 								<Route
 									element={<StudentRoute element={FinalQuestionnaire} />}
 									path="/final-questionnaire/"
+								/>
+								<Route
+									element={<RequestPasswordReset />}
+									path="request-password-reset/"
 								/>
 							</Routes>
 

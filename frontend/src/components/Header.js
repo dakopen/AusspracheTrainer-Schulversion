@@ -66,7 +66,9 @@ const Header = () => {
 				<>
 					<Link to="/rolelogin">Role-Login</Link>
 					<br></br>
-					<Link to="/login">Login</Link>
+					<Link to="/login">Login</Link> |{" "}
+					<Link to="/request-password-reset">Passwort vergessen</Link>
+
 				</>
 			)}
 			{user && (

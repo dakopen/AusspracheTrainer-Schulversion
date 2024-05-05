@@ -12,6 +12,9 @@ urlpatterns = [
     path('delete-account/confirm/<str:uidb64>/<str:token>/', views.DeleteAccountConfirmView.as_view(), name='delete_account_confirm'),
     path('change-username/', views.ChangeUsernameView.as_view(), name='change-username'),
 
+    path('request-reset-password/', views.PasswordResetRequestView.as_view(), name='request-reset-password'),
+    path('reset-password/<uidb64>/<token>/', views.PasswordResetView.as_view(), name='reset-password'),
+
     path('schools/', views.SchoolListView.as_view(), name='school-list'),
     path('schools/create', views.SchoolCreateView.as_view(), name='school-create'),
     path('schools/<int:pk>/', views.SchoolDetailView.as_view(), name='school-detail'),

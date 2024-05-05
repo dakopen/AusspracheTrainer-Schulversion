@@ -210,7 +210,14 @@ REST_FRAMEWORK = {
 }
 
 # REACT FRONTEND
-FRONTEND_URL = 'http://localhost:3000'
+if DEBUG:
+    FRONTEND_URL = 'http://localhost:3000'
+    BACKEND_URL = 'http://localhost:8000'
+
+else:
+    FRONTEND_URL = 'http://localhost:3000'
+    BACKEND_URL = 'https://tapir-perfect-thankfully.ngrok-free.app'
+
 
 # EMAIL SETTINGS:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
