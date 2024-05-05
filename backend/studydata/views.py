@@ -167,7 +167,7 @@ class RetrieveStudySentenceById(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except StudySentences.DoesNotExist:
             return Response({'error': 'Study sentence not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
 
 class RetrieveStudySentencesByCourseAndLocation(APIView):
     permission_classes = [IsAuthenticated]

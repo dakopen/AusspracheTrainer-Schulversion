@@ -30,6 +30,7 @@ import Courses from "./pages/Courses";
 import ShowCourse from "./pages/ShowCourse";
 import StudySentences from "./pages/StudySentences";
 import UserSettings from "./pages/UserSettings";
+import SentenceDisplay from "./pages/SentenceDisplay";
 import DeleteAccountConfirm from "./components/DeleteAccountConfirm";
 
 import FirstQuestionnaire from "./pages/FirstQuestionnaire";
@@ -175,6 +176,13 @@ function App() {
 									element={<ForgotUsername />}
 									path="forgot-username/"
 								/>
+								<Route
+									element={
+										<TeacherOrSecretaryOrAdminRoute
+											element={SentenceDisplay}
+										/>
+									}
+									path="/courses/:courseId/:todoId" />
 							</Routes>
 
 						</AuthProvider>

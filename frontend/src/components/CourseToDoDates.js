@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { fetchToDoDates, updateToDoDates } from "../utils/api";
 
@@ -8,6 +8,7 @@ const CourseToDoDates = ({ final_test_activated }) => {
     const { authTokens } = useContext(AuthContext);
     const [todoDates, setTodoDates] = useState({ group1to4: [], group5to10: [], group11to13: [] });
     const [editData, setEditData] = useState({}); // Holds editable data for dates
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadData = async () => {
@@ -111,12 +112,22 @@ const CourseToDoDates = ({ final_test_activated }) => {
         return !isNaN(new Date(date).getTime());
     };
 
+    const handleHeadlineClick = (todoId) => {
+        if (todoId >= 5 && todoId <= 10) {
+            navigate(`/courses/${courseId}/${todoId}`);
+        } else if (todoId === "Group 1 - 4") {
+            navigate(`/courses/${courseId}/4`);
+        } else if (todoId === "Group 11 - 13") {
+            navigate(`/courses/${courseId}/12`);
+        }
+    }
+
     return (
         <div>
             <h3>ToDo Dates</h3>
             {Object.entries(editData).map(([dateKey, date]) => (
                 <div key={dateKey}>
-                    <h4>{dateKey.includes('group5to10') ? 'Wöchentliche Übungen' : (dateKey.includes('group1to4') ? 'Anfangstest' : 'Endtest')}</h4>
+                    <h4 onClick={() => handleHeadlineClick(date.standard_todo)}>{dateKey.includes('group5to10') ? 'Wöchentliche Übungen' : (dateKey.includes('group1to4') ? 'Anfangstest' : 'Endtest')}</h4>
                     <p>StandardTodo: {date.standard_todo}</p>
                     {dateKey.includes('group5to10') && (
                         <>
