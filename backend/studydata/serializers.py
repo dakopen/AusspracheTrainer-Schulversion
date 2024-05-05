@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, PronunciationAssessmentResult
+from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, PronunciationAssessmentResult, FinalQuestionnaire
 
 class FirstQuestionnaireSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,7 +12,19 @@ class FirstQuestionnaireSerializer(serializers.ModelSerializer):
         if FirstQuestionnaire.objects.filter(user=user).exists():
             raise serializers.ValidationError('You have already submitted the questionnaire.')
         return FirstQuestionnaire.objects.create(**validated_data, user=user)
+    
 
+class FinalQuestionnaireSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FinalQuestionnaire
+        fields = '__all__'
+        read_only_fields = ('user', 'date_submitted')
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        if FinalQuestionnaire.objects.filter(user=user).exists():
+            raise serializers.ValidationError('You have already submitted the questionnaire.')
+        return FinalQuestionnaire.objects.create(**validated_data, user=user)
 
 class AudioAnalysisSerializer(serializers.Serializer):
     audio = serializers.FileField()

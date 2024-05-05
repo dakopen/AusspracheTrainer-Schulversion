@@ -39,6 +39,7 @@ import "./App.css";
 import Tutorial from "./pages/Tutorial";
 import PronunciationTest from "./pages/PronunciationTest";
 import PronunciationPractice from "./pages/PronunciationPractice";
+import FinalQuestionnaire from "./pages/FinalQuestionnaire";
 
 function App() {
 	return (
@@ -150,7 +151,7 @@ function App() {
 											element={PronunciationTest}
 										/>
 									}
-									path="first-test/"
+									path="test/"
 								/>
 								<Route
 									element={
@@ -159,6 +160,10 @@ function App() {
 										/>
 									}
 									path="practice/"
+								/>
+								<Route
+									element={<StudentRoute element={FinalQuestionnaire} />}
+									path="/final-questionnaire/"
 								/>
 							</Routes>
 

@@ -29,6 +29,16 @@ class FirstQuestionnaire(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Questionnaire Submission"
+    
+class FinalQuestionnaire(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_submitted = models.DateTimeField(auto_now_add=True)
+    motivation = models.IntegerField(choices=[(i, i) for i in range(1, 11)], null=True, blank=True)  # Scale of 1 to 10
+    weekly_training_in_minutes = models.PositiveSmallIntegerField(null=True, blank=True)
+    feeling_of_improvement = models.IntegerField(choices=[(i, i) for i in range(1, 11)], null=True, blank=True)  # Scale of 1 to 10
+    
+    def __str__(self):
+        return f"{self.user.username}'s Final Questionnaire Submission"
 
 class PronunciationAssessmentResult(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

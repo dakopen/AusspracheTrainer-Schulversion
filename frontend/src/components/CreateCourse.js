@@ -44,7 +44,7 @@ const CreateCourse = ({ setCourses }) => {
 				console.log(responseData);
 				throw new Error(
 					responseData.detail ||
-						"An error occurred while creating the course."
+					"An error occurred while creating the course."
 				);
 			}
 		} catch (error) {
@@ -78,7 +78,7 @@ const CreateCourse = ({ setCourses }) => {
 			<label>
 				Stufe:
 				<select
-					value={language}
+					value={grade}
 					onChange={(e) => setGrade(e.target.value)}
 					required
 				>

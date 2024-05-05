@@ -15,7 +15,7 @@ from accounts.models import Course
 from .tasks import async_pronunciation_assessment
 from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment
 from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, \
-    StudySentencesSerializer, StudySentencesCourseAssignmentSerializer
+    StudySentencesSerializer, StudySentencesCourseAssignmentSerializer, FinalQuestionnaireSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
@@ -31,6 +31,17 @@ class FirstQuestionnaireView(APIView):
         if serializer.is_valid():
             serializer.save()
             complete_user_todo_user_and_standard_todo(request.user, 2)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class FinalQuestionnaireView(APIView):
+    permission_classes = [IsStudystudent]
+
+    def post(self, request, *args, **kwargs):
+        serializer = FinalQuestionnaireSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            complete_user_todo_user_and_standard_todo(request.user, 13)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
