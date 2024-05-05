@@ -36,7 +36,7 @@ def assign_sentences(sender, instance, created, **kwargs):
         i = 1
 
         test_sentences = StudySentences.objects.filter(language=language).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[: NUM_SENTENCES_TEST]
-        random.shuffle(test_sentences)
+        random.shuffle(list(test_sentences))
         for sentence in test_sentences:
             sentence.number_of_times_assigned_as_test += 1
             sentence.save()
@@ -44,7 +44,7 @@ def assign_sentences(sender, instance, created, **kwargs):
             i += 1
         
         final_test_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences]).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[:NUM_SENTENCES_TEST]
-        random.shuffle(final_test_sentences)    
+        random.shuffle(list(final_test_sentences))    
         for sentence in final_test_sentences:
             sentence.number_of_times_assigned_as_test += 1
             sentence.save()
@@ -54,7 +54,7 @@ def assign_sentences(sender, instance, created, **kwargs):
 
         # filter out test sentences from test sentences
         train_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences]).exclude(id__in=[sentence.id for sentence in final_test_sentences]).order_by('number_of_times_assigned_as_train', 'number_of_times_assigned_as_test')[:NUM_SENTENCES_PER_WEEK * NUM_WEEKS]
-        random.shuffle(train_sentences)
+        random.shuffle(list(train_sentences))
         for sentence in train_sentences:
             sentence.number_of_times_assigned_as_train += 1
             sentence.save()

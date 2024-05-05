@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
 import { UrlContext } from "../context/UrlContext";
 
-function RequestPasswordReset() {
+function ForgotUsername() {
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
     const { addNotification } = useNotification();
@@ -14,7 +14,7 @@ function RequestPasswordReset() {
 
         try {
             const response = await fetch(
-                `${ACCOUNT_BASE_URL}/request-reset-password/`,
+                `${ACCOUNT_BASE_URL}/forgot-username/`,
                 {
                     method: "POST",
                     headers: {
@@ -25,24 +25,24 @@ function RequestPasswordReset() {
             );
 
             if (response.ok) {
-                addNotification("Password reset link has been sent to your email.", "success");
-                navigate("/login"); // Redirect to login page or a confirmation page
+                addNotification("Your username has been sent to your email.", "success");
+                navigate("/login"); // Redirect to the login page or a confirmation page
             } else {
                 const errorData = await response.json(); // Assuming the server sends back JSON
                 addNotification(errorData.error, "error");
             }
         } catch (error) {
             console.error("Error:", error);
-            addNotification("Failed to send reset email. Please try again.", "error");
+            addNotification("Keinen Benutzernamen (eines Schüler-Accounts) mit dieser Email Adresse gefunden.", "error");
         }
     };
 
     return (
         <div>
-            <h1>Request Password Reset (Staff Only)</h1>
+            <h1>Retrieve Username (Students only)</h1>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Enter your email (staff only):
+                    Enter your registered email:
                     <input
                         type="email"
                         value={email}
@@ -50,10 +50,10 @@ function RequestPasswordReset() {
                         required
                     />
                 </label>
-                <button type="submit">Send Reset Link</button>
+                <button type="submit">Send Username</button>
             </form>
         </div>
     );
 }
 
-export default RequestPasswordReset;
+export default ForgotUsername;

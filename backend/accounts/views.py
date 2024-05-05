@@ -417,7 +417,7 @@ class PasswordResetRequestView(APIView):
                 recipient_list=[user.username],
                 fail_silently=False,
             )
-            return Response({'message': 'Password reset link has been sent to your email.'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Ein Wiederherstellungscode wurde an deine Mail gesendet.'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'error': 'No user found with this email address.'}, status=status.HTTP_404_NOT_FOUND)
         
@@ -437,3 +437,42 @@ class PasswordResetView(APIView):
         user.set_password(password)
         user.save()
         return Response({"success": "Your password has been reset successfully."}, status=status.HTTP_200_OK)
+    
+
+class ForgotUsernameView(APIView):
+
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'error': 'Email address is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            usernames = []
+            users = User.objects.filter(email=email)
+            i = 1
+            for user in users:
+                if user.role != User.STUDYSTUDENT:
+                    return Response({'error': 'Nur Schüler:innen können ihren Benutzernamen anfordern.'}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    usernames.append(f'{i}.: {user.username[:10]}')
+                    i += 1
+            
+            if len(usernames) > 1:
+                message = "Folgende Benutzernamen sind mit deiner Email Adresse verknüpft:\n" + "\n".join(usernames)
+
+            elif len(usernames) == 1:
+                message = f'Dein Benutzername lautet: {users[0].username[:10]}'
+            
+            else:
+                return Response({'error': 'Keinen Account mit dieser Mail gefunden.'}, status=status.HTTP_404_NOT_FOUND)
+            
+            send_mail(
+                subject='Dein AusspracheTrainer-Studie Benutzername',
+                message=message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+            return Response({'message': 'Dein Benutzername wurde an die hinterlegte Email Adresse gesendet.'}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'error': 'Keinen Account mit dieser Mail gefunden.'}, status=status.HTTP_404_NOT_FOUND)

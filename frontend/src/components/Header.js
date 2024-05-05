@@ -67,7 +67,9 @@ const Header = () => {
 					<Link to="/rolelogin">Role-Login</Link>
 					<br></br>
 					<Link to="/login">Login</Link> |{" "}
-					<Link to="/request-password-reset">Passwort vergessen</Link>
+					<Link to="/request-password-reset">Passwort vergessen</Link> |{" "}
+					<Link to="/forgot-username">Benutzername vergessen</Link>
+					
 
 				</>
 			)}

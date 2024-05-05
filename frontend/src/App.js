@@ -41,6 +41,7 @@ import PronunciationTest from "./pages/PronunciationTest";
 import PronunciationPractice from "./pages/PronunciationPractice";
 import FinalQuestionnaire from "./pages/FinalQuestionnaire";
 import RequestPasswordReset from "./pages/RequestPasswordReset";
+import ForgotUsername from "./pages/ForgotUsername";
 
 function App() {
 	return (
@@ -169,6 +170,10 @@ function App() {
 								<Route
 									element={<RequestPasswordReset />}
 									path="request-password-reset/"
+								/>
+								<Route
+									element={<ForgotUsername />}
+									path="forgot-username/"
 								/>
 							</Routes>
 
