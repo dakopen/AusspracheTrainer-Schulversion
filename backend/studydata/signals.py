@@ -35,6 +35,7 @@ def assign_sentences(sender, instance, created, **kwargs):
         # filter out test sentences from test sentences
         train_sentences = StudySentences.objects.exclude(id__in=[sentence.id for sentence in test_sentences]).order_by('number_of_times_assigned_as_train', 'number_of_times_assigned_as_test')[:NUM_SENTENCES_PER_WEEK * NUM_WEEKS]
         
+        final_test_sentences = StudySentences.objects.exclude(id__in=[sentence.id for sentence in test_sentences]).exclude(id__in=[sentence.id for sentence in train_sentences]).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[:NUM_SENTENCES_TEST]
         i = 1
         
         for sentence in test_sentences:
@@ -49,3 +50,8 @@ def assign_sentences(sender, instance, created, **kwargs):
             StudySentencesCourseAssignment.objects.create(course=instance, sentence=sentence, location_value=i)
             i += 1
         
+        for sentence in final_test_sentences:
+            sentence.number_of_times_assigned_as_test += 1
+            sentence.save()
+            StudySentencesCourseAssignment.objects.create(course=instance, sentence=sentence, location_value=i)
+            i += 1

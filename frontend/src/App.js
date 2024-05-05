@@ -38,6 +38,7 @@ import EmailQuestionnaire from "./pages/EmailQuestionnaire";
 import "./App.css";
 import Tutorial from "./pages/Tutorial";
 import PronunciationTest from "./pages/PronunciationTest";
+import PronunciationPractice from "./pages/PronunciationPractice";
 
 function App() {
 	return (
@@ -150,6 +151,14 @@ function App() {
 										/>
 									}
 									path="first-test/"
+								/>
+								<Route
+									element={
+										<StudentRoute
+											element={PronunciationPractice}
+										/>
+									}
+									path="practice/"
 								/>
 							</Routes>
 

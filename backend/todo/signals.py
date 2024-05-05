@@ -13,7 +13,14 @@ User = get_user_model()
 @receiver(post_save, sender=User)
 def link_initial_todos_to_student(sender, instance, created, **kwargs):
     if created and instance.role == User.STUDYSTUDENT:
-        pass
+        # if the course has already started, add the todos to the student
+        
+        course_todos = ToDoDates.objects.filter(course=instance.belongs_to_course)
+        for todo_date in course_todos:
+            UserToDo.objects.create(
+                user=instance,
+                todo_date=todo_date
+            )
         """
         initial_todos = StandardToDo.objects.filter(id__in=[1, 2, 3])
 

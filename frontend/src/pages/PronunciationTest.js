@@ -3,7 +3,7 @@ import { fetchSentencesByCourseAndLocation } from '../utils/api';
 import AuthContext from "../context/AuthContext";
 import AusspracheTrainer from '../components/AusspracheTrainer';
 import ProgressBar from '../components/ProgressBar';
-import { completeStandardTodo } from '../utils/api';
+import { completeStandardTodo, fetchLowestPriorityUserToDo } from '../utils/api';
 import { useNotification } from '../context/NotificationContext';
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +14,56 @@ const PronunciationTest = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const { addNotification } = useNotification();
+	const [todo_id, setTodo_id] = useState(-1);
 	let navigate = useNavigate();
+
+
+	useEffect(() => {
+		const fetchTodo = async () => {
+			try {
+				const result = await fetchLowestPriorityUserToDo(authTokens);
+				console.log("Fetched todo:", result);
+				let id = result.id;
+				setTodo_id(id);
+				// check if todo_id is between 5 and 10
+				if (id === 4) {
+					let start_location = 1;
+					let end_location = 20;
+					fetchData(start_location, end_location);
+
+				} else if (id === 12) {  // 5-10 are weekly trainings, 11 is tutorial
+					let start_location = 81;
+					let end_location = 100;
+					fetchData(start_location, end_location);
+
+				} else {
+					addNotification("Bitte die Aufgaben Reihenfolge einhalten.", "error");
+					console.log(id, "id")
+					navigate("/");
+				}
+			} catch (err) {
+				console.error("Error fetching todo:", err);
+				setError(err);
+				setLoading(false);
+			}
+		};
+
+
+		const fetchData = async (start_location, end_location) => {
+			try {
+				const result = await fetchSentencesByCourseAndLocation(start_location, end_location, authTokens);
+				console.log("Fetched sentences:", result);
+				setSentences(result);
+				setLoading(false);
+			} catch (err) {
+				console.error("Error fetching sentences:", err);
+				setError(err);
+				setLoading(false);
+			}
+		};
+		fetchTodo();
+	}, [authTokens]);
+
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -51,7 +100,8 @@ const PronunciationTest = () => {
 				setCurrentSentenceIndex(wrapAroundIndex);
 			} else {
 				// If no incomplete sentences are found at all, alert the user that the test is completed
-				completeStandardTodo(4, authTokens);
+				addNotification("Test completed", "success");
+				completeStandardTodo(todo_id, authTokens);
 				navigate("/");
 
 			}
@@ -71,6 +121,10 @@ const PronunciationTest = () => {
 		setCurrentSentenceIndex(index);
 	};
 
+	const debugCompleteAll = () => {
+		setSentences(sentences.map(sentence => ({ ...sentence, is_completed: true })));
+	};
+
 	const currentSentence = sentences[currentSentenceIndex];
 
 	return (
@@ -87,6 +141,7 @@ const PronunciationTest = () => {
 			) : (
 				<div>No sentences found</div>
 			)}
+			<button onClick={debugCompleteAll}>DEBUG: Complete all</button>
 		</div>
 	);
 };

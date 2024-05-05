@@ -1,0 +1,63 @@
+0000000000000000000000000000000000000000 62725b4525cd93d3846e54c4591ac3c6344c1ea6 Daniel Busch <dakopen185@gmail.com> 1712081146 +0200	commit (initial): initial commit
+62725b4525cd93d3846e54c4591ac3c6344c1ea6 bf05d1747716dc9e38fc5e7a88c9c9cb5d0a3913 Daniel Busch <dakopen185@gmail.com> 1712094423 +0200	commit: first steps for user auth
+bf05d1747716dc9e38fc5e7a88c9c9cb5d0a3913 48d7038e467e0129e91efd426b5e921066f26d43 Daniel Busch <dakopen185@gmail.com> 1712163431 +0200	commit: first step to teacher creation
+48d7038e467e0129e91efd426b5e921066f26d43 a6f7a8dc33e37bf9861415ae18e543c733c2f74e Daniel Busch <dakopen185@gmail.com> 1712166013 +0200	commit: create teacher with mail password
+a6f7a8dc33e37bf9861415ae18e543c733c2f74e 87c416163d2626f01067d7f260fc33bdfce0974c Daniel Busch <dakopen185@gmail.com> 1712166555 +0200	commit: small logging change and debugging
+87c416163d2626f01067d7f260fc33bdfce0974c 97b607a063e1ac4aba32ea180aaaaa152b2f0040 Daniel Busch <dakopen185@gmail.com> 1712177994 +0200	commit: add Notifications
+97b607a063e1ac4aba32ea180aaaaa152b2f0040 91dac664dbd88709c84959a6d441a1c29cc767d4 Daniel Busch <dakopen185@gmail.com> 1712236398 +0200	commit: create-school function
+91dac664dbd88709c84959a6d441a1c29cc767d4 1f6e71770b6d6b3a84d3c0b60bcccd8d4f759db3 Daniel Busch <dakopen185@gmail.com> 1712328698 +0200	commit: frontend user verification (backend already implemented)
+1f6e71770b6d6b3a84d3c0b60bcccd8d4f759db3 2e7808fbc7b7dfda2358cd3e30fa1bef5e9e2557 Daniel Busch <dakopen185@gmail.com> 1712335051 +0200	commit: initial work to user accounts for STUDYSTUDENTS
+2e7808fbc7b7dfda2358cd3e30fa1bef5e9e2557 5fdc4b0eb240f891c0dc70891ed9eb16e1b8c46a Daniel Busch <dakopen185@gmail.com> 1712403613 +0200	commit: create_course works now
+5fdc4b0eb240f891c0dc70891ed9eb16e1b8c46a eea5bcd8e8c7fa9fc3b80977084c0f0c8aaa92a2 Daniel Busch <dakopen185@gmail.com> 1712408746 +0200	commit: fixed permissions in frontend and notification
+eea5bcd8e8c7fa9fc3b80977084c0f0c8aaa92a2 55e76e48c75c793d8e6dbc8b1b85cb546854c464 Daniel Busch <dakopen185@gmail.com> 1712502370 +0200	commit: updated Course and addedRoleChecks
+55e76e48c75c793d8e6dbc8b1b85cb546854c464 d8552b3a4ca070d59a7f9ceb39d034d7fd28ff3e Daniel Busch <dakopen185@gmail.com> 1712508155 +0200	commit: Study Student login works
+d8552b3a4ca070d59a7f9ceb39d034d7fd28ff3e b0bb3f606492dc1e7e903ceec0d73537378fca97 Daniel Busch <dakopen185@gmail.com> 1712510416 +0200	commit: bulk_creation for study students
+b0bb3f606492dc1e7e903ceec0d73537378fca97 a70e070443ab2e0f0a8376ecc5221aef17c5b526 Daniel Busch <dakopen185@gmail.com> 1712580618 +0200	commit: add fetch students
+a70e070443ab2e0f0a8376ecc5221aef17c5b526 4bf4022a335b68af05b3ab75cc48aad1a6954f40 Daniel Busch <dakopen185@gmail.com> 1712581085 +0200	commit: teacher werden angezeigt
+4bf4022a335b68af05b3ab75cc48aad1a6954f40 d869d061c1dad9d71b152d5ca16125dd6f28d825 Daniel Busch <dakopen185@gmail.com> 1712698844 +0200	commit: different header based on user role
+d869d061c1dad9d71b152d5ca16125dd6f28d825 2188aea42b608160c0a39ae6508cb5727524aa84 Daniel Busch <dakopen185@gmail.com> 1712764600 +0200	commit: started app studydata
+2188aea42b608160c0a39ae6508cb5727524aa84 0c2af08bce71f2f38f7b52cf38ea6c9788d4d1f2 Daniel Busch <dakopen185@gmail.com> 1712771744 +0200	commit: todo first steps
+0c2af08bce71f2f38f7b52cf38ea6c9788d4d1f2 08e7d647063a8b3c66d3ed67760673df826b0941 Daniel Busch <dakopen185@gmail.com> 1712774494 +0200	commit: Refactor function names and update email questionnaire in frontend and backend
+08e7d647063a8b3c66d3ed67760673df826b0941 280153abb811c09d3ad9566e15284c9c1d0a7163 Daniel Busch <dakopen185@gmail.com> 1712786485 +0200	commit: small fixes and todo for first two priorities
+280153abb811c09d3ad9566e15284c9c1d0a7163 1fe174bd7f174b1a95e29af05c0dd65213071903 Daniel Busch <dakopen185@gmail.com> 1712832400 +0200	commit: make first questionnaire optional
+1fe174bd7f174b1a95e29af05c0dd65213071903 4f027152c43da9519df0bb6f99002e08d128063c Daniel Busch <dakopen185@gmail.com> 1712833432 +0200	commit: Update FirstQuestionnaire model and form validation
+4f027152c43da9519df0bb6f99002e08d128063c 6f5e6af124c10bf05d9027ac648d066ad6ad356c Daniel Busch <dakopen185@gmail.com> 1712844318 +0200	commit: Textarea Component
+6f5e6af124c10bf05d9027ac648d066ad6ad356c ca9afcee1496b55326036e24dcdac1a090695db2 Daniel Busch <dakopen185@gmail.com> 1712847045 +0200	commit: Add speech synthesis
+ca9afcee1496b55326036e24dcdac1a090695db2 09aed73c780a4f898841c5c66b7fb633544530a5 Daniel Busch <dakopen185@gmail.com> 1713198038 +0200	commit: add grade for creating Courses and [language]_since_grade for school creation
+09aed73c780a4f898841c5c66b7fb633544530a5 6329a4092bcf39ad0bbdeab99ee00150d03edd3c Daniel Busch <dakopen185@gmail.com> 1713290994 +0200	commit: add celery and redis and first steps to recording audio
+6329a4092bcf39ad0bbdeab99ee00150d03edd3c dda51df210e23880f8c426ed62832dec6588df6e Daniel Busch <dakopen185@gmail.com> 1713444269 +0200	commit: ADD: study sentences model and views
+dda51df210e23880f8c426ed62832dec6588df6e 4a514495849271b99b4e16737af4e45c0ec2df7e Daniel Busch <dakopen185@gmail.com> 1713447620 +0200	commit: initial steps to pronunciation result
+4a514495849271b99b4e16737af4e45c0ec2df7e 263d90009c4542ef234f6de37a2db1c032709680 Daniel Busch <dakopen185@gmail.com> 1713472494 +0200	commit: clean old functions
+263d90009c4542ef234f6de37a2db1c032709680 1e8dbfc8c3701e1f509ff056e7e813feb47ab6f2 Daniel Busch <dakopen185@gmail.com> 1713474269 +0200	pull --tags origin main: Fast-forward
+1e8dbfc8c3701e1f509ff056e7e813feb47ab6f2 a3dba0cfb02806c290cb20d293cbb7e9c513e99f Daniel Busch <dakopen185@gmail.com> 1713475883 +0200	commit: now works on ubuntu 20.04
+a3dba0cfb02806c290cb20d293cbb7e9c513e99f d392ee0d9165eab3206a038cf912c1b23be1e436 Daniel Busch <dakopen185@gmail.com> 1713542992 +0200	commit: json repsonse works
+d392ee0d9165eab3206a038cf912c1b23be1e436 561c1d3c37d05abadf550249d16996c2bd15c6e5 Daniel Busch <dakopen185@gmail.com> 1713637187 +0200	commit: initial steps to recording audio and visualize it
+561c1d3c37d05abadf550249d16996c2bd15c6e5 61fb53db4a34db564715d027f860ac9e5cde91ad Daniel Busch <dakopen185@gmail.com> 1713796145 +0200	commit: finally works visualizing the audio
+61fb53db4a34db564715d027f860ac9e5cde91ad 4eee40fc7f3521cd26bb11bf9aa433da01f13128 Daniel Busch <dakopen185@gmail.com> 1713797546 +0200	commit: ignore redis binary dump rdb
+4eee40fc7f3521cd26bb11bf9aa433da01f13128 23e792b042bda87b35cfcea0c4aeca0121f7201d Daniel Busch <dakopen185@gmail.com> 1713815999 +0200	commit: with replay
+23e792b042bda87b35cfcea0c4aeca0121f7201d 173c2c42d3e5eea0d4c048d0f609996dffe4008e Daniel Busch <dakopen185@gmail.com> 1713816204 +0200	commit: also handle canvas click
+173c2c42d3e5eea0d4c048d0f609996dffe4008e 6c6829bc51f3f835e95cdb6c1baf6d4531fe0f11 Daniel Busch <dakopen185@gmail.com> 1713902504 +0200	commit: automatically synth speech
+6c6829bc51f3f835e95cdb6c1baf6d4531fe0f11 a07a7a2621d8984448572c410552d66b02196b19 Daniel Busch <dakopen185@gmail.com> 1714051168 +0200	commit: small fixes for adjusting the size of replay buttons
+a07a7a2621d8984448572c410552d66b02196b19 d355211bde606abef7a2f26f219c42f7bc500dc1 Daniel Busch <dakopen185@gmail.com> 1714052048 +0200	commit: removed debug console.log statements
+d355211bde606abef7a2f26f219c42f7bc500dc1 9a4ae04c8a879f2a8b80f74ccab199f431b650dc Daniel Busch <dakopen185@gmail.com> 1714052786 +0200	commit: add bulk creation for studysentences
+9a4ae04c8a879f2a8b80f74ccab199f431b650dc 6b10e75cd86e6a6a7bc548c95438e0c4a55ef01c Daniel Busch <dakopen185@gmail.com> 1714054174 +0200	commit: changed to TODO state
+6b10e75cd86e6a6a7bc548c95438e0c4a55ef01c fdb04a844bbbd255b53c3458b7c96519635742f1 Daniel Busch <dakopen185@gmail.com> 1714212338 +0200	pull --tags origin main: Fast-forward
+fdb04a844bbbd255b53c3458b7c96519635742f1 8ad471c1443d9da12e75d8ea20234c08cbff2d5d Daniel Busch <dakopen185@gmail.com> 1714214546 +0200	commit: fixed StudySentences things - updating works with synth and there is a filter
+8ad471c1443d9da12e75d8ea20234c08cbff2d5d afcf8d495e0270591e692e1bf4766f6439db2216 Daniel Busch <dakopen185@gmail.com> 1714216475 +0200	commit: deleted superflous folder
+afcf8d495e0270591e692e1bf4766f6439db2216 ae35ac4a4a92f02303330b358436d7e5f983694d Daniel Busch <dakopen185@gmail.com> 1714223735 +0200	commit: ADD: change username and possibility to delete the account
+ae35ac4a4a92f02303330b358436d7e5f983694d d7297a6ce031f08c66346a9acfa438d4cdc6d782 Daniel Busch <dakopen185@gmail.com> 1714230172 +0200	commit: ADD: SentencesCourseAssignment
+d7297a6ce031f08c66346a9acfa438d4cdc6d782 9748ab3bb810d47c61f559f9d6abc8f57c3c725a Daniel Busch <dakopen185@gmail.com> 1714490960 +0200	commit: Add start_date and study_started fields to Course model
+9748ab3bb810d47c61f559f9d6abc8f57c3c725a 70dcee6d06f8944c142555f96aea2254ab388a13 Daniel Busch <dakopen185@gmail.com> 1714491956 +0200	commit: courses can be updated and started
+70dcee6d06f8944c142555f96aea2254ab388a13 f7e1f5bb2ae5acdc043537903dcdf5222e1778f5 Daniel Busch <dakopen185@gmail.com> 1714494180 +0200	commit: first steps to todo dates
+f7e1f5bb2ae5acdc043537903dcdf5222e1778f5 5783f7154ff59add63fb65a25b8dffde7cd36b47 Daniel Busch <dakopen185@gmail.com> 1714494786 +0200	commit: next steps
+5783f7154ff59add63fb65a25b8dffde7cd36b47 5a77065c8a93233379762eb65ac991790dc74d97 Daniel Busch <dakopen185@gmail.com> 1714564928 +0200	commit: ADD: final test and date groups
+5a77065c8a93233379762eb65ac991790dc74d97 6344fca11c8d23c5ed69d0ef9a830add7ff1c7a0 Daniel Busch <dakopen185@gmail.com> 1714688168 +0200	commit: updated scheduling for teachers
+6344fca11c8d23c5ed69d0ef9a830add7ff1c7a0 ff187fe9ec20677bcab52354b73c28235ebf12b4 Daniel Busch <dakopen185@gmail.com> 1714761484 +0200	commit: add Tutorial completion logik
+ff187fe9ec20677bcab52354b73c28235ebf12b4 61a0c1e1620d19d943c90550ba55a47ef446e867 Daniel Busch <dakopen185@gmail.com> 1714769438 +0200	commit: first steps for pronunciation test
+61a0c1e1620d19d943c90550ba55a47ef446e867 1e1b311c0cbc89747d5efd08816c4bd9e8cfd839 Daniel Busch <dakopen185@gmail.com> 1714819050 +0200	commit: refactor: Update AusspracheTrainer component to handle pronunciation test sentences and progress tracking
+1e1b311c0cbc89747d5efd08816c4bd9e8cfd839 be73c60cf8411005bdb4608c6ea6fb1930ef3344 Daniel Busch <dakopen185@gmail.com> 1714820168 +0200	commit: fixed issue with Audio Recording
+be73c60cf8411005bdb4608c6ea6fb1930ef3344 55cc919e4093fa410e21aa0705026d506c16b696 Daniel Busch <dakopen185@gmail.com> 1714825021 +0200	commit: Progress and sentence display for the test
+55cc919e4093fa410e21aa0705026d506c16b696 767d0712e6ece86a23a24d8711cb6e324b29fd86 Daniel Busch <dakopen185@gmail.com> 1714825718 +0200	commit: updated progressbar and handle_next_sentence
+767d0712e6ece86a23a24d8711cb6e324b29fd86 094b524dfbbdb7f0ba2260f1296efad296528e83 Daniel Busch <dakopen185@gmail.com> 1714838820 +0200	commit: updated urls and first steps for correct todo
+094b524dfbbdb7f0ba2260f1296efad296528e83 dd10fe8572be81ffabe23c3a6e097ebe80bc9134 Daniel Busch <dakopen185@gmail.com> 1714839984 +0200	commit: todos are now displayed correctly
+                                                                                                                                                                                  

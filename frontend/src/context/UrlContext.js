@@ -19,9 +19,9 @@ export const UrlProvider = ({ children }) => {
 	//const BASE_URL = "http://127.0.0.1:8000";
 	const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 	const API_BASE_URL = `${BASE_URL}api`;
-	const ACCOUNT_BASE_URL = `${BASE_URL}/accounts`;
-	const STUDYDATA_BASE_URL = `${BASE_URL}/studydata`;
-	const TODO_BASE_URL = `${BASE_URL}/todo`;
+	const ACCOUNT_BASE_URL = `${BASE_URL}accounts`;
+	const STUDYDATA_BASE_URL = `${BASE_URL}studydata`;
+	const TODO_BASE_URL = `${BASE_URL}todo`;
 
 	return (
 		<UrlContext.Provider
