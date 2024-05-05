@@ -1,16 +1,37 @@
-import React, { useContext } from 'react';
-import { completeStandardTodo } from "../utils/api";
+import React, { useContext, useState, useEffect } from 'react';
+import { completeStandardTodo, fetchLowestPriorityUserToDo } from "../utils/api";
 import AuthContext from "../context/AuthContext";
 import { useNotification } from "../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
 
-const Tutorial = ({ standardTodo }) => {
+const Tutorial = () => {
     let { authTokens } = useContext(AuthContext);
     const { addNotification } = useNotification();
     let navigate = useNavigate();
+    const [todo_id, setTodo_id] = useState(-1);
+
+    useEffect(() => {
+        const fetchTodo = async () => {
+            try {
+                const result = await fetchLowestPriorityUserToDo(authTokens);
+                console.log("Fetched todo:", result);
+                let id = result.id;
+                if (id == 4 || id == 11) {
+                    setTodo_id(id);
+                } else {
+                    addNotification("Bitte die Aufgaben Reihenfolge einhalten.", "error");
+                    navigate("/");
+                }
+            } catch (err) {
+                console.error("Error fetching todo:", err);
+            }
+        };
+
+        fetchTodo();
+    }, [authTokens]);
 
     const handleCompleteClick = () => {
-        completeStandardTodo(standardTodo, authTokens)
+        completeStandardTodo(todo_id, authTokens)
             .then(response => {
                 addNotification(
                     "Tutorial abgeschlossen",

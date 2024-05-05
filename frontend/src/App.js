@@ -142,7 +142,7 @@ function App() {
 									path="delete-account-confirm/:uidb64/:token/"
 								/>
 								<Route
-									element={<Tutorial standardTodo={3} />}
+									element={<Tutorial />}
 									path="/tutorial/"
 								/>
 								<Route

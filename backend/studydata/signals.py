@@ -29,13 +29,16 @@ def assign_sentences(sender, instance, created, **kwargs):
     NUM_SENTENCES_PER_WEEK = 10
     NUM_WEEKS = 6
 
+    # get the language of the course
+    language = instance.language
+
     if created:
-        test_sentences = StudySentences.objects.order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[: NUM_SENTENCES_TEST]
+        test_sentences = StudySentences.objects.filter(language=language).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[: NUM_SENTENCES_TEST]
 
         # filter out test sentences from test sentences
-        train_sentences = StudySentences.objects.exclude(id__in=[sentence.id for sentence in test_sentences]).order_by('number_of_times_assigned_as_train', 'number_of_times_assigned_as_test')[:NUM_SENTENCES_PER_WEEK * NUM_WEEKS]
+        train_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences]).order_by('number_of_times_assigned_as_train', 'number_of_times_assigned_as_test')[:NUM_SENTENCES_PER_WEEK * NUM_WEEKS]
         
-        final_test_sentences = StudySentences.objects.exclude(id__in=[sentence.id for sentence in test_sentences]).exclude(id__in=[sentence.id for sentence in train_sentences]).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[:NUM_SENTENCES_TEST]
+        final_test_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences]).exclude(id__in=[sentence.id for sentence in train_sentences]).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[:NUM_SENTENCES_TEST]
         i = 1
         
         for sentence in test_sentences:
