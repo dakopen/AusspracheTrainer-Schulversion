@@ -96,7 +96,9 @@ export const AuthProvider = ({ children }) => {
 
 	let updateToken = useCallback(async () => {
 		console.log("Updated token!");
-
+		console.log(API_BASE_URL);
+		console.log(process.env.DJANGO_DEBUG);
+		console.log(process.env.REACT_APP_API_BASE_URL);
 		let response = await fetch(`${API_BASE_URL}/token/refresh/`, {
 			method: "POST",
 			headers: {

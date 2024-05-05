@@ -39,14 +39,14 @@ class SingleUserToDoView(APIView):
     permission_classes = [IsStudystudentOrTeacher]
 
     def get(self, request):
-        todos = UserToDo.objects.filter(user=request.user, completed=False)
+        now = timezone.now()
+        todos = UserToDo.objects.filter(user=request.user, completed=False, todo_date__activation_date__lte=now, todo_date__due_date__gte=now)
         lowest_prio_todo = todos.order_by('todo_date__standard_todo__priority').first()
         if lowest_prio_todo is None:
             return Response({})
         serializer = StandardToDoSerializer(lowest_prio_todo.todo_date.standard_todo)
         return Response(serializer.data)
     
-
 
 def create_user_todo_for_all_users_in_course(todo_date_id, course_id, due_date=None):
     """

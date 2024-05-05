@@ -10,3 +10,4 @@ app = Celery('backend')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 app.conf.result_backend = 'redis://localhost:6379/0'
+app.conf.broker_connection_retry_on_startup = True
