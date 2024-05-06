@@ -10,7 +10,8 @@ const AudioRecorder = () => {
             startRecording();
             console.log(recordingState, "RECSTATE INITIAL")
         } else {
-            stopRecording();
+            // short delay to allow the last audio buffer to be recorded
+            setTimeout(() => stopRecording(), 200);
             console.log(recordingState, "RECSTATE")
 
         }
