@@ -76,6 +76,9 @@ class StudySentences(models.Model):
         return f"Study Sentence in {self.get_language_display()}, with id {self.id}"
 
 
+
+
+
 class StudySentencesCourseAssignment(models.Model):
     course = models.ForeignKey('accounts.Course', on_delete=models.CASCADE)
     sentence = models.ForeignKey('StudySentences', on_delete=models.CASCADE)
