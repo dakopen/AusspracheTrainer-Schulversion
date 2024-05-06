@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 import { useAudioRecording } from '../context/AudioRecordingContext';
 import "./AudioVisualizer.css";
+import DisplayResult from './DisplayResult';
 
 
-const AudioVisualizer = ({ offsets }) => {
+const AudioVisualizer = ({ result }) => {
     const { isRecording, audioContext, recordingState, source, audioBlob, starttimeRecording, endtimeRecording } = useAudioRecording(); // Get necessary items from context
 
     const canvasRef = useRef(null);
@@ -294,7 +295,7 @@ const AudioVisualizer = ({ offsets }) => {
             const percentage = offset[2];
             if (percentage < 70) {
                 offscreenCtxRef.current.fillStyle = "rgba(255, 0, 0, 0.5)";
-            } else if (percentage < 90) {
+            } else if (percentage < 95) {
                 offscreenCtxRef.current.fillStyle = "rgba(255, 255, 0, 0.5)";
             } else {
                 offscreenCtxRef.current.fillStyle = "rgba(0, 255, 0, 0.5)";
@@ -305,10 +306,11 @@ const AudioVisualizer = ({ offsets }) => {
 
 
     useEffect(() => {
-        if (offsets && offsets.length > 0) {
-            colorCanvas(offsets);
+        // offsets = result[1]
+        if (result && result[1] && result[1].length > 0) {
+            colorCanvas(result[1]);
         }
-    }, [offsets]);
+    }, [result]);
 
     useEffect(() => {
         if (replayButtonRef.current) {
@@ -358,14 +360,24 @@ const AudioVisualizer = ({ offsets }) => {
         recordedAudioRef.current.currentTime = x / pixelsPerSecondRef.current;
     }
 
+    const jumpToWaveformTimestamp = (timestamp) => {
+        recordedAudioRef.current.currentTime = timestamp;
+        replayXRef.current = timestamp * pixelsPerSecondRef.current * 2;
+        replayControl.updateReplayLinePosition();
+    }
 
     return (
-        <div id="canvas-parent-container">
-            <canvas className="canvas-visualizer" ref={canvasRef} width="800" height="200"></canvas>
+        <>
+            <div id="canvas-parent-container">
+                <canvas className="canvas-visualizer" ref={canvasRef} width="800" height="200"></canvas>
 
-            <button id="replay-button" ref={replayButtonRef}></button>
-            <div id="replay-line" ref={replayLineRef}></div>
-        </div>
+                <button id="replay-button" ref={replayButtonRef}></button>
+                <div id="replay-line" ref={replayLineRef}></div>
+
+            </div>
+            {result && <DisplayResult result={result} jumpToWaveformTimestamp={jumpToWaveformTimestamp} />}
+
+        </>
     );
 
 };

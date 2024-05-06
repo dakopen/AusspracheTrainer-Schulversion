@@ -14,7 +14,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
     const [taskId, setTaskId] = useState(null);
     const [taskStatus, setTaskStatus] = useState("PENDING");
     const { authTokens } = useContext(AuthContext);
-    const [offsets, setOffsets] = useState(null);
+    const [result, setResult] = useState(null);
 
     useEffect(() => {
         pollTaskStatus();
@@ -31,7 +31,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
                 }
                 if (data.status === "SUCCESS") {
                     console.log()
-                    setOffsets(data.result[1]);
+                    setResult(data.result);
                     console.log(data)
 
                 }
@@ -47,7 +47,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
             <AudioRecordingProvider sentenceId={sentenceId} onComplete={onComplete} setTaskId={setTaskId}>
                 <RecordingButton setRecordingState={setRecordingState} />
                 <br></br>
-                <AudioVisualizer offsets={offsets} />
+                <AudioVisualizer result={result} />
             </AudioRecordingProvider>
             {user.full_access_group && <SpeechSynthesis audioUrl={audioUrl} />}
             <button onClick={onNextSentence}>Next Sentence</button> {/* Button to proceed to the next sentence */}

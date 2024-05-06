@@ -1,0 +1,49 @@
+#responsearea-scores {
+	display: none;
+	height: auto;
+	white-space: normal;
+	text-align: center;
+	vertical-align: top;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	background-color: var(--light-rosa);
+	font-size: smaller;
+}
+
+#responsearea {
+	display: none;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	vertical-align: middle;
+	border-radius: 25px;
+	border: solid 4px #aa6bfd;
+	outline: none;
+	height: auto;
+	white-space: normal;
+	text-align: left;
+	vertical-align: top;
+}
+
+.response-word {
+	font-size: max(min(1.5vw, 24px), 18px);
+	font-family: "Montserrat";
+	font-weight: 500;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.black-word {
+	color: black;
+}
+
+.darkred-word {
+	color: darkred;
+}
+
+.yellow-word {
+	color: gold;
+}
