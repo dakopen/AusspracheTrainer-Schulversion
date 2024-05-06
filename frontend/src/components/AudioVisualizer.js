@@ -3,7 +3,7 @@ import { useAudioRecording } from '../context/AudioRecordingContext';
 import "./AudioVisualizer.css";
 
 
-const AudioVisualizer = () => {
+const AudioVisualizer = ({ offsets }) => {
     const { isRecording, audioContext, recordingState, source, audioBlob, starttimeRecording, endtimeRecording } = useAudioRecording(); // Get necessary items from context
 
     const canvasRef = useRef(null);
@@ -260,6 +260,55 @@ const AudioVisualizer = () => {
         }
     }
 
+    const colorCanvas = (offsets) => {
+        const maxWidth = getResponsiveCanvasWidth();
+
+        // original dimensions
+        const originalWidth = offscreenCanvasRef.current.width;
+        const originalHeight = offscreenCanvasRef.current.height;
+
+        const aspectRatio = originalWidth / originalHeight;
+
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
+
+        tempCanvas.width = originalWidth;
+        tempCanvas.height = originalHeight;
+
+        // Copy current content of offscreenCanvas to temporary canvas
+        tempCtx.drawImage(offscreenCanvasRef.current, 0, 0);
+
+        // Update the dimensions of the offscreen canvas
+        if (offscreenXRef.current > maxWidth) {
+            offscreenCanvasRef.current.width = maxWidth;
+            offscreenCanvasRef.current.height = maxWidth / aspectRatio;
+        } else {
+            offscreenCanvasRef.current.width = offscreenXRef.current;
+            offscreenCanvasRef.current.height = offscreenXRef.current / aspectRatio;
+        }
+
+        replayLineRef.current.style.height = `${offscreenCanvasRef.current.height}px`;
+        offscreenCtxRef.current.drawImage(tempCanvas, 0, 0, originalWidth, originalHeight, 0, 0, offscreenCanvasRef.current.width, offscreenCanvasRef.current.height);
+        console.log("offsets inside: ", offsets);
+        offsets.forEach((offset) => {
+            const percentage = offset[2];
+            if (percentage < 70) {
+                offscreenCtxRef.current.fillStyle = "rgba(255, 0, 0, 0.5)";
+            } else if (percentage < 90) {
+                offscreenCtxRef.current.fillStyle = "rgba(255, 255, 0, 0.5)";
+            } else {
+                offscreenCtxRef.current.fillStyle = "rgba(0, 255, 0, 0.5)";
+            }
+            offscreenCtxRef.current.fillRect(offset[0] / 1000 * pixelsPerSecondRef.current, 0, offset[1] / 1000 * pixelsPerSecondRef.current, offscreenCanvasRef.current.height);
+        });
+    }
+
+
+    useEffect(() => {
+        if (offsets && offsets.length > 0) {
+            colorCanvas(offsets);
+        }
+    }, [offsets]);
 
     useEffect(() => {
         if (replayButtonRef.current) {

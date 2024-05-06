@@ -9,4 +9,5 @@ urlpatterns = [
     path('sentences/', views.StudySentencesListView.as_view(), name='sentences-list'),
     path('sentences/<int:sentence_id>/', views.StudySentencesListView.as_view(), name='sentences-update'),
     path('course-assignments/', views.RetrieveStudySentencesByCourseAndLocation.as_view(), name='course-assignments-sentences'),
+    path('task-status/<str:task_id>/', views.TaskStatusView.as_view(), name='task-status'),
 ]

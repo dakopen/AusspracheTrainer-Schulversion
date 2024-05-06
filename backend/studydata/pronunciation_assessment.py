@@ -59,16 +59,15 @@ def pronunciation_assessment_continuous_from_file(filename, reference_text, lang
         nb = jo['NBest'][0]
         durations.append(sum([int(w['Duration']) for w in nb['Words']]))
         
-        """
+        
         for word in nb['Words']:
             word_offset_duration.append((word['Offset']/10000, word['Duration']/10000, word['PronunciationAssessment']['AccuracyScore'], word['Word']))
 
 
-            # Store all phoneme scores:
-            for phoneme in word["Phonemes"]:
-                if phoneme["Phoneme"] != "":
-                    phoneme_dicts.append({"phoneme_id": get_phoneme_index(phoneme["Phoneme"], language), "score": phoneme['PronunciationAssessment']['AccuracyScore']})
-        """
+        # Store all phoneme scores:
+        #    for phoneme in word["Phonemes"]:
+        #        if phoneme["Phoneme"] != "":
+        #            phoneme_dicts.append({"phoneme_id": get_phoneme_index(phoneme["Phoneme"], language), "score": phoneme['PronunciationAssessment']['AccuracyScore']})
             
 
 

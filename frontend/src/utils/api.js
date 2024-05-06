@@ -452,3 +452,22 @@ export const fetchSentencesByCourseAndLocation = async (startLocation, endLocati
 		throw error;
 	}
 };
+
+
+export const checkTaskStatus = async (id, authTokens) => {
+	try {
+		const response = await fetch(`${STUDYDATA_BASE_URL}/task-status/${id}/`, {
+			headers: {
+				Authorization: "Bearer " + authTokens.access,
+				"ngrok-skip-browser-warning": "true",
+
+			},
+		});
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching task status:", error);
+		return "ERROR";
+	}
+};
+

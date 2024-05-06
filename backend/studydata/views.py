@@ -19,6 +19,8 @@ from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, 
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
+from celery.result import AsyncResult
+
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
@@ -99,6 +101,21 @@ class AudioAnalysisView(APIView):
             return Response({'task_id': task.id}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TaskStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, task_id, format=None):
+        task_result = AsyncResult(task_id)
+
+        response = {
+            'task_id': task_id,
+            'status': task_result.status,
+            'result': task_result.result
+        }
+        return Response(response)
+
 
 class StudySentencesListView(APIView):
     def get_permissions(self):

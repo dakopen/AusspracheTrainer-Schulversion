@@ -6,7 +6,7 @@ const AudioRecordingContext = createContext();
 
 export const useAudioRecording = () => useContext(AudioRecordingContext);
 
-export const AudioRecordingProvider = ({ children, sentenceId, onComplete }) => {
+export const AudioRecordingProvider = ({ children, sentenceId, onComplete, setTaskId, }) => {
     const [isRecording, setIsRecording] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioType, setAudioType] = useState('');
@@ -112,6 +112,8 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete }) => 
                 body: formData,
             });
             const data = await response.json();
+            setTaskId(data.task_id);
+            console.log(data);
             if (response.ok) {
                 console.log("Complete")
                 onComplete(sentenceId)
