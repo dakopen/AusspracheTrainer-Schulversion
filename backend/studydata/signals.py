@@ -19,9 +19,17 @@ def create_synth_speech(sender, instance, **kwargs):
             if instance.sentence != old_instance.sentence or instance.language != old_instance.language:
                 instance.synth_filename = synthesize_speech(instance.id, text=instance.sentence, language=instance.language)
                 instance.save(update_fields=["synth_filename"])
+
     finally:
         delattr(instance, '_processing')
 
+
+@receiver(post_save, sender=StudySentences)
+def create_synth_speech(sender, instance, created, **kwargs):
+    if created:
+        instance.synth_filename = synthesize_speech(instance.id, text=instance.sentence, language=instance.language)
+        instance.save(update_fields=["synth_filename"])
+        
 
 @receiver(post_save, sender=Course)
 def assign_sentences(sender, instance, created, **kwargs):

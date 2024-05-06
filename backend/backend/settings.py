@@ -216,7 +216,7 @@ if DEBUG:
 
 else:
     # FRONTEND_URL = 'http://localhost:3000'
-    FRONTEND_URL = "https://0c19-2a02-8070-8e83-2e20-6dd4-dfc5-1e1e-e626.ngrok-free.app/"
+    FRONTEND_URL = "https://263b-2a02-8070-8e83-2e20-6dd4-dfc5-1e1e-e626.ngrok-free.app"
     BACKEND_URL = 'https://tapir-perfect-thankfully.ngrok-free.app'
 
 

@@ -16,7 +16,7 @@ const Tutorial = () => {
                 const result = await fetchLowestPriorityUserToDo(authTokens);
                 console.log("Fetched todo:", result);
                 let id = result.id;
-                if (id == 4 || id == 11) {
+                if (id == 3 || id == 11) {
                     setTodo_id(id);
                 } else {
                     addNotification("Bitte die Aufgaben Reihenfolge einhalten.", "error");

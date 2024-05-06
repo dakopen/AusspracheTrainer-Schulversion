@@ -17,6 +17,7 @@ const ShowCourse = () => {
 	const { authTokens } = useContext(AuthContext);
 	const { addNotification } = useNotification();
 
+
 	useEffect(() => {
 		const loadData = async () => {
 			try {

@@ -96,7 +96,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         teacher = self.context['request'].user
-        if teacher.role != User.TEACHER:
+        if teacher.role != User.TEACHER and teacher.role != User.ADMIN:
             raise serializers.ValidationError("Only teachers can create courses.")
         return attrs
 
