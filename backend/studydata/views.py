@@ -102,7 +102,7 @@ class AudioAnalysisView(APIView):
                 TestSentencesWithAudio.objects.create(
                     user=request.user, 
                     sentence_id=sentence_id, 
-                    audio_file=ContentFile(file_content, name=random_name)  # Use file_content again
+                    audio_file_path=file_path
                 )
             
             # Dispatch the pronunciation assessment task to Celery
@@ -123,19 +123,15 @@ class TriggerAudioAnalysisView(APIView):
         test_sentences = TestSentencesWithAudio.objects.filter(user=user)
         for test_sentence in test_sentences:
             # retrieve the audio file
-            audio_file = test_sentence.audio_file
+            audio_file_path = test_sentence.audio_file_path
             # retrieve the sentence
             sentence_id = test_sentence.sentence.id
-            prepare_for_analysis(audio_file.url, sentence_id, user.belongs_to_course.language, user_id=user.id)
+            async_pronunciation_assessment(audio_file_path, sentence_id, user.belongs_to_course.language, user_id=user.id)
         return Response({'message': 'Analysis triggered'}, status=status.HTTP_200_OK)
 
-
-
 def prepare_for_analysis(audio_file_path, sentence_id, language, user_id):
-    logger.warn("AUDIO FILE PATH", audio_file_path)
-    file_path = download_file_from_s3(audio_file_path)
     
-    async_pronunciation_assessment.delay(file_path, sentence_id, language, user_id=user_id)
+    async_pronunciation_assessment.delay(audio_file_path, sentence_id, language, user_id=user_id)
 
 
 class TaskStatusView(APIView):

@@ -121,8 +121,8 @@ def trigger_analysis_on_completion(sender, instance, created, **kwargs):
         test_sentences = TestSentencesWithAudio.objects.filter(user=user)
         for test_sentence in test_sentences:
             # retrieve the audio file
-            audio_file = test_sentence.audio_file
+            audio_file_path = test_sentence.audio_file_path
             # retrieve the sentence
             sentence_id = test_sentence.sentence.id
-            prepare_for_analysis(audio_file.path, sentence_id, user.belongs_to_course.language, user_id=user.id)
+            prepare_for_analysis(audio_file_path, sentence_id, user.belongs_to_course.language, user_id=user.id)
         

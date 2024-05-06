@@ -63,7 +63,7 @@ class PronunciationAssessmentResult(models.Model):
 class TestSentencesWithAudio(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     sentence = models.ForeignKey('StudySentences', on_delete=models.CASCADE)
-    audio_file = models.FileField(upload_to='student_audio_files/', storage=PrivateMediaStorage())
+    audio_file_path = models.CharField(max_length=255)
 
 class StudySentences(models.Model):
     sentence = models.TextField(unique=True)
