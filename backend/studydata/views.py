@@ -13,12 +13,12 @@ import backend.settings
 
 from accounts.models import Course
 from .tasks import async_pronunciation_assessment
-from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment
+from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, TestSentencesWithAudio
 from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, \
     StudySentencesSerializer, StudySentencesCourseAssignmentSerializer, FinalQuestionnaireSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-
+from .utils import download_file_from_s3
 from celery.result import AsyncResult
 
 logger = logging.getLogger(__name__)
@@ -86,21 +86,56 @@ class AudioAnalysisView(APIView):
             buffer = io.BytesIO()
             audio_segment.export(buffer, format="wav")
             buffer.seek(0)
-            content_file = ContentFile(buffer.read())
+            
+            # Read the buffer content once
+            file_content = buffer.read()
 
             # Save the processed file to disk
             random_name = str(uuid.uuid4()) + ".wav"
             file_path = str(backend.settings.MEDIA_ROOT) + '/audio_files/' + random_name
             with open(file_path, 'wb+') as destination:
-                destination.write(content_file.read())
-            
+                destination.write(file_content)  # Use file_content
 
+            user_course = request.user.belongs_to_course
+            location_value = StudySentencesCourseAssignment.objects.get(course=user_course, sentence=sentence_id).location_value
+            if location_value <= 20 or location_value >= 80:
+                TestSentencesWithAudio.objects.create(
+                    user=request.user, 
+                    sentence_id=sentence_id, 
+                    audio_file=ContentFile(file_content, name=random_name)  # Use file_content again
+                )
+            
             # Dispatch the pronunciation assessment task to Celery
             task = async_pronunciation_assessment.delay(file_path, sentence_id, request.user.belongs_to_course.language, user_id=request.user.id)
 
             return Response({'task_id': task.id}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TriggerAudioAnalysisView(APIView):
+    permission_classes = [IsStudystudentOrTeacher]
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+
+        # get all files and sentences:
+        test_sentences = TestSentencesWithAudio.objects.filter(user=user)
+        for test_sentence in test_sentences:
+            # retrieve the audio file
+            audio_file = test_sentence.audio_file
+            # retrieve the sentence
+            sentence_id = test_sentence.sentence.id
+            prepare_for_analysis(audio_file.url, sentence_id, user.belongs_to_course.language, user_id=user.id)
+        return Response({'message': 'Analysis triggered'}, status=status.HTTP_200_OK)
+
+
+
+def prepare_for_analysis(audio_file_path, sentence_id, language, user_id):
+    logger.warn("AUDIO FILE PATH", audio_file_path)
+    file_path = download_file_from_s3(audio_file_path)
+    
+    async_pronunciation_assessment.delay(file_path, sentence_id, language, user_id=user_id)
 
 
 class TaskStatusView(APIView):

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
+from backend.custom_storages import PrivateMediaStorage
 
 User = get_user_model()
 
@@ -59,7 +60,10 @@ class PronunciationAssessmentResult(models.Model):
     def __str__(self):
         return f"Pronunciation Assessment Result for {self.user.username} on {self.date_submitted}"
     
-
+class TestSentencesWithAudio(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sentence = models.ForeignKey('StudySentences', on_delete=models.CASCADE)
+    audio_file = models.FileField(upload_to='student_audio_files/', storage=PrivateMediaStorage())
 
 class StudySentences(models.Model):
     sentence = models.TextField(unique=True)

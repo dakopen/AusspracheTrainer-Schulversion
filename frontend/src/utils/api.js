@@ -471,3 +471,24 @@ export const checkTaskStatus = async (id, authTokens) => {
 	}
 };
 
+export const triggerAnalysis = async (authTokens) => {
+	try {
+		const response = await fetch(`${STUDYDATA_BASE_URL}/trigger-audio-analysis/`, {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${authTokens.access}`,
+				'ngrok-skip-browser-warning': 'true',
+				'Content-Type': 'application/json'  // Include if your endpoint expects JSON
+			},
+		});
+		const data = await response.json();
+		if (!response.ok) {
+			throw new Error(data.error || 'Failed to trigger analysis');
+		}
+		return data;
+	} catch (error) {
+		console.error("Error triggering analysis:", error);
+		return { error: "ERROR" };
+	}
+};
+

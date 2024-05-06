@@ -9,6 +9,12 @@ class MediaStorage(S3Boto3Storage):
     default_acl = 'private'
     file_overwrite = False
 
+class PrivateMediaStorage(S3Boto3Storage):
+    location = 'private-media'
+    default_acl = 'private'
+    file_overwrite = False
+    custom_domain = False
+
 class SynthStorage(S3Boto3Storage):
     location = 'synthed_speech'
     default_acl = 'public-read'

@@ -182,3 +182,5 @@ class ToDoDatesView(APIView):
             logger.warn("Serializer errors: " + str(serializer.errors))
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+
+

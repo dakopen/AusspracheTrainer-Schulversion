@@ -3,8 +3,11 @@ from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from .models import StandardToDo, UserToDo, ToDoDates
+from studydata.views import prepare_for_analysis
 
 from accounts.models import Course
+from studydata.models import TestSentencesWithAudio, PronunciationAssessmentResult
+from studydata.tasks import async_pronunciation_assessment
 import logging
 logger = logging.getLogger(__name__)
 
@@ -108,3 +111,18 @@ def add_todos_to_user(sender, instance, created, **kwargs):
                 user=user,
                 todo_date=instance,
             )
+
+@receiver(post_save, sender=UserToDo)
+def trigger_analysis_on_completion(sender, instance, created, **kwargs):
+    if instance.todo_date.standard_todo.id == 12 and instance.completed:
+        user = instance.user
+
+        # get all files and sentences:
+        test_sentences = TestSentencesWithAudio.objects.filter(user=user)
+        for test_sentence in test_sentences:
+            # retrieve the audio file
+            audio_file = test_sentence.audio_file
+            # retrieve the sentence
+            sentence_id = test_sentence.sentence.id
+            prepare_for_analysis(audio_file.path, sentence_id, user.belongs_to_course.language, user_id=user.id)
+        

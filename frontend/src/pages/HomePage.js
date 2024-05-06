@@ -10,9 +10,11 @@ import RecordingButton from "../components/RecordingButton";
 import AudioVisualizer from "../components/AudioVisualizer";
 import { AudioRecordingProvider } from "../context/AudioRecordingContext";
 
+import { triggerAnalysis } from "../utils/api";
+
 const HomePage = () => {
 	const { addNotification } = useNotification();
-	const { user } = useContext(AuthContext);
+	const { user, authTokens } = useContext(AuthContext);
 	const [recordingState, setRecordingState] = useState(0);
 
 	return (
@@ -40,6 +42,11 @@ const HomePage = () => {
 					"https://www.fluentu.com/blog/english/wp-content/uploads/sites/4/2024/02/v1-7c88f6eaf460a5f05b3bc7e21ccc5e2c-neural-Salli.mp3"
 				}
 			/>
+			<button
+				onClick={() => {
+					triggerAnalysis(authTokens);
+				}}
+			>TRIGGER ANALYSIS</button>
 		</div>
 	);
 };
