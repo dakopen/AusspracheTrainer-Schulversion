@@ -96,7 +96,7 @@ const CreateCourse = ({ setCourses }) => {
 					<option value={13}>13. Klasse</option>
 				</select>
 			</label>
-			<button type="submit" className="form-button">Create Course</button>
+			<button type="submit" className="form-button">Neuen Kurs erstellen</button>
 		</form>
 	);
 };

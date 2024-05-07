@@ -89,9 +89,11 @@ class SchoolSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    number_of_students = serializers.SerializerMethodField()
+
     class Meta:
         model = Course
-        fields = ('id', 'name', 'language', 'teacher', 'grade', 'start_date', 'study_started', 'activate_final_test')
+        fields = ('id', 'name', 'language', 'teacher', 'grade', 'start_date', 'study_started', 'activate_final_test', 'number_of_students', 'created_at')
         extra_kwargs = {'teacher': {'read_only': True}}
 
     def validate(self, attrs):
@@ -102,6 +104,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Course.objects.create(**validated_data)
+    
+    def get_number_of_students(self, obj):
+        return obj.students.count()
  
 class UserEmailSerializer(serializers.ModelSerializer):
     class Meta:

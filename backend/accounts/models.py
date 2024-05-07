@@ -28,6 +28,8 @@ class Course(models.Model):
     study_started = models.BooleanField(default=False)
 
     activate_final_test = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
     
 
 class User(AbstractUser):

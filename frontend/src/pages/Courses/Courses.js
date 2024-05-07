@@ -30,9 +30,10 @@ const Courses = () => {
 				<Link to={`/courses/${course.id}`} key={course.id} className="course-card">
 					<div>
 						<h4>{course.name}</h4>
-						<p>{course.language}</p>
-						<p>{course.teacher}</p>
-						<small>KURS ID: {course.id}</small>
+						<p>{course.language === 1 ? "Englisch" : "Französisch"}</p>
+						<p>{course.number_of_students} Schüler</p>
+						<p>{course.study_started ? "Kurs am " + new Date(course.start_date).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric' }) + " aktiviert" : "Kurs noch nicht aktiviert"}</p>
+						<small>Kurs ID: {course.id}, erstellt am {new Date(course.created_at).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</small>
 					</div>
 				</Link>
 			))}
