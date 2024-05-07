@@ -1,0 +1,40 @@
+.course-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	grid-gap: 20px;
+	padding: 20px;
+	justify-content: center;
+}
+
+.course-card {
+	background-color: var(--light-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	padding: 15px;
+	text-decoration: none;
+	color: var(--black);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: box-shadow 0.3s, transform 0.2s;
+}
+
+.course-card:hover {
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+	transform: translateY(-5px);
+}
+
+.course-card h4 {
+	margin: 0 0 10px 0;
+	color: var(--lila);
+}
+
+.course-card p,
+.course-card small {
+	margin: 5px 0;
+}
+
+/* Responsive adjustments for mobile screens */
+@media (max-width: 600px) {
+	.course-container {
+		grid-template-columns: 1fr; /* Stack cards on mobile */
+	}
+}

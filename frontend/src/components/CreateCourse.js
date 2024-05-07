@@ -54,19 +54,21 @@ const CreateCourse = ({ setCourses }) => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<label>
+		<form onSubmit={handleSubmit} className="create-course-form">
+			<label className="form-label">
 				Name:
 				<input
 					type="text"
+					className="form-input"
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 					required
 				/>
 			</label>
-			<label>
-				Language:
+			<label className="form-label">
+				Sprache:
 				<select
+					className="form-select"
 					value={language}
 					onChange={(e) => setLanguage(e.target.value)}
 					required
@@ -75,9 +77,10 @@ const CreateCourse = ({ setCourses }) => {
 					<option value={2}>Französisch</option>
 				</select>
 			</label>
-			<label>
+			<label className="form-label">
 				Stufe:
 				<select
+					className="form-select"
 					value={grade}
 					onChange={(e) => setGrade(e.target.value)}
 					required
@@ -93,9 +96,10 @@ const CreateCourse = ({ setCourses }) => {
 					<option value={13}>13. Klasse</option>
 				</select>
 			</label>
-			<button type="submit">Create Course</button>
+			<button type="submit" className="form-button">Create Course</button>
 		</form>
 	);
 };
 
 export default CreateCourse;
+

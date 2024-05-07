@@ -1,0 +1,46 @@
+/* Style for the course creation form */
+.create-course-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	max-width: 400px; /* Limit width to ensure form readability */
+	margin: 20px auto;
+	background-color: var(--light-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.create-course-form label {
+	margin-bottom: 15px;
+	font-size: 16px;
+	color: var(--black);
+	width: 100%; /* Ensures label and inputs align well */
+}
+
+.create-course-form input,
+.create-course-form select {
+	width: calc(100% - 20px);
+	padding: 10px;
+	border: 1px solid var(--lila);
+	border-radius: 4px;
+	background-color: var(--white);
+	color: var(--black);
+	margin-top: 5px;
+}
+
+.create-course-form button {
+	padding: 10px 20px;
+	background-color: var(--lila);
+	color: var(--white);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	margin-top: 15px;
+}
+
+.create-course-form button:hover {
+	background-color: var(--rosa);
+}

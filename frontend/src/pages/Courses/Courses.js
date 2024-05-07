@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
-import AuthContext from "../context/AuthContext";
-import { fetchCourses } from "../utils/api";
-import CreateCourse from "../components/CreateCourse.js";
-import { isTeacher } from "../utils/RoleChecks";
+import AuthContext from "../../context/AuthContext.js";
+import { fetchCourses } from "../../utils/api.js";
+import CreateCourse from "../../components/CreateCourse.js";
+import { isTeacher } from "../../utils/RoleChecks.js";
 import { Link } from "react-router-dom";
+import "./Courses.css";
+import "./CreateCourse.css"
 
 const Courses = () => {
 	const { authTokens, user } = useContext(AuthContext);
@@ -23,17 +25,17 @@ const Courses = () => {
 	}, [authTokens]);
 
 	return (
-		<div>
-			{courses.map((course) => {
-				return (
-					<Link to={`/courses/${course.id}`} key={course.id}>
-						<p>
-							{course.name} - {course.language} - {course.teacher}{" "}
-							- KURS ID: {course.id}
-						</p>
-					</Link>
-				);
-			})}
+		<div className="course-container">
+			{courses.map((course) => (
+				<Link to={`/courses/${course.id}`} key={course.id} className="course-card">
+					<div>
+						<h4>{course.name}</h4>
+						<p>{course.language}</p>
+						<p>{course.teacher}</p>
+						<small>KURS ID: {course.id}</small>
+					</div>
+				</Link>
+			))}
 			{isTeacher(user) && <CreateCourse setCourses={setCourses} />}
 		</div>
 	);

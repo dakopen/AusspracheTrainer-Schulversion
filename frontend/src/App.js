@@ -26,7 +26,7 @@ import CreateAnyRole from "./pages/CreateAnyRole";
 import HomePage from "./pages/HomePage";
 import Schools from "./pages/Schools";
 import ShowSchool from "./pages/ShowSchool";
-import Courses from "./pages/Courses";
+import Courses from "./pages/Courses/Courses";
 import ShowCourse from "./pages/ShowCourse";
 import StudySentences from "./pages/StudySentences";
 import UserSettings from "./pages/UserSettings";
