@@ -16,8 +16,8 @@ const LoginPage = () => {
 			<h1>Lehrer:innen Login</h1>
 			<form onSubmit={sendToLogin}>
 				<div className="staff-input-container">
-					<input type="text" name="username" placeholder="Benutzernamen eingeben" />
-					<input type={showPassword ? 'text' : 'password'} name="password" placeholder="Passwort eingeben" />
+					<input type="text" name="username" placeholder="E-Mail eingeben" />
+					<input type={showPassword ? 'text' : 'password'} name="password" placeholder="Passwort eingeben" className='password-input' />
 					<button type="button" onClick={togglePasswordVisibility} className="staff-show-password">
 						{showPassword ? 'Verbergen' : 'Zeigen'}
 					</button>
