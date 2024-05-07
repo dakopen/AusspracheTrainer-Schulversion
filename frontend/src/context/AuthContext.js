@@ -34,11 +34,24 @@ export const AuthProvider = ({ children }) => {
 
 	let sendToStudyStudentLogin = async (e) => {
 		e.preventDefault();
-		let username =
-			e.target.username.value + "@studie.aussprachetrainer.org";
-		let password = e.target.username.value;
+
+		// Initialize the username and password strings
+		let username = '';
+
+		// Loop over the inputs and concatenate the first character of each input
+		for (let input of e.target.elements) {
+			if (input.type === "text") { // Ensure we're only processing text inputs
+				username += input.value.charAt(0);
+			}
+		}
+		let password = username;
+		// Append the domain for username
+		username += "@studie.aussprachetrainer.org";
+
+		// Call the login function with the constructed credentials
 		await loginUserWithCredentials(username, password);
 	};
+
 
 	let loginUserWithCredentials = async (username, password) => {
 		let response = await fetch(`${API_BASE_URL}/token/`, {
@@ -60,7 +73,7 @@ export const AuthProvider = ({ children }) => {
 			addNotification("Erfolgreich eingeloggt", "success");
 			navigate("/");
 		} else {
-			alert("Etwas ist schiefgelaufen");
+			alert("Die Anmeldedaten sind ungültig.");
 		}
 	};
 
@@ -84,7 +97,7 @@ export const AuthProvider = ({ children }) => {
 			localStorage.setItem("authTokens", JSON.stringify(data));
 			navigate("/");
 		} else {
-			alert("Etwas ist schiefgelaufen");
+			alert("Die Anmeldedaten sind ungültig.");
 		}
 	};
 
@@ -97,7 +110,7 @@ export const AuthProvider = ({ children }) => {
 	let updateToken = useCallback(async () => {
 		console.log("Updated token!");
 		console.log(API_BASE_URL);
-		console.log(process.env.REACT_APP_API_BASE_URL, "process.env");
+		console.log("AUTHTOKENREFRESH", authTokens?.refresh)
 		let response = await fetch(`${API_BASE_URL}/token/refresh/`, {
 			method: "POST",
 			headers: {

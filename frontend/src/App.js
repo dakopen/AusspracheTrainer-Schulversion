@@ -19,7 +19,7 @@ import "./components/Notification.css";
 
 import SetPassword from "./pages/SetPassword";
 import LoginPage from "./pages/LoginPage";
-import StudyStudentLogin from "./pages/StudyStudentLogin";
+import StudyStudentLogin from "./pages/StudyStudentLogin/StudyStudentLogin";
 import CreateTeacher from "./pages/CreateTeacher";
 import CreateAnyRole from "./pages/CreateAnyRole";
 

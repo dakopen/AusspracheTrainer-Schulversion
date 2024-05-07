@@ -10,3 +10,7 @@
 	--yellow: #ffd700;
 	--green: #008000;
 }
+
+.required {
+	color: var(--darkred);
+}

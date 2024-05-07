@@ -251,3 +251,9 @@ class RetrieveStudySentencesByCourseAndLocation(APIView):
         return Response(serializer.data)
     
 
+# TODO: use the results from the analysis to make a summary for the teacher for each sentence
+# the summary should for the first student be like all his scores
+# next student all scores / 2 + his scores / 2
+# next student all scores * 2/3 + his scores / 3
+# and so on
+# then just like the normal student view show all sentences in colours (grey: no data yet)

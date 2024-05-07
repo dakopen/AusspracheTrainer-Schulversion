@@ -1,0 +1,101 @@
+/* StudyStudentLogin.css */
+.login-form {
+	display: flex;
+	flex-direction: column; /* Change to column to stack elements vertically */
+	align-items: center;
+	height: 100vh;
+	max-width: 95%;
+	max-width: 800px;
+	margin: 0 auto;
+	padding-top: 20px;
+}
+
+.input-container {
+	display: flex; /* Aligns child inputs horizontally */
+	flex-wrap: wrap; /* Allows inputs to wrap on small screens */
+	justify-content: center;
+	margin-bottom: 20px; /* Space between inputs and the checkbox */
+}
+
+.login-form input[type="text"] {
+	font-size: 16px;
+	width: 10px; /* Adjust width to fit single characters */
+	margin: 5px;
+	padding: 10px 8px;
+	text-align: center;
+	border: 2px solid var(--lila);
+	border-radius: 10px;
+	color: transparent; /* Hide text color */
+	text-shadow: 0 0 0 var(--black); /* Show text using shadow */
+	background-color: var(--white);
+	transition: border-color 0.3s ease-in-out;
+}
+
+.login-form input:focus {
+	outline: none;
+	border-color: var(--rosa);
+	/* make it glow */
+	box-shadow: 0 0 10px var(--rosa);
+}
+
+.login-form input[type="submit"] {
+	padding: 8px 16px;
+	font-size: 16px;
+	background-color: var(--lila);
+	color: var(--white);
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.login-form input[type="submit"]:hover {
+	background-color: var(--rosa);
+}
+
+.checkbox-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 20px;
+}
+
+h1 {
+	margin-bottom: 20px;
+	text-align: center;
+	font-weight: normal;
+}
+
+.hyphen {
+	align-self: center;
+	margin-right: 5px;
+	margin-left: 5px;
+	font-size: 20px;
+	line-height: 20px;
+	font-weight: bold;
+}
+
+/* Responsive adjustments */
+/* Responsive adjustments for mobile devices */
+@media (max-width: 768px) {
+	.login-form {
+		width: 100%; /* Use maximum width */
+	}
+	.hyphen {
+		font-size: 16px; /* Smaller font size */
+		line-height: 16px;
+		margin-right: 2px;
+		margin-left: -1px;
+	}
+
+	.login-form input[type="text"] {
+		width: 5px;
+		padding: 4px 1px;
+		margin: -1px;
+	}
+
+	.login-form input[type="submit"] {
+		font-size: 14px; /* Smaller font size */
+		padding: 4px 8px; /* Smaller padding */
+	}
+}
