@@ -1,0 +1,77 @@
+.staff-login-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100vh;
+	max-width: 95%;
+	max-width: 800px;
+	margin: 0 auto;
+	padding-top: 20px;
+}
+
+.staff-input-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.staff-login-form input[type="text"],
+.staff-login-form input[type="password"] {
+	font-size: 16px;
+	width: 280px;
+	padding: 10px 8px;
+	text-align: center;
+	border: 2px solid var(--lila);
+	border-radius: 10px;
+	color: var(--black);
+	background-color: var(--white);
+	transition: border-color 0.3s ease-in-out;
+}
+
+.staff-login-form input[type="password"] {
+	margin-top: 10px;
+}
+
+.staff-login-form input:focus {
+	outline: none;
+	border-color: var(--rosa);
+	box-shadow: 0 0 10px var(--rosa);
+}
+
+.staff-login-form input[type="submit"] {
+	padding: 8px 16px;
+	font-size: 16px;
+	background-color: var(--lila);
+	color: var(--white);
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.staff-login-form input[type="submit"]:hover {
+	background-color: var(--rosa);
+}
+
+.staff-show-password {
+	background: none;
+	border: none;
+	color: var(--rosa);
+	cursor: pointer;
+}
+
+@media (max-width: 768px) {
+	.staff-login-form {
+		width: 100%;
+	}
+	.staff-login-form input[type="text"],
+	.staff-login-form input[type="password"] {
+		width: 80%;
+		padding: 8px 6px;
+	}
+	.staff-login-form input[type="submit"] {
+		font-size: 14px;
+		padding: 6px 12px;
+	}
+}

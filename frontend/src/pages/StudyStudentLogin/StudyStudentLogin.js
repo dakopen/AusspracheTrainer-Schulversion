@@ -151,7 +151,7 @@ const StudyStudentLogin = () => {
 						<span className='required'> *</span>
 					</label>
 				</div>
-				<input type="submit" ref={submitRef} onKeyDown={handleKeyDown(11)} value="einloggen" />
+				<input type="submit" ref={submitRef} onKeyDown={handleKeyDown(11)} value="Einloggen" />
 			</form>
 		</div>
 	);
