@@ -27,7 +27,7 @@ import HomePage from "./pages/HomePage";
 import Schools from "./pages/Schools";
 import ShowSchool from "./pages/ShowSchool";
 import Courses from "./pages/Courses/Courses";
-import ShowCourse from "./pages/ShowCourse";
+import ShowCourse from "./pages/ShowCourse/ShowCourse";
 import StudySentences from "./pages/StudySentences";
 import UserSettings from "./pages/UserSettings";
 import SentenceDisplay from "./pages/SentenceDisplay";

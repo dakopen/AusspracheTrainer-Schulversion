@@ -4,6 +4,7 @@
 	grid-gap: 20px;
 	padding: 20px;
 	justify-content: center;
+	align-items: center;
 }
 
 .course-card {
@@ -15,6 +16,7 @@
 	color: var(--black);
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	transition: box-shadow 0.3s, transform 0.2s;
+	max-height: 150px;
 }
 
 .course-card:hover {

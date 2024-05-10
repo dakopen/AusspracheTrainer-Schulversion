@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
-import { useNotification } from "../context/NotificationContext";
-import CourseStudents from "../components/CourseStudents";
-import { fetchCourse, updateCourseField } from "../utils/api";
-import CourseToDoDates from "../components/CourseToDoDates";
+import AuthContext from "../../context/AuthContext";
+import { useNotification } from "../../context/NotificationContext";
+import CourseStudents from "../../components/CourseStudents";
+import { fetchCourse, updateCourseField } from "../../utils/api";
+import CourseToDoDates from "../../components/CourseToDoDates";
+import './ShowCourse.css';
+import './CreateBulkStudents.css'
+import './CourseToDoDates.css'
 
 const ShowCourse = () => {
 	const { courseId } = useParams();
@@ -86,25 +89,25 @@ const ShowCourse = () => {
 	};
 
 	return (
-		<div>
+		<div className="show-course-container">
 			{course ? (
 				<>
-					<h2>Course Details</h2>
-					<div>
-						<strong>Name:</strong>
+					<h2 className="show-course-header">Details: {course.name}</h2>
+					<div className="show-course-detail">
+						<strong>Kursname:</strong>
 						{editName ? (
-							<input type="text" value={name} onChange={(e) => setName(e.target.value)} onBlur={handleNameChange} autoFocus />
+							<input type="text" className="show-course-input" value={name} onChange={(e) => setName(e.target.value)} onBlur={handleNameChange} autoFocus />
 						) : (
 							<>
 								{course.name}
-								<button onClick={() => setEditName(true)}>Edit</button>
+								<button className="show-course-button" onClick={() => setEditName(true)}>Edit</button>
 							</>
 						)}
 					</div>
-					<div>
-						<strong>Grade:</strong>
+					<div className="show-course-detail">
+						<strong>Stufe:</strong>
 						{editGrade ? (
-							<select value={grade} onChange={(e) => setGrade(e.target.value)} onBlur={handleGradeChange}>
+							<select className="show-course-select" value={grade} onChange={(e) => setGrade(e.target.value)} onBlur={handleGradeChange}>
 								<option value={5}>5. Klasse</option>
 								<option value={6}>6. Klasse</option>
 								<option value={7}>7. Klasse</option>
@@ -118,30 +121,41 @@ const ShowCourse = () => {
 						) : (
 							<>
 								{course.grade}
-								<button onClick={() => setEditGrade(true)}>Edit</button>
+								<button className="show-course-button" onClick={() => setEditGrade(true)}>Edit</button>
 							</>
 						)}
 					</div>
-					<button onClick={toggleStudyStarted}>
+					<button className="show-course-button" onClick={toggleStudyStarted}>
 						{course.study_started ? "Mark as Not Started" : "Mark as Started"}
 					</button>
-					<p><strong>Language:</strong> {course.language}</p>
-					<p><strong>Teacher:</strong> {course.teacher}</p>
+					<p><strong>Sprache:</strong> {course.language === 1 ? "Englisch" : "Französisch"}</p>
 					<CourseStudents />
 					{course.study_started &&
-						<><CourseToDoDates final_test_activated={finalTestActivated} />
-							<button onClick={toggleFinalTestActivation}>
+						<>
+							<CourseToDoDates final_test_activated={finalTestActivated} />
+							<button className="show-course-button" onClick={toggleFinalTestActivation}>
 								{course.activate_final_test ? "Finalen Test deaktivieren" : "Finalen Test aktivieren"}
-								{/*once pressed, it should update the finaltest_activated */}
 							</button>
 						</>}
+					<div className="course-debug-information">
+						<small>
+							<p>
+								<strong>Kurs-ID:</strong> {course.id}
+								{"  -  "}
+								<strong>Lehrer-ID:</strong> {course.teacher}
+								{"  -  "}
+								<strong>Erstellt am:</strong> {new Date(course.created_at).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
+							</p>
+						</small>
+					</div>
 
 				</>
 			) : (
-				<p>Loading course details...</p>
+				<p>Lädt...</p>
 			)}
 		</div>
 	);
 };
+
 
 export default ShowCourse;

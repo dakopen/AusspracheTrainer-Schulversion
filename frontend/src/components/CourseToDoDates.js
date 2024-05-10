@@ -9,6 +9,7 @@ const CourseToDoDates = ({ final_test_activated }) => {
     const [todoDates, setTodoDates] = useState({ group1to4: [], group5to10: [], group11to13: [] });
     const [editData, setEditData] = useState({}); // Holds editable data for dates
     const navigate = useNavigate();
+    const [hasChanged, setHasChanged] = useState({});
 
     useEffect(() => {
         const loadData = async () => {
@@ -96,12 +97,14 @@ const CourseToDoDates = ({ final_test_activated }) => {
                 [field]: new Date(value).toISOString()
             }
         }));
+        setHasChanged({ ...hasChanged, [dateKey]: true });
     };
     const saveDateChanges = async (dateKey) => {
-        if (!editData[dateKey]) return;
+        if (!editData[dateKey] || !hasChanged[dateKey]) return;
         try {
             await updateToDoDates(authTokens, courseId, editData[dateKey].standard_todo, editData[dateKey]);
             alert("Dates updated successfully!");
+            setHasChanged({ ...hasChanged, [dateKey]: false });  // Reset change tracking after save
         } catch (error) {
             console.error("Error updating ToDo dates:", error);
             alert("Error updating ToDo dates.");
@@ -123,31 +126,45 @@ const CourseToDoDates = ({ final_test_activated }) => {
     }
 
     return (
-        <div>
-            <h3>ToDo Dates</h3>
+        <div className="todo-dates-container">
+            <h3 className="todo-dates-header">ToDo Dates</h3>
             {Object.entries(editData).map(([dateKey, date]) => (
-                <div key={dateKey}>
-                    <h4 onClick={() => handleHeadlineClick(date.standard_todo)}>{dateKey.includes('group5to10') ? 'Wöchentliche Übungen' : (dateKey.includes('group1to4') ? 'Anfangstest' : 'Endtest')}</h4>
+                <div key={dateKey} className="todo-date-group">
+                    <h4 onClick={() => handleHeadlineClick(date.standard_todo)}>
+                        {dateKey.includes('group5to10') ? 'Wöchentliche Übungen' : (dateKey.includes('group1to4') ? 'Anfangstest' : 'Endtest')}
+                    </h4>
                     <p>StandardTodo: {date.standard_todo}</p>
-                    {dateKey.includes('group5to10') && (
+                    {dateKey.includes('group5to10') ? (
                         <>
-                            <label>Activation Date:</label>
-                            <input type="date" value={new Date(date.activation_date).toISOString().slice(0, 10)}
-                                onChange={e => handleDateChange(dateKey, 'activation_date', e.target.value)} />
-                            <label>Due Date:</label>
-                            <input type="date" value={new Date(date.due_date).toISOString().slice(0, 10)}
-                                onChange={e => handleDateChange(dateKey, 'due_date', e.target.value)} />
-                            <button onClick={() => saveDateChanges(dateKey)} disabled={!isDateValid(date.activation_date) || !isDateValid(date.due_date)}>Save Changes</button>
+                            <label className="todo-date-label">Activation Date:</label>
+                            <input
+                                type="date"
+                                className="todo-date-input"
+                                value={new Date(date.activation_date).toISOString().slice(0, 10)}
+                                onChange={e => handleDateChange(dateKey, 'activation_date', e.target.value)}
+                            />
+                            <label className="todo-date-label">Due Date:</label>
+                            <input
+                                type="date"
+                                className="todo-date-input"
+                                value={new Date(date.due_date).toISOString().slice(0, 10)}
+                                onChange={e => handleDateChange(dateKey, 'due_date', e.target.value)}
+                            />
+                            <button
+                                className="todo-date-button"
+                                onClick={() => saveDateChanges(dateKey)}
+                                disabled={!hasChanged[dateKey] || !isDateValid(date.activation_date) || !isDateValid(date.due_date)}
+                            >
+                                Save Changes
+                            </button>
                         </>
-                    )}
-                    {!dateKey.includes('group5to10') && (
+                    ) : (
                         <p>Activation Date: {new Date(date.activation_date).toLocaleDateString()}, Due Date: {new Date(date.due_date).toLocaleDateString()}</p>
                     )}
                 </div>
             ))}
         </div>
     );
-
 };
 
 export default CourseToDoDates;

@@ -43,20 +43,21 @@ const CreateBulkStudents = ({ refreshStudents }) => {
 	};
 
 	return (
-		<div>
-			<h3>Create Bulk Students for Course</h3>
-			<form onSubmit={handleSubmit}>
+		<div className="bulk-students-container">
+			<h3 className="bulk-students-header">Schüler:innen Accounts für diesen Kurs erstellen</h3>
+			<form onSubmit={handleSubmit} className="bulk-students-form">
 				<label>
-					Number of Students:
+					Anzahl:
 					<input
 						type="number"
+						className="bulk-students-input"
 						value={numberOfStudents}
 						onChange={(e) => setNumberOfStudents(e.target.value)}
 						min="1"
 						required
 					/>
 				</label>
-				<button type="submit">Create Students</button>
+				<button type="submit" className="bulk-students-button">Schüleraccounts erstellen</button>
 			</form>
 		</div>
 	);

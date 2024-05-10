@@ -1,0 +1,66 @@
+.course-todo-dates {
+	margin-top: 20px;
+	padding: 15px;
+	background-color: var(--white-rosa);
+	border-left: 5px solid var(--lila);
+	border-radius: 4px;
+}
+
+.todo-date-heading {
+	font-size: 18px;
+	color: var(--lila);
+	margin-bottom: 10px;
+}
+
+.todo-date-detail {
+	margin-bottom: 10px;
+}
+
+.todo-date-label {
+	font-weight: bold;
+	color: var(--black);
+}
+
+.todo-date-info {
+	padding: 5px 0;
+	color: var(--black);
+}
+
+.todo-date-edit {
+	margin-top: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.todo-date-input {
+	border: 1px solid var(--lila);
+	border-radius: 4px;
+	padding: 8px;
+	width: 120px;
+	margin: 0 10px;
+}
+
+.todo-date-button {
+	padding: 6px 12px;
+	background-color: var(--lila);
+	color: var(--white);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.todo-date-button:not(:disabled):hover {
+	background-color: var(--rosa);
+}
+
+.todo-date-button:disabled {
+	cursor: default;
+	filter: grayscale(0.3);
+	opacity: 0.3;
+}
+
+.todo-date-button:not(:disabled) {
+	opacity: 1;
+}
