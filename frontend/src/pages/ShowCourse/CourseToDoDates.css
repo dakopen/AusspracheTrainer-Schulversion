@@ -1,3 +1,8 @@
+.todo-dates-header {
+	text-align: center;
+	margin-top: 1vh;
+}
+
 .course-todo-dates {
 	margin-top: 20px;
 	padding: 15px;
@@ -17,7 +22,6 @@
 }
 
 .todo-date-label {
-	font-weight: bold;
 	color: var(--black);
 }
 
@@ -38,7 +42,6 @@
 	border-radius: 4px;
 	padding: 8px;
 	width: 120px;
-	margin: 0 10px;
 }
 
 .todo-date-button {
@@ -49,6 +52,9 @@
 	border-radius: 4px;
 	cursor: pointer;
 	transition: background-color 0.3s;
+	transform: translateY(25px);
+	word-wrap: break-word;
+	white-space: normal;
 }
 
 .todo-date-button:not(:disabled):hover {
@@ -63,4 +69,82 @@
 
 .todo-date-button:not(:disabled) {
 	opacity: 1;
+}
+
+.date-input-container {
+	display: inline-flex;
+	flex-direction: column;
+	margin-right: 34px;
+}
+
+.todo-date-group {
+	display: flex;
+	/*align-items: flex-start; /* Aligns items to the top */
+	margin-top: 20px;
+	padding: 15px;
+	background-color: var(--white-rosa);
+	border-left: 5px solid var(--lila);
+	border-radius: 4px;
+}
+
+.todo-index-display {
+	font-size: 24px;
+	color: var(--lila);
+	margin-right: 20px;
+	flex-shrink: 0;
+	justify-content: center;
+	display: flex;
+	flex-direction: column;
+}
+
+.todo-dates-content {
+	flex-grow: 1;
+}
+
+.todo-dates-training {
+	display: block;
+	outline: var(--lila) solid 1px;
+	border-radius: 10px;
+	outline-offset: 10px;
+	margin-bottom: 40px;
+}
+
+.todo-date-training-week {
+	margin-bottom: 5px;
+	margin-top: 30px;
+	cursor: pointer;
+}
+
+.todo-dates-training.currently-active-tododate {
+	outline: var(--green) solid 3px;
+}
+
+.todo-dates-training.passed-tododate {
+	outline: var(--black) solid 1px;
+}
+
+/* styles on mobile */
+@media (max-width: 768px) {
+	.todo-date-group {
+		flex-direction: column;
+	}
+	.date-input-container {
+		margin-right: 5px;
+	}
+
+	.todo-date-input {
+		width: 100%;
+	}
+
+	.todo-date-input {
+		border: 1px solid var(--lila);
+		border-radius: 4px;
+		padding: 4px;
+		width: 120px;
+	}
+
+	.todo-date-button {
+		transform: translateY(5px);
+		padding: 6px 8px;
+	}
 }

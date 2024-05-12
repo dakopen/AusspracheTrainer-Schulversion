@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { fetchToDoDates, updateToDoDates } from "../utils/api";
 
@@ -116,53 +116,109 @@ const CourseToDoDates = ({ final_test_activated }) => {
     };
 
     const handleHeadlineClick = (todoId) => {
+        navigate(generateDetailWeekLink(todoId));
+    }
+
+    const generateDetailWeekLink = (todoId) => {
         if (todoId >= 5 && todoId <= 10) {
-            navigate(`/courses/${courseId}/${todoId}`);
+            return `/courses/${courseId}/${todoId}`;
         } else if (todoId === "Group 1 - 4") {
-            navigate(`/courses/${courseId}/4`);
+            return `/courses/${courseId}/4`;
         } else if (todoId === "Group 11 - 13") {
-            navigate(`/courses/${courseId}/12`);
+            return `/courses/${courseId}/12`;
         }
     }
 
+    function getGroupIndex(dateKey) {
+        if (dateKey.includes('group1to4')) return '1';
+        else if (dateKey.includes('group5to10')) return '2';
+        else if (dateKey.includes('group11to13')) return '3';
+        return ''; // default
+    }
+
+
     return (
         <div className="todo-dates-container">
-            <h3 className="todo-dates-header">ToDo Dates</h3>
-            {Object.entries(editData).map(([dateKey, date]) => (
-                <div key={dateKey} className="todo-date-group">
-                    <h4 onClick={() => handleHeadlineClick(date.standard_todo)}>
-                        {dateKey.includes('group5to10') ? 'Wöchentliche Übungen' : (dateKey.includes('group1to4') ? 'Anfangstest' : 'Endtest')}
-                    </h4>
-                    <p>StandardTodo: {date.standard_todo}</p>
-                    {dateKey.includes('group5to10') ? (
-                        <>
-                            <label className="todo-date-label">Activation Date:</label>
-                            <input
-                                type="date"
-                                className="todo-date-input"
-                                value={new Date(date.activation_date).toISOString().slice(0, 10)}
-                                onChange={e => handleDateChange(dateKey, 'activation_date', e.target.value)}
-                            />
-                            <label className="todo-date-label">Due Date:</label>
-                            <input
-                                type="date"
-                                className="todo-date-input"
-                                value={new Date(date.due_date).toISOString().slice(0, 10)}
-                                onChange={e => handleDateChange(dateKey, 'due_date', e.target.value)}
-                            />
-                            <button
-                                className="todo-date-button"
-                                onClick={() => saveDateChanges(dateKey)}
-                                disabled={!hasChanged[dateKey] || !isDateValid(date.activation_date) || !isDateValid(date.due_date)}
-                            >
-                                Save Changes
-                            </button>
-                        </>
-                    ) : (
-                        <p>Activation Date: {new Date(date.activation_date).toLocaleDateString()}, Due Date: {new Date(date.due_date).toLocaleDateString()}</p>
-                    )}
+            <hr></hr>
+            <h3 className="todo-dates-header">Zeitpunkte der Übungen</h3>
+            {console.log(editData)}
+            {console.log(editData.length)}
+            {editData["group1to4"] &&
+                <div className="todo-date-group" onClick={() => handleHeadlineClick(editData["group1to4"].standard_todo)}>
+                    <div className="todo-index-display">1</div>
+                    <div className="todo-dates-content pointer">
+                        <h4>Anfangstest (falls möglich in der Schule)</h4>
+                        <p>Aktiviert am: {new Date(editData["group1to4"].activation_date).toLocaleDateString()}</p>
+                        <p>Die Studie kann nun von Schüler:innen begonnen werden. Geben Sie dazu jedem Teilnehmenden einen Schüleraccount aus, mit dem man sich auf studie.aussprachetrainer.org einloggen kann.</p>
+                    </div>
                 </div>
-            ))}
+            }
+            {editData["group5to10-0"] &&
+                <div className="todo-date-group">
+                    <div className="todo-index-display">2</div>
+                    <div className="todo-dates-content">
+                        <h4>Wöchentliche Übungen (zuhause)</h4>
+                        {Object.entries(editData).map(([dateKey, date]) => {
+                            const currentDate = new Date();
+                            const activationDate = new Date(date.activation_date);
+                            const dueDate = new Date(date.due_date);
+                            const isActive = currentDate >= activationDate && currentDate <= dueDate;
+                            const isPast = currentDate > dueDate;
+                            const className = isActive ? 'currently-active-tododate' : isPast ? 'passed-tododate' : '';
+
+                            console.log(dateKey.includes('group5to10'))
+                            if (dateKey.includes('group5to10')) {
+                                return (
+                                    <div className={`todo-dates-training ${className}`}>
+                                        <p className="todo-date-training-week" onClick={() => handleHeadlineClick(date.standard_todo)}>Training Woche {parseInt(dateKey.replace('group5to10-', '')) + 1} - <Link href={generateDetailWeekLink(date.standard_todo)}>hier</Link> klicken für Details</p>
+                                        <div className="date-input-container">
+                                            <label className="todo-date-label">Start: <small>17:00 Uhr</small></label>
+                                            <input
+                                                type="date"
+                                                className="todo-date-input"
+                                                value={new Date(date.activation_date).toISOString().slice(0, 10)}
+                                                onChange={e => handleDateChange(dateKey, 'activation_date', e.target.value)}
+                                            />
+                                        </div>
+
+                                        <div className="date-input-container">
+                                            <label className="todo-date-label">Fälligkeit: <small>16:59 Uhr</small></label>
+                                            <input
+                                                type="date"
+                                                className="todo-date-input"
+                                                value={new Date(date.due_date).toISOString().slice(0, 10)}
+                                                onChange={e => handleDateChange(dateKey, 'due_date', e.target.value)}
+                                            />
+                                        </div>
+                                        <button
+                                            className="todo-date-button"
+                                            onClick={() => saveDateChanges(dateKey)}
+                                            disabled={!hasChanged[dateKey] || !isDateValid(date.activation_date) || !isDateValid(date.due_date)}
+                                        >
+                                            Änderung speichern
+                                        </button>
+                                    </div>
+
+                                );
+                            }
+                            return null;
+                        })}
+                    </div>
+                </div>
+            }
+            {editData["group11to13"] && editData["group11to13"].activation_date &&
+                <div className="todo-date-group" onClick={() => handleHeadlineClick(editData["group11to13"].standard_todo)}>
+                    <div className="todo-index-display">3</div>
+                    <div className="todo-dates-content pointer">
+                        <h4>Finaler Test (falls möglich in der Schule)</h4>
+                        <p>Aktiviert am: {new Date(editData["group11to13"].activation_date).toLocaleDateString()}</p>
+                        <p>Die Studie ist fast zuende. Ein finaler Test (wenn möglich im Computerraum der Schule) fehlt noch, den die Schüler:innen zusammen mit einem Fragebogen beantworten sollen.</p>
+                    </div>
+                </div>}
+
+
+
+
         </div>
     );
 };

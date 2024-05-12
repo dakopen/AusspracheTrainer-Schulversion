@@ -14,3 +14,7 @@
 .required {
 	color: var(--darkred);
 }
+
+.pointer {
+	cursor: pointer;
+}
