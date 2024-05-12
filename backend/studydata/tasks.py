@@ -2,7 +2,7 @@ from celery import shared_task
 from pydub import AudioSegment
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from .models import PronunciationAssessmentResult, StudySentences
+from .models import PronunciationAssessmentResult, StudySentences, StudySentenceByWord
 from .pronunciation_assessment import pronunciation_assessment_continuous_from_file
 
 User = get_user_model()
@@ -30,9 +30,9 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id):
         human_readable_language = "fr-FR"
     
     result, word_offset_duration, phoneme_dicts, json_response = pronunciation_assessment_continuous_from_file(filename, reference_text, human_readable_language)
-    logger.warn(word_offset_duration, "word_offset_duration ")
     if not json_response:
         json_response = ["No response from the API"]
+
 
         
     user = User.objects.get(id=user_id) if user_id is not None else None
@@ -55,6 +55,29 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id):
             full_result=json_response,
         )
 
+    if result and result["Words"]:
+        logger.warn("Creating StudySentenceByWord objects")
+        study_sentence_by_word_objects = [] 
+
+        for word in result["Words"]:
+            logger.warn(f"Word: {word}")
+            if word["error_type"] in ["None", "Mispronunciation"]:
+                logger.warn(f"Creating StudySentenceByWord object for {word['index']}")
+                study_sentence_by_word_objects.append(
+                    StudySentenceByWord(
+                        course=user.belongs_to_course,
+                        user=user,
+                        sentence=StudySentences.objects.get(id=sentence_id),
+                        word_index=word["index"],
+                        accuracy_score=int(word["accuracy_score"]),
+                    )
+                )
+
+    # batch insert
+    if study_sentence_by_word_objects:
+        StudySentenceByWord.objects.bulk_create(study_sentence_by_word_objects)
+        logger.warn(f"Batch created {len(study_sentence_by_word_objects)} StudySentenceByWord objects")
+
 
     """
     if user is not None:
@@ -72,5 +95,7 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id):
                 phoneme_result.save()
 
     """
+
+
 
     return result, word_offset_duration

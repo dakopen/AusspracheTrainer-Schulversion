@@ -467,7 +467,7 @@ export const checkTaskStatus = async (id, authTokens) => {
 		return data;
 	} catch (error) {
 		console.error("Error fetching task status:", error);
-		return "ERROR";
+		return { status: "FAILURE" };
 	}
 };
 
@@ -492,3 +492,33 @@ export const triggerAnalysis = async (authTokens) => {
 	}
 };
 
+export const fetchAverageScoresByCourseAndSentence = async (courseId, startLocation, endLocation, authTokens) => {
+	try {
+		// Construct the URL with dynamic path segments for the GET request
+		const url = new URL(`${STUDYDATA_BASE_URL}/average-course-sentence-scores/`);
+
+		url.searchParams.append('start_location', startLocation);
+		url.searchParams.append('end_location', endLocation);
+		url.searchParams.append('course_id', courseId);
+
+		const response = await fetch(url, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + String(authTokens.access),
+				"ngrok-skip-browser-warning": "true",
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error("Failed to retrieve average scores");
+		}
+
+		const data = await response.json();
+		console.log('Average scores:', data)
+		return data;
+	} catch (error) {
+		console.error("Error fetching average scores:", error);
+		throw error;
+	}
+};

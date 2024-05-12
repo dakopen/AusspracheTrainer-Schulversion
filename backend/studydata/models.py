@@ -75,10 +75,6 @@ class StudySentences(models.Model):
     def __str__(self):
         return f"Study Sentence in {self.get_language_display()}, with id {self.id}"
 
-
-
-
-
 class StudySentencesCourseAssignment(models.Model):
     course = models.ForeignKey('accounts.Course', on_delete=models.CASCADE)
     sentence = models.ForeignKey('StudySentences', on_delete=models.CASCADE)
@@ -86,3 +82,14 @@ class StudySentencesCourseAssignment(models.Model):
 
     def __str__(self):
         return f"Assignment of Sentence {self.sentence.id} to Course {self.course.id}"
+    
+
+class StudySentenceByWord(models.Model):
+    course = models.ForeignKey('accounts.Course', on_delete=models.CASCADE, null=True, blank=True)
+    word_index = models.PositiveSmallIntegerField()
+    sentence = models.ForeignKey('StudySentences', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    accuracy_score = models.PositiveBigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+
+    def __str__(self):
+        return f"Study Sentence by Word for {self.user.username} on {self.sentence.sentence} at index {self.word_index}"

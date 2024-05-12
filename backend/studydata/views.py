@@ -6,14 +6,15 @@ import uuid
 import io
 from pydub import AudioSegment
 from django.core.files.base import ContentFile
-
+from django.db.models import Max, Avg
+from rest_framework import serializers
 from accounts.permissions import IsStudystudent, IsAuthenticated, IsTeacherOrSecretaryOrAdmin, IsAdmin, IsStudystudentOrTeacher
 from todo.views import complete_user_todo_user_and_standard_todo
 import backend.settings
 
 from accounts.models import Course
 from .tasks import async_pronunciation_assessment
-from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, TestSentencesWithAudio
+from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, TestSentencesWithAudio, StudySentenceByWord
 from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, \
     StudySentencesSerializer, StudySentencesCourseAssignmentSerializer, FinalQuestionnaireSerializer
 from django.contrib.auth import get_user_model
@@ -249,11 +250,78 @@ class RetrieveStudySentencesByCourseAndLocation(APIView):
 
         serializer = StudySentencesCourseAssignmentSerializer(sentences, many=True, context={'request': request})
         return Response(serializer.data)
-    
 
-# TODO: use the results from the analysis to make a summary for the teacher for each sentence
-# the summary should for the first student be like all his scores
-# next student all scores / 2 + his scores / 2
-# next student all scores * 2/3 + his scores / 3
-# and so on
-# then just like the normal student view show all sentences in colours (grey: no data yet)
+
+
+
+
+class WordScoreSerializer(serializers.Serializer):
+    word = serializers.CharField(max_length=100)
+    average_score = serializers.FloatField()
+
+class SentenceScoreSerializer(serializers.Serializer):
+    sentence_id = serializers.IntegerField()
+    sentence_text = serializers.CharField()
+    scores = WordScoreSerializer(many=True)  # Nested serialization for scores
+
+class AverageScoreSerializer(serializers.Serializer):
+    sentences = SentenceScoreSerializer(many=True)
+
+    def to_representation(self, instance):
+        # Custom representation to handle nested data
+        ret = super().to_representation(instance)
+        return ret
+    
+class RetrieveStudySentencesByCourseAndLocationWithScore(APIView):
+    permission_classes = [IsTeacherOrSecretaryOrAdmin]
+
+    def get(self, request):
+        user = request.user
+        course_id = request.query_params.get('course_id')
+        start_location = request.query_params.get('start_location')
+        end_location = request.query_params.get('end_location')
+
+        if not course_id or not start_location or not end_location:
+            return Response({'error': 'Missing required parameters.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        course = get_object_or_404(Course, pk=course_id)
+
+        if user.role == User.TEACHER and course.teacher != user:
+            return Response({'error': 'You do not have permission to view this course'}, status=status.HTTP_403_FORBIDDEN)
+        elif user.role == User.SECRETARY and course.teacher.school != user.school:
+            return Response({'error': 'You do not have permission to view this course'}, status=status.HTTP_403_FORBIDDEN)
+
+        sentences = StudySentencesCourseAssignment.objects.filter(
+            course=course,
+            location_value__range=(int(start_location), int(end_location))
+        ).select_related('sentence')
+
+        results = {'sentences': []}
+        for sentence in sentences:
+            sentence = sentence.sentence
+            words = sentence.sentence.split()
+            sentence_scores = []
+            for index, word in enumerate(words):
+                best_scores = StudySentenceByWord.objects.filter(
+                    course=course,
+                    sentence=sentence,
+                    word_index=index + 1
+                ).values('user').annotate(best_score=Max('accuracy_score')).aggregate(average_score=Avg('best_score'))
+                average_score = best_scores.get('average_score', -1)
+                if average_score is None:
+                    average_score = -1
+                sentence_scores.append({
+                    'word': word,
+                    'average_score': average_score
+                })
+
+            results['sentences'].append({
+                'sentence_id': sentence.id,
+                'sentence_text': sentence.sentence,
+                'scores': sentence_scores
+            })
+        serializer = AverageScoreSerializer(data=results)
+        if serializer.is_valid():
+            return Response(serializer.validated_data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
