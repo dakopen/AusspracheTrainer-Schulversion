@@ -1,0 +1,44 @@
+.score-bar {
+	height: 20px;
+	width: 100%;
+	max-width: 300px;
+	background: linear-gradient(to right, var(--red) 0%, green 100%);
+	border-radius: 5px;
+	margin-top: 5px;
+}
+
+.score-labels {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	max-width: 300px;
+}
+
+.placeholder,
+.loading {
+	color: black;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: #cccccc;
+	width: auto;
+	height: 15px;
+	display: inline-block;
+	margin-right: 10px;
+	text-align: center;
+	line-height: 15px;
+}
+
+.sentence-display-container {
+	padding: 5px;
+	padding-left: 20px;
+	background-color: var(--white-rosa);
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin: 10px 0;
+}
+
+.sentence-display-text {
+	color: var(--black);
+	font-size: 16px;
+	line-height: 1.2;
+}

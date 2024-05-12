@@ -8,6 +8,7 @@ import CourseToDoDates from "../../components/CourseToDoDates";
 import './ShowCourse.css';
 import './CreateBulkStudents.css'
 import './CourseToDoDates.css'
+import './SentenceDisplay.css'
 
 const ShowCourse = () => {
 	const { courseId } = useParams();
