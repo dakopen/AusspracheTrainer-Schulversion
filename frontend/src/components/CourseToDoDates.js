@@ -148,7 +148,7 @@ const CourseToDoDates = ({ final_test_activated }) => {
                     <div className="todo-index-display">1</div>
                     <div className="todo-dates-content pointer">
                         <h4>Anfangstest (falls möglich in der Schule)</h4>
-                        <p>Aktiviert am: {new Date(editData["group1to4"].activation_date).toLocaleDateString()}</p>
+                        <p>Aktiviert am: {new Date(editData["group1to4"].activation_date).toLocaleDateString()} - <Link href={generateDetailWeekLink("group1to4")}>hier</Link> klicken für Details</p>
                         <p>Die Studie kann nun von Schüler:innen begonnen werden. Geben Sie dazu jedem Teilnehmenden einen Schüleraccount aus, mit dem man sich auf studie.aussprachetrainer.org einloggen kann.</p>
                     </div>
                 </div>
@@ -211,7 +211,7 @@ const CourseToDoDates = ({ final_test_activated }) => {
                     <div className="todo-index-display">3</div>
                     <div className="todo-dates-content pointer">
                         <h4>Finaler Test (falls möglich in der Schule)</h4>
-                        <p>Aktiviert am: {new Date(editData["group11to13"].activation_date).toLocaleDateString()}</p>
+                        <p>Aktiviert am: {new Date(editData["group11to13"].activation_date).toLocaleDateString()} - <Link href={generateDetailWeekLink("group11to13")}>hier</Link> klicken für Details</p>
                         <p>Die Studie ist fast zuende. Ein finaler Test (wenn möglich im Computerraum der Schule) fehlt noch, den die Schüler:innen zusammen mit einem Fragebogen beantworten sollen.</p>
                     </div>
                 </div>}

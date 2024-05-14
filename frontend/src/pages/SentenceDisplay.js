@@ -77,7 +77,7 @@ function SentenceDisplay() {
                         <p className="sentence-display-text">
                             Satz {index + 1}: &nbsp;
                             {item.scores.map((wordScore, idx) => (
-                                <span key={idx} style={getWordStyle(wordScore.average_score)}>
+                                <span key={idx} style={getWordStyle(wordScore.average_score)} title={`⌀ Score: ${wordScore.average_score === -1 ? "?" : wordScore.average_score}`}>
                                     {wordScore.word}{idx < item.scores.length - 1 ? ' ' : ''}
                                 </span>
                             ))}
