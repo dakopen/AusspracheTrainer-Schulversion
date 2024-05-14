@@ -21,6 +21,9 @@ const ShowCourse = () => {
 	const { authTokens } = useContext(AuthContext);
 	const { addNotification } = useNotification();
 
+	const [scheduledStudyStart, setScheduledStudyStart] = useState("");
+	const [scheduledFinalTest, setScheduledFinalTest] = useState("");
+
 
 	useEffect(() => {
 		const loadData = async () => {
@@ -30,6 +33,9 @@ const ShowCourse = () => {
 				setName(fetchedCourse.name);
 				setGrade(fetchedCourse.grade);
 				setFinalTestActivated(fetchedCourse.activate_final_test);
+				console.log(fetchedCourse);
+				setScheduledStudyStart(fetchedCourse.scheduled_study_start || "");
+				setScheduledFinalTest(fetchedCourse.scheduled_final_test || "");
 			} catch (error) {
 				console.error("Error loading course data:", error);
 			}
@@ -40,6 +46,12 @@ const ShowCourse = () => {
 		}
 	}, [courseId, authTokens]);
 
+	const formatDate = (dateString) => {
+		if (!dateString) return "";
+		const date = new Date(dateString);
+		return new Intl.DateTimeFormat('en-CA').format(date); // 'en-CA' uses the YYYY-MM-DD format which is required by input type="date"
+	};
+
 	const handleNameChange = async () => {
 		try {
 			await updateCourseField(authTokens, courseId, { name });
@@ -49,6 +61,17 @@ const ShowCourse = () => {
 		} catch (error) {
 			addNotification("Failed to update course name", "error");
 			console.error("Error updating course name:", error);
+		}
+	};
+
+	const updateScheduledDate = async (field, value) => {
+		try {
+			await updateCourseField(authTokens, courseId, { [field]: value });
+			setCourse(prev => ({ ...prev, [field]: value }));
+			addNotification(`${field} date updated successfully`, "success");
+		} catch (error) {
+			addNotification(`Failed to update ${field} date`, "error");
+			console.error(`Error updating ${field} date:`, error);
 		}
 	};
 
@@ -127,11 +150,22 @@ const ShowCourse = () => {
 							</>
 						)}
 					</div>
+
+					<p><strong>Sprache:</strong> {course.language === 1 ? "Englisch" : "Französisch"}</p>
+					<CourseStudents />
+					<br></br>
 					<button className="show-course-button" onClick={toggleStudyStarted}>
 						{course.study_started ? "Mark as Not Started" : "Mark as Started"}
 					</button>
-					<p><strong>Sprache:</strong> {course.language === 1 ? "Englisch" : "Französisch"}</p>
-					<CourseStudents />
+					<div className="show-course-detail">
+						<strong>Geplantes Startdatum:</strong>
+						{console.log(scheduledStudyStart, "scheduledStudyStart")}
+						<input type="date" className="show-course-input" value={formatDate(scheduledStudyStart)} onChange={(e) => setScheduledStudyStart(e.target.value)} onBlur={() => updateScheduledDate('scheduled_study_start', scheduledStudyStart)} />
+					</div>
+					<div className="show-course-detail">
+						<strong>Geplanter finaler Test:</strong>
+						<input type="date" className="show-course-input" value={formatDate(scheduledFinalTest)} onChange={(e) => setScheduledFinalTest(e.target.value)} onBlur={() => updateScheduledDate('scheduled_final_test', scheduledFinalTest)} />
+					</div>
 					{course.study_started &&
 						<>
 							<CourseToDoDates final_test_activated={finalTestActivated} />

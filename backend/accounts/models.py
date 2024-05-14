@@ -29,7 +29,12 @@ class Course(models.Model):
 
     activate_final_test = models.BooleanField(default=False)
 
+    scheduled_study_start = models.DateTimeField(default=None, null=True, blank=True)
+    scheduled_final_test = models.DateTimeField(default=None, null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
+
+
     
 
 class User(AbstractUser):
