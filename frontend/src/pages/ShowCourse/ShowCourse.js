@@ -69,6 +69,7 @@ const ShowCourse = () => {
 			const studyStarted = !course.study_started;
 			const updatedCourse = await updateCourseField(authTokens, courseId, { study_started: studyStarted });
 			setCourse(updatedCourse);
+			setFinalTestActivated(false);
 			addNotification("Study status updated successfully", "success");
 		} catch (error) {
 			addNotification("Failed to update study status", "error");

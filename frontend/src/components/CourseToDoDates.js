@@ -206,7 +206,7 @@ const CourseToDoDates = ({ final_test_activated }) => {
                     </div>
                 </div>
             }
-            {editData["group11to13"] && editData["group11to13"].activation_date &&
+            {editData["group11to13"] && editData["group11to13"].activation_date && editData["group11to13"].due_date !== editData["group11to13"].activation_date &&
                 <div className="todo-date-group" onClick={() => handleHeadlineClick(editData["group11to13"].standard_todo)}>
                     <div className="todo-index-display">3</div>
                     <div className="todo-dates-content pointer">

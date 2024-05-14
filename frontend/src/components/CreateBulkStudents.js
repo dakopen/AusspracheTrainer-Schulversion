@@ -44,7 +44,7 @@ const CreateBulkStudents = ({ refreshStudents }) => {
 
 	return (
 		<div className="bulk-students-container">
-			<h3 className="bulk-students-header">Schüler:innen Accounts für diesen Kurs erstellen</h3>
+			<h4 className="bulk-students-header">Schüler:innen Accounts für diesen Kurs erstellen</h4>
 			<form onSubmit={handleSubmit} className="bulk-students-form">
 				<label>
 					Anzahl:

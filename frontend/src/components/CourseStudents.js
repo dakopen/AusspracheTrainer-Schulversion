@@ -32,7 +32,7 @@ const CourseStudents = () => {
 
 	return (
 		<div>
-			<h3>Schüler:innen Accounts: {students.length}</h3>
+			<h4>Schüler:innen Accounts: {students.length}</h4>
 			{students.length > 0 ? (
 				<ul>
 					{students.map((student) => (
