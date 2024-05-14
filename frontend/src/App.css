@@ -11,6 +11,10 @@
 	--green: #008000;
 }
 
+body {
+	font-family: "Montserrat", sans-serif;
+}
+
 .required {
 	color: var(--darkred);
 }

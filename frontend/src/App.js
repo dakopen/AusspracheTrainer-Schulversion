@@ -14,7 +14,7 @@ import { UrlProvider } from "./context/UrlContext";
 
 import axios from "axios";
 
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import "./components/Notification.css";
 
 import SetPassword from "./pages/SetPassword";
