@@ -35,6 +35,10 @@
 	width: 50%;
 }
 
+.show-course-input-date {
+	max-width: 120px;
+}
+
 .show-course-button {
 	padding: 8px 16px;
 	background-color: var(--lila);
@@ -68,4 +72,3 @@
 .course-debug-information {
 	text-align: center;
 }
-

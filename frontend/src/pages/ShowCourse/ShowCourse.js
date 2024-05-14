@@ -119,7 +119,7 @@ const ShowCourse = () => {
 				<>
 					<h2 className="show-course-header">Details: {course.name}</h2>
 					<div className="show-course-detail">
-						<strong>Kursname:</strong>
+						<strong>Name:</strong>
 						{editName ? (
 							<input type="text" className="show-course-input" value={name} onChange={(e) => setName(e.target.value)} onBlur={handleNameChange} autoFocus />
 						) : (
@@ -154,17 +154,19 @@ const ShowCourse = () => {
 					<p><strong>Sprache:</strong> {course.language === 1 ? "Englisch" : "Französisch"}</p>
 					<CourseStudents />
 					<br></br>
-					<button className="show-course-button" onClick={toggleStudyStarted}>
-						{course.study_started ? "Mark as Not Started" : "Mark as Started"}
-					</button>
+
 					<div className="show-course-detail">
 						<strong>Geplantes Startdatum:</strong>
 						{console.log(scheduledStudyStart, "scheduledStudyStart")}
-						<input type="date" className="show-course-input" value={formatDate(scheduledStudyStart)} onChange={(e) => setScheduledStudyStart(e.target.value)} onBlur={() => updateScheduledDate('scheduled_study_start', scheduledStudyStart)} />
+						<input type="date" className="show-course-input show-course-input-date" value={formatDate(scheduledStudyStart)} onChange={(e) => setScheduledStudyStart(e.target.value)} onBlur={() => updateScheduledDate('scheduled_study_start', scheduledStudyStart)} />
+						<p> oder </p>
+						<button className="show-course-button" onClick={toggleStudyStarted}>
+							{course.study_started ? "Mark as Not Started" : "direkt starten"}
+						</button>
 					</div>
 					<div className="show-course-detail">
 						<strong>Geplanter finaler Test:</strong>
-						<input type="date" className="show-course-input" value={formatDate(scheduledFinalTest)} onChange={(e) => setScheduledFinalTest(e.target.value)} onBlur={() => updateScheduledDate('scheduled_final_test', scheduledFinalTest)} />
+						<input type="date" className="show-course-input show-course-input-date" value={formatDate(scheduledFinalTest)} onChange={(e) => setScheduledFinalTest(e.target.value)} onBlur={() => updateScheduledDate('scheduled_final_test', scheduledFinalTest)} />
 					</div>
 					{course.study_started &&
 						<>
@@ -195,3 +197,8 @@ const ShowCourse = () => {
 
 
 export default ShowCourse;
+
+
+// TODO:
+// wenn man es scheduled, soll es schonmal alles angezeigt werden. Einfach in den Signals dann um die Zeit
+// verschieben, wie der scheduled date vom jetzigen Datum entfernt ist.
