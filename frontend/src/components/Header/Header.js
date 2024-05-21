@@ -22,7 +22,7 @@ const Header = () => {
 		document.body.classList.toggle("unscrollable");
 	};
 
-	
+
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -40,12 +40,12 @@ const Header = () => {
 	}, []);
 
 	const closeMobileMenu = () => {
-        if (navMenuRef.current.classList.contains("active")) {
-            hamburgerRef.current.classList.remove("active");
-            navMenuRef.current.classList.remove("active");
-            document.body.classList.remove("unscrollable");
-        }
-    };
+		if (navMenuRef.current.classList.contains("active")) {
+			hamburgerRef.current.classList.remove("active");
+			navMenuRef.current.classList.remove("active");
+			document.body.classList.remove("unscrollable");
+		}
+	};
 
 	const logoutAndCloseMenu = () => {
 		logoutUser();

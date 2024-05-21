@@ -2,6 +2,7 @@
 
 li.nav-item {
 	list-style-type: none;
+	z-index: 100;
 }
 
 .header {
@@ -12,6 +13,7 @@ li.nav-item {
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 1000;
 }
 
 .navbar {
@@ -35,6 +37,7 @@ li.nav-item {
 
 .nav-item {
 	margin-right: 2em;
+	z-index: inherit;
 }
 
 .nav-link {
@@ -85,6 +88,7 @@ li.nav-item {
 	}
 	.nav-item {
 		margin: 1em 0;
+		z-index: 100;
 	}
 	.hamburger {
 		display: block;

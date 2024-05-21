@@ -128,8 +128,9 @@ const PronunciationTest = () => {
 	const currentSentence = sentences[currentSentenceIndex];
 
 	return (
-		<div style={{ zIndex: -1, position: "relative" }}>
+		<div style={{ zIndex: 0, position: "relative" }}>
 			<ProgressBar sentences={sentences.map(sentence => sentence.is_completed)} onSentenceClick={handleSentenceClick} currentSentenceIndex={currentSentenceIndex} />
+			<br></br>
 			{currentSentence ? (
 				<AusspracheTrainer
 					textareaText={currentSentence.sentence_as_text.sentence}
