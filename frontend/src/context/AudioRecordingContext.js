@@ -129,6 +129,7 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete, setTa
         stopRecording,
         cancelRecording,
         recordingState,
+        setRecordingState,
         source,
         audioContext,
         audioBlob,

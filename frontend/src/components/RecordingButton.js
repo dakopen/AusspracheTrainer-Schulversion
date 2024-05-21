@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAudioRecording } from '../context/AudioRecordingContext';
-import "./RecordingButton.css";
+//import "./RecordingButton.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMicrophone, faStop, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-const AudioRecorder = () => {
-    const { isRecording, startRecording, stopRecording, cancelRecording, recordingState } = useAudioRecording();
+const AudioRecorder = (pollCompleted) => {
+    const { isRecording, startRecording, stopRecording, cancelRecording, recordingState, setRecordingState } = useAudioRecording();
 
     const handleToggleRecording = () => {
         if (!isRecording) {
@@ -17,10 +19,19 @@ const AudioRecorder = () => {
         }
     };
 
+    useEffect(() => {
+        if (pollCompleted) {
+            setRecordingState(0);
+        }
+    }, [pollCompleted]);
+
     return (
         <div className="recording-button-container">
             <button onClick={handleToggleRecording} className="recording-button" id="recording-button">
-                {isRecording ? "Stop and Submit" : "Start Recording"}
+                {recordingState == 0 && <FontAwesomeIcon icon={faMicrophone} size="4x" className='start-recording-icon' />}
+                {recordingState == 1 && <FontAwesomeIcon icon={faStop} size="3x" className="stop-recording-icon" />}
+                {recordingState == 2 && <FontAwesomeIcon icon={faSpinner} spin size='4x' className='analyzing-recording-icon' />}
+                {/*isRecording ? "Stop and Submit" : "Start Recording"*/}
             </button>
             {isRecording && (
                 <button onClick={cancelRecording} className="cancel-recording-button">

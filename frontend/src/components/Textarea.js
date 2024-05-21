@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Textarea.css";
+import { text } from "@fortawesome/fontawesome-svg-core";
 
 const Textarea = ({ textareaValue }) => {
 	const textareaRef = useRef(null);
 	const [textareaWidth, setTextareaWidth] = useState("800px");
+	const [textareaHeight, setTextareaHeight] = useState("30px");
 
 	useEffect(() => {
+
 		const windowResize = () => {
 			const maxWidth =
 				Math.min(
@@ -14,15 +17,24 @@ const Textarea = ({ textareaValue }) => {
 					800
 				) + "px";
 			textareaRef.current.style.maxWidth = maxWidth;
+
 			resizeTextarea(); // Call resizeTextarea to adjust width and height
 		};
+		console.log(textareaRef.current.style.height, "resizeTextarea")
 
 		// Initial resize
+
 		windowResize();
+
+		//windowResize();
 
 		window.addEventListener("resize", windowResize);
 
 		return () => window.removeEventListener("resize", windowResize);
+	}, []);
+
+	useEffect(() => {
+		resizeTextarea();
 	}, [textareaValue]);
 
 	const resizeTextarea = () => {
@@ -46,9 +58,10 @@ const Textarea = ({ textareaValue }) => {
 				)
 			) + "px";
 		setTextareaWidth(newWidth);
-
-		textarea.style.height = "auto";
+		textarea.style.width = newWidth;
+		textarea.style.height = "0px";
 		textarea.style.height = textarea.scrollHeight + "px";
+
 	};
 
 	const getTextWidth = (text, font) => {
@@ -63,7 +76,7 @@ const Textarea = ({ textareaValue }) => {
 			ref={textareaRef}
 			id="textarea"
 			value={textareaValue}
-			style={{ width: textareaWidth }}
+			style={{ width: textareaWidth, height: textareaHeight }}
 			readOnly
 		/>
 	);

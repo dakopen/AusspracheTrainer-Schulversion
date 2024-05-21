@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { fetchSentencesByCourseAndLocation, fetchLowestPriorityUserToDo } from '../utils/api';
 import AuthContext from "../context/AuthContext";
-import AusspracheTrainer from '../components/AusspracheTrainer';
+import AusspracheTrainer from '../components/AusspracheTrainer/AusspracheTrainer';
 import ProgressBar from '../components/ProgressBar';
 import { completeStandardTodo } from '../utils/api';
 import { useNotification } from '../context/NotificationContext';

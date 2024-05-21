@@ -1,0 +1,46 @@
+.recording-button-container2 {
+	position: relative;
+	align-items: center;
+	justify-content: center;
+	margin: auto;
+	display: flex;
+}
+
+.recording-button-container {
+	position: absolute; /* Absolute positioning on button container */
+	top: 67%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 2;
+	overflow: visible;
+}
+
+.recording-button {
+	position: relative;
+	z-index: 2;
+	/*background-color: #4CAF50; */
+	background-color: var(--rosa);
+	/* round glow outside */
+	box-shadow: 10 10 10 10 var(--rosa);
+	border: none;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+	border-radius: 50%;
+	width: 130px;
+	height: 130px;
+	transition: top 1s;
+	display: flex; /* This was missing */
+	justify-content: center; /* Centers children horizontally */
+	align-items: center; /* Centers children vertically */
+}
+
+.cancel-recording-button {
+	position: absolute;
+	right: -110%;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 1;
+	transition: opacity 0.3s ease;
+}
