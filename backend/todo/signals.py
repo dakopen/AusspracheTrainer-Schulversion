@@ -86,6 +86,8 @@ def add_course_due_dates(sender, instance, **kwargs):
                 # Set due_date to now instead of deleting
                 now = timezone.now()
                 instance.activate_final_test = False
+                instance.scheduled_final_test = None
+                instance.scheduled_study_start = None
                 ToDoDates.objects.filter(course=instance).update(due_date=now, activation_date=now)
 
         if instance.activate_final_test != old_instance.activate_final_test and old_instance.study_started:
@@ -113,6 +115,7 @@ def add_course_due_dates(sender, instance, **kwargs):
             else:
                 # Set due_date to now instead of deleting
                 now = timezone.now()
+                instance.scheduled_final_test = None
                 ToDoDates.objects.filter(course=instance, standard_todo__in=[11, 12, 13]).update(due_date=now, activation_date=now)
 
 

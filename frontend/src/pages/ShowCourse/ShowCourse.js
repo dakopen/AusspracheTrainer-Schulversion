@@ -23,6 +23,7 @@ const ShowCourse = () => {
 
 	const [scheduledStudyStart, setScheduledStudyStart] = useState("");
 	const [scheduledFinalTest, setScheduledFinalTest] = useState("");
+	const [isDemo, setIsDemo] = useState(false);
 
 
 	useEffect(() => {
@@ -36,6 +37,7 @@ const ShowCourse = () => {
 				console.log(fetchedCourse);
 				setScheduledStudyStart(fetchedCourse.scheduled_study_start || "");
 				setScheduledFinalTest(fetchedCourse.scheduled_final_test || "");
+				setIsDemo(fetchedCourse.demo || false);
 			} catch (error) {
 				console.error("Error loading course data:", error);
 			}
@@ -110,6 +112,18 @@ const ShowCourse = () => {
 		}
 	};
 
+	const toggleDemoStatus = async () => {
+		const newDemoStatus = !isDemo;
+		try {
+			const updatedCourse = await updateCourseField(authTokens, course.id, { demo: newDemoStatus });
+			setIsDemo(updatedCourse.demo);
+			addNotification(`Demo Status erfolgreich geändert`, "success");
+		} catch (error) {
+			console.error('Failed to update demo status:', error);
+			addNotification('Demo Status Änderung war nicht erfolgreich.', 'error');
+		}
+	};
+
 	const toggleFinalTestActivation = async () => {
 		try {
 			const updatedCourse = await updateCourseField(authTokens, courseId, { activate_final_test: !finalTestActivated });
@@ -127,7 +141,7 @@ const ShowCourse = () => {
 		<div className="show-course-container">
 			{course ? (
 				<>
-					<h2 className="show-course-header">Details: {course.name}</h2>
+					<h2 className="show-course-header">Details: {course.name} {isDemo && "[DEMO]"}</h2>
 					<div className="show-course-detail">
 						<strong>Name:</strong>
 						{editName ? (
@@ -199,10 +213,20 @@ const ShowCourse = () => {
 					{course.study_started &&
 						<>
 							<CourseToDoDates final_test_activated={finalTestActivated} />
+							<br></br>
 							<button className="show-course-button" onClick={toggleFinalTestActivation} title={course.activate_final_test ? "Klicken, um den finalen Test zurückzunehmen und neu zu planen. Dadurch kann keiner den finalen Test sehen, bevor er aktiviert ist." : "Klicken, um den finalen Test heute zu aktivieren, sodass er direkt bei den Schülerinnen erscheint. Achtung, er erscheint vor allen Trainingsaufgaben!!"}>
 								{course.activate_final_test ? "Finalen Test zurücknehmen" : "Finalen Test heute starten"}
 							</button>
 						</>}
+
+					<br></br>
+					<br></br>
+					<hr></hr>
+					<p>Dieser Kurs ist ein {isDemo ? "Demo-" : "regulärer "}Kurs. Das heißt, er wird in der Auswertung {isDemo && <b>nicht</b>} berücksichtigt. Hier können Sie den Kurs umschalten:</p>
+					<button className="show-course-button" onClick={toggleDemoStatus}>
+						{isDemo ? 'Kurs umschalten zu regulärem Kurs (keine Demo)' : 'Kurs umschalten zum Demo Kurs (nur für Testzwecke)'}
+					</button>
+
 					<div className="course-debug-information">
 						<small>
 							<p>
@@ -211,6 +235,8 @@ const ShowCourse = () => {
 								<strong>Lehrer-ID:</strong> {course.teacher}
 								{"  -  "}
 								<strong>Erstellt am:</strong> {new Date(course.created_at).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
+								{"  -  "}
+								<strong>Kursart:</strong> {isDemo ? "Demo" : "regulärer Kurs"}
 							</p>
 						</small>
 					</div>
@@ -225,8 +251,3 @@ const ShowCourse = () => {
 
 
 export default ShowCourse;
-
-
-// TODO:
-// wenn man es scheduled, soll es schonmal alles angezeigt werden. Einfach in den Signals dann um die Zeit
-// verschieben, wie der scheduled date vom jetzigen Datum entfernt ist.

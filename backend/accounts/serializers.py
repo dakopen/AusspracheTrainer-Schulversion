@@ -93,7 +93,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('id', 'name', 'language', 'teacher', 'grade', 'start_date', 'study_started', 'activate_final_test', 'number_of_students', 'created_at', 'scheduled_study_start', 'scheduled_final_test')
+        fields = ('id', 'name', 'language', 'teacher', 'grade', 'start_date', 'study_started', 'activate_final_test', 'number_of_students', 'created_at', 'scheduled_study_start', 'scheduled_final_test', 'demo')
         extra_kwargs = {'teacher': {'read_only': True}}
 
     def validate(self, attrs):

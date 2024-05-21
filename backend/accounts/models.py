@@ -34,6 +34,8 @@ class Course(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    demo = models.BooleanField(default=False)
+
 
     
 
