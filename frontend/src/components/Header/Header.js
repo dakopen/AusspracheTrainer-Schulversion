@@ -57,7 +57,7 @@ const Header = () => {
 			<header className="header">
 				<nav className="navbar" ref={navBarRef}>
 					<Link to="/" className="nav-logo" onClick={closeMobileMenu}>
-						<img src="https://placehold.co/600x200" height={65} alt="Studienlogo"></img>
+						<img src="https://aussprachetrainer-schulversion-bucket.s3.eu-central-1.amazonaws.com/media/AusspracheTrainerStudy-Uni-Tuebingen-Logo.png" alt="Studienlogo" className="study-logo"></img>
 					</Link>
 					<ul className="nav-menu" ref={navMenuRef}>
 						{isStudyStudent(user) && (

@@ -111,3 +111,8 @@ li.nav-item {
 .margin-for-header {
 	margin-top: 100px;
 }
+
+.study-logo {
+	max-height: 65px;
+	width: auto !important;
+}
