@@ -1,18 +1,12 @@
-.recording-button-container2 {
-	position: relative;
-	align-items: center;
-	justify-content: center;
-	margin: auto;
-	display: flex;
-}
-
 .recording-button-container {
-	position: absolute; /* Absolute positioning on button container */
-	top: 67%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 	z-index: 2;
 	overflow: visible;
+	position: relative;
+	justify-content: center;
+	max-width: 800px;
+	width: 95%;
+	display: flex;
+	margin-top: 30px;
 }
 
 .recording-button {
@@ -35,10 +29,9 @@
 	justify-content: center; /* Centers children horizontally */
 	align-items: center; /* Centers children vertically */
 }
-
 .cancel-recording-button {
 	position: absolute;
-	right: -110%;
+	right: calc(50% - 220px);
 	top: 50%;
 	transform: translateY(-50%);
 	z-index: 1;

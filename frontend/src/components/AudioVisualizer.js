@@ -307,7 +307,10 @@ const AudioVisualizer = ({ result }) => {
 
     useEffect(() => {
         // offsets = result[1]
+        console.log("RESULT: ", result)
         if (result && result[1] && result[1].length > 0) {
+            console.log("COLORING CANVAS")
+
             colorCanvas(result[1]);
         }
     }, [result]);

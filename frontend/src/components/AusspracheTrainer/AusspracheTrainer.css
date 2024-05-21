@@ -1,4 +1,7 @@
 .aussprachetrainer-container {
 	position: relative;
 	text-align: center;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
 }

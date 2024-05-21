@@ -22,6 +22,8 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
         pollTaskStatus();
     }, [taskId]);
 
+
+
     const pollTaskStatus = () => {
         if (taskId) {
             const intervalId = setInterval(async () => {
@@ -30,6 +32,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
                 setTaskStatus(data.status);
                 if (data.status === "SUCCESS" || data.status === "FAILURE") {
                     clearInterval(intervalId);
+                    setPollCompleted(true);
                 }
                 if (data.status === "SUCCESS") {
                     console.log()

@@ -19,18 +19,25 @@ const AudioRecorder = (pollCompleted) => {
         }
     };
 
+    const moveCanvasDown = () => {
+        const canvasParentContainer = document.getElementById('canvas-parent-container');
+        canvasParentContainer.style.marginTop = canvasParentContainer.style.marginTop + 10 + 'px';
+
+    }
+
     useEffect(() => {
-        if (pollCompleted) {
-            setRecordingState(0);
+        if (pollCompleted.pollCompleted) {
+            console.log("poll completed", pollCompleted)
+            moveCanvasDown();
         }
     }, [pollCompleted]);
 
     return (
         <div className="recording-button-container">
             <button onClick={handleToggleRecording} className="recording-button" id="recording-button">
-                {recordingState == 0 && <FontAwesomeIcon icon={faMicrophone} size="4x" className='start-recording-icon' />}
+                {((recordingState == 0) || (pollCompleted && recordingState == 2 && pollCompleted.pollCompleted)) && <FontAwesomeIcon icon={faMicrophone} size="4x" className='start-recording-icon' />}
                 {recordingState == 1 && <FontAwesomeIcon icon={faStop} size="3x" className="stop-recording-icon" />}
-                {recordingState == 2 && <FontAwesomeIcon icon={faSpinner} spin size='4x' className='analyzing-recording-icon' />}
+                {recordingState == 2 && !(pollCompleted && recordingState == 2 && pollCompleted.pollCompleted) && <FontAwesomeIcon icon={faSpinner} spin size='4x' className='analyzing-recording-icon' />}
                 {/*isRecording ? "Stop and Submit" : "Start Recording"*/}
             </button>
             {isRecording && (

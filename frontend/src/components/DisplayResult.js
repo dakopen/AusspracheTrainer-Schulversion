@@ -22,16 +22,17 @@ const DisplayResult = ({ result, jumpToWaveformTimestamp }) => {
                             break;
                         case 'Insertion':
                             wordStyle = "insertion-word";
-                            
-                            
+
+
                             break;
 
                         case 'Mispronunciation':
                         case 'None':
                             wordStyle = word.accuracy_score < 70 ? "darkred-word" :
                                 word.accuracy_score < 95 ? "yellow-word" : "black-word";
-                            
-                                onClickHandler = () => jumpToWaveformTimestamp(timestamps[timestamp_index++][0] / 1000);
+
+                            onClickHandler = () => jumpToWaveformTimestamp(timestamps[timestamp_index][0] / 1000);
+                            timestamp_index++;
                             break;
                     }
                     return (
