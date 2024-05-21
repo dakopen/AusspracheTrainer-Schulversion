@@ -199,8 +199,8 @@ const ShowCourse = () => {
 					{course.study_started &&
 						<>
 							<CourseToDoDates final_test_activated={finalTestActivated} />
-							<button className="show-course-button" onClick={toggleFinalTestActivation}>
-								{course.activate_final_test ? "Finalen Test deaktivieren" : "Finalen Test aktivieren"}
+							<button className="show-course-button" onClick={toggleFinalTestActivation} title={course.activate_final_test ? "Klicken, um den finalen Test zurückzunehmen und neu zu planen. Dadurch kann keiner den finalen Test sehen, bevor er aktiviert ist." : "Klicken, um den finalen Test heute zu aktivieren, sodass er direkt bei den Schülerinnen erscheint. Achtung, er erscheint vor allen Trainingsaufgaben!!"}>
+								{course.activate_final_test ? "Finalen Test zurücknehmen" : "Finalen Test heute starten"}
 							</button>
 						</>}
 					<div className="course-debug-information">

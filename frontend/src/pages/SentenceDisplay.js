@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { fetchAverageScoresByCourseAndSentence } from '../utils/api';
 
@@ -88,6 +88,13 @@ function SentenceDisplay() {
 
                 <p>Lädt... (sollte das länger als einige Sekunden angezeigt werden handelt es sich um einen technischen Fehler, der schnellstmöglich behoben wird)</p>
             )}
+
+            <br></br>
+            <Link to={`/courses/${courseId}`}>
+                <button>
+                    Zurück zum Kurs
+                </button>
+            </Link>
         </div>
     );
 }
