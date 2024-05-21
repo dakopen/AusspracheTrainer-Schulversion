@@ -1,0 +1,79 @@
+.user-todo-container {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: var(--light-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-todo-header {
+	color: var(--lila);
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.user-todo-detail {
+	margin: 10px 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.user-todo-detail strong {
+	color: var(--black);
+	margin-right: 10px;
+}
+
+.user-todo-button {
+	padding: 8px 16px;
+	background-color: var(--lila);
+	color: var(--white);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.user-todo-button:hover {
+	background-color: var(--rosa);
+}
+
+.user-todo-action-link {
+	color: var(--lila);
+	text-decoration: none;
+}
+
+.user-todo-action-link:hover {
+	text-decoration: underline;
+}
+
+.loading {
+	text-align: center;
+	color: var(--black);
+}
+
+.empty-todo {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.empty-todo-box {
+	display: inline-block;
+	padding: 8px 14px;
+	max-width: 600px;
+	background-color: var(--white-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	font-size: 18px;
+	line-height: 1.5;
+	color: var(--black);
+}
+
+.checkmark {
+	color: var(--green);
+	font-size: 20px;
+	margin-right: 10px;
+}

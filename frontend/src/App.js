@@ -23,7 +23,7 @@ import StudyStudentLogin from "./pages/StudyStudentLogin/StudyStudentLogin";
 import CreateTeacher from "./pages/CreateTeacher";
 import CreateAnyRole from "./pages/CreateAnyRole";
 
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/HomePage/HomePage";
 import Schools from "./pages/Schools";
 import ShowSchool from "./pages/ShowSchool";
 import Courses from "./pages/Courses/Courses";
