@@ -69,6 +69,16 @@ const ShowCourse = () => {
 			await updateCourseField(authTokens, courseId, { [field]: value });
 			setCourse(prev => ({ ...prev, [field]: value }));
 			addNotification(`${field} date updated successfully`, "success");
+			let startfield = "study_started";
+
+			if (field === 'scheduled_final_test') {
+				startfield = "activate_final_test";
+				setFinalTestActivated(true);
+			}
+
+			const updatedCourse = await updateCourseField(authTokens, courseId, { [startfield]: true, [field]: value });
+			setCourse(updatedCourse);
+
 		} catch (error) {
 			addNotification(`Failed to update ${field} date`, "error");
 			console.error(`Error updating ${field} date:`, error);
@@ -157,17 +167,35 @@ const ShowCourse = () => {
 
 					<div className="show-course-detail">
 						<strong>Geplantes Startdatum:</strong>
+
+
 						{console.log(scheduledStudyStart, "scheduledStudyStart")}
-						<input type="date" className="show-course-input show-course-input-date" value={formatDate(scheduledStudyStart)} onChange={(e) => setScheduledStudyStart(e.target.value)} onBlur={() => updateScheduledDate('scheduled_study_start', scheduledStudyStart)} />
-						<p> oder </p>
-						<button className="show-course-button" onClick={toggleStudyStarted}>
-							{course.study_started ? "Mark as Not Started" : "direkt starten"}
+						{!course.study_started &&
+							<>
+								<input type="date" className="show-course-input show-course-input-date" value={formatDate(scheduledStudyStart)} onChange={(e) => setScheduledStudyStart(e.target.value)} onBlur={() => updateScheduledDate('scheduled_study_start', scheduledStudyStart)} />
+								<p> oder </p>
+							</>
+						}
+						<button className="show-course-button" onClick={toggleStudyStarted} title={course.study_started ? "Klicken, um den Studienstart zurückzunehmen und neu zu planen. Alle bereits erledigten Trainings werden gespeichert." : "Studie direkt starten, sodass Schüler:innen direkt anfangen können mit dem Anfangstest."}>
+							{course.study_started ? "Studienstart zurücknehmen" : "heute starten"}
 						</button>
 					</div>
-					<div className="show-course-detail">
-						<strong>Geplanter finaler Test:</strong>
-						<input type="date" className="show-course-input show-course-input-date" value={formatDate(scheduledFinalTest)} onChange={(e) => setScheduledFinalTest(e.target.value)} onBlur={() => updateScheduledDate('scheduled_final_test', scheduledFinalTest)} />
-					</div>
+					{course.study_started &&
+						<div className="show-course-detail">
+							<strong>Geplanter finaler Test:</strong>
+
+							{!course.activate_final_test &&
+								<>
+									<input type="date" className="show-course-input show-course-input-date" value={formatDate(scheduledFinalTest)} onChange={(e) => setScheduledFinalTest(e.target.value)} onBlur={() => updateScheduledDate('scheduled_final_test', scheduledFinalTest)} />
+									<p> oder </p>
+								</>
+							}
+							<button className="show-course-button" onClick={toggleFinalTestActivation} title={course.activate_final_test ? "Klicken, um den finalen Test zurückzunehmen und neu zu planen. Dadurch kann keiner den finalen Test sehen, bevor er aktiviert ist." : "Klicken, um den finalen Test heute zu aktivieren, sodass er direkt bei den Schülerinnen erscheint. Achtung, er erscheint vor allen Trainingsaufgaben!!"}>
+								{course.activate_final_test ? "Finalen Test zurücknehmen" : "heute starten"}
+
+							</button>
+						</div>
+					}
 					{course.study_started &&
 						<>
 							<CourseToDoDates final_test_activated={finalTestActivated} />

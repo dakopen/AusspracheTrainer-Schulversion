@@ -122,9 +122,9 @@ const CourseToDoDates = ({ final_test_activated }) => {
     const generateDetailWeekLink = (todoId) => {
         if (todoId >= 5 && todoId <= 10) {
             return `/courses/${courseId}/${todoId}`;
-        } else if (todoId === "Group 1 - 4") {
+        } else if (todoId === "group1to4") {
             return `/courses/${courseId}/4`;
-        } else if (todoId === "Group 11 - 13") {
+        } else if (todoId === "group11to13") {
             return `/courses/${courseId}/12`;
         }
     }
@@ -144,11 +144,12 @@ const CourseToDoDates = ({ final_test_activated }) => {
             {console.log(editData)}
             {console.log(editData.length)}
             {editData["group1to4"] &&
-                <div className="todo-date-group" onClick={() => handleHeadlineClick(editData["group1to4"].standard_todo)}>
+                // <div className="todo-date-group" {/**/} onClick={() => handleHeadlineClick(editData["group1to4"].standard_todo)}>
+                <div className="todo-date-group">
                     <div className="todo-index-display">1</div>
-                    <div className="todo-dates-content pointer">
+                    <div className="todo-dates-content">
                         <h4>Anfangstest (falls möglich in der Schule)</h4>
-                        <p>Aktiviert am: {new Date(editData["group1to4"].activation_date).toLocaleDateString()} - <Link href={generateDetailWeekLink("group1to4")}>hier</Link> klicken für Details</p>
+                        <p>Aktiviert am: {new Date(editData["group1to4"].activation_date).toLocaleDateString()} - <Link to={generateDetailWeekLink("group1to4")}>hier</Link> klicken für Details</p>
                         <p>Die Studie kann nun von Schüler:innen begonnen werden. Geben Sie dazu jedem Teilnehmenden einen Schüleraccount aus, mit dem man sich auf studie.aussprachetrainer.org einloggen kann.</p>
                     </div>
                 </div>
@@ -170,7 +171,7 @@ const CourseToDoDates = ({ final_test_activated }) => {
                             if (dateKey.includes('group5to10')) {
                                 return (
                                     <div className={`todo-dates-training ${className}`}>
-                                        <p className="todo-date-training-week" onClick={() => handleHeadlineClick(date.standard_todo)}>Training Woche {parseInt(dateKey.replace('group5to10-', '')) + 1} - <Link href={generateDetailWeekLink(date.standard_todo)}>hier</Link> klicken für Details</p>
+                                        <p className="todo-date-training-week">Training Woche {parseInt(dateKey.replace('group5to10-', '')) + 1} - <Link to={generateDetailWeekLink(date.standard_todo)}>hier</Link> klicken für Details</p>
                                         <div className="date-input-container">
                                             <label className="todo-date-label">Start: <small>17:00 Uhr</small></label>
                                             <input
@@ -207,11 +208,11 @@ const CourseToDoDates = ({ final_test_activated }) => {
                 </div>
             }
             {editData["group11to13"] && editData["group11to13"].activation_date && editData["group11to13"].due_date !== editData["group11to13"].activation_date &&
-                <div className="todo-date-group" onClick={() => handleHeadlineClick(editData["group11to13"].standard_todo)}>
+                <div className="todo-date-group">
                     <div className="todo-index-display">3</div>
-                    <div className="todo-dates-content pointer">
+                    <div className="todo-dates-content">
                         <h4>Finaler Test (falls möglich in der Schule)</h4>
-                        <p>Aktiviert am: {new Date(editData["group11to13"].activation_date).toLocaleDateString()} - <Link href={generateDetailWeekLink("group11to13")}>hier</Link> klicken für Details</p>
+                        <p>Aktiviert am: {new Date(editData["group11to13"].activation_date).toLocaleDateString()} - <Link to={generateDetailWeekLink("group11to13")}>hier</Link> klicken für Details</p>
                         <p>Die Studie ist fast zuende. Ein finaler Test (wenn möglich im Computerraum der Schule) fehlt noch, den die Schüler:innen zusammen mit einem Fragebogen beantworten sollen.</p>
                     </div>
                 </div>}
