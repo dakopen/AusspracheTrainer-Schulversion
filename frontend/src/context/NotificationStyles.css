@@ -1,0 +1,53 @@
+.notifications-container {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 1000;
+}
+
+.notification {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	padding: 10px;
+	border-radius: 8px;
+	color: var(--white);
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	animation: slideIn 0.3s ease-out forwards;
+}
+
+.notification-content {
+	flex-grow: 1;
+}
+
+.notification-close {
+	margin-left: 20px;
+	cursor: pointer;
+	font-size: 20px;
+}
+
+/* Type-specific styles */
+.notification.info {
+	background-color: #007bff;
+}
+
+.notification.warning {
+	background-color: #ffc107;
+}
+
+.notification.error {
+	background-color: #dc3545;
+}
+
+/* Animations */
+@keyframes slideIn {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
