@@ -11,6 +11,10 @@
 	--green: #008000;
 }
 
+.green {
+	color: var(--green);
+}
+
 body {
 	font-family: "Montserrat", sans-serif;
 }

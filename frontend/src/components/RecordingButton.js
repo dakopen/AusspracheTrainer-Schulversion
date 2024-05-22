@@ -22,7 +22,7 @@ const AudioRecorder = (pollCompleted) => {
     const moveRecButtonDown = () => {
         const recButtonContainer = document.getElementById('recording-button-container');
         recButtonContainer.style.marginTop = recButtonContainer.style.marginTop + 10 + 'px';
-        recButtonContainer.style.zIndex = -1;
+        recButtonContainer.style.zIndex = 0;
     }
 
     useEffect(() => {
@@ -43,7 +43,7 @@ const AudioRecorder = (pollCompleted) => {
             </button>
             {isRecording && (
                 <button onClick={cancelRecording} className="cancel-recording-button">
-                    Cancel Recording
+                    abbrechen
                 </button>
             )}
         </div>

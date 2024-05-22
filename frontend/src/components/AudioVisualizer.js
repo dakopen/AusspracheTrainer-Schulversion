@@ -1,11 +1,16 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 import { useAudioRecording } from '../context/AudioRecordingContext';
 import "./AudioVisualizer.css";
+import ReactDOM from 'react-dom';
+import AuthContext from "../context/AuthContext";
 import DisplayResult from './DisplayResult';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import RestrictedAccessOverlay from './RestrictedAccessOverlay';
 
 const AudioVisualizer = ({ result }) => {
+    const { user } = useContext(AuthContext);
+
     const { isRecording, audioContext, recordingState, source, audioBlob, starttimeRecording, endtimeRecording } = useAudioRecording(); // Get necessary items from context
 
     const canvasRef = useRef(null);
@@ -95,7 +100,7 @@ const AudioVisualizer = ({ result }) => {
             }
             resizeAndCopyCanvasContent();
 
-            showReplayButtonAndReplayLine();
+            if (user.full_access_group === true) showReplayButtonAndReplayLine();
         }
     }, [recordingState]);
 
@@ -305,14 +310,41 @@ const AudioVisualizer = ({ result }) => {
         });
     }
 
+    const restrictedAccessCanvas = () => {
+        const mainCanvas = offscreenCanvasRef.current;
+
+        // Create a div to hold the overlay component
+        const overlayDiv = document.createElement('div');
+        overlayDiv.style.position = 'absolute';
+        overlayDiv.style.top = mainCanvas.offsetTop + 'px';
+        overlayDiv.style.left = mainCanvas.offsetLeft + 'px';
+        overlayDiv.style.width = mainCanvas.width + 'px';
+        overlayDiv.style.height = mainCanvas.height + 'px';
+        overlayDiv.style.pointerEvents = 'none'; // Allow clicks to pass through to the main canvas
+        overlayDiv.style.zIndex = 10; // Ensure it is above other elements
+
+        // Append the overlay div to the parent of the main canvas
+        mainCanvas.parentElement.appendChild(overlayDiv);
+
+        // Render the React component into the overlay div
+        ReactDOM.render(<RestrictedAccessOverlay />, overlayDiv);
+    };
+
+
+
+
+
 
     useEffect(() => {
         // offsets = result[1]
         console.log("RESULT: ", result)
         if (result && result[1] && result[1].length > 0) {
             console.log("COLORING CANVAS")
-
-            colorCanvas(result[1]);
+            if (user.full_access_group === true) {
+                colorCanvas(result[1]);
+            } else {
+                restrictedAccessCanvas();
+            }
         }
     }, [result]);
 
@@ -382,7 +414,7 @@ const AudioVisualizer = ({ result }) => {
                 <div id="replay-line" ref={replayLineRef}></div>
 
             </div>
-            {result && <DisplayResult result={result} jumpToWaveformTimestamp={jumpToWaveformTimestamp} />}
+            {result && (user.full_access_group === true) && <DisplayResult result={result} jumpToWaveformTimestamp={jumpToWaveformTimestamp} />}
 
         </>
     );
