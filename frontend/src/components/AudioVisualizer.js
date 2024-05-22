@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import RestrictedAccessOverlay from './RestrictedAccessOverlay';
 
-const AudioVisualizer = ({ result }) => {
+const AudioVisualizer = ({ result, setResult }) => {
     const { user } = useContext(AuthContext);
 
     const { isRecording, audioContext, recordingState, source, audioBlob, starttimeRecording, endtimeRecording } = useAudioRecording(); // Get necessary items from context
@@ -81,7 +81,7 @@ const AudioVisualizer = ({ result }) => {
 
         } else if (recordingState === 1) {
 
-            initializeCanvasAndOffscreen();
+            hideAndResetEverything();
             source.connect(analyser);
             animationFrameIdRef.current = requestAnimationFrame(draw)
 
@@ -105,6 +105,12 @@ const AudioVisualizer = ({ result }) => {
     }, [recordingState]);
 
     function initializeCanvasAndOffscreen() {
+        // find all elements with class name restricted-access-overlay
+        const restrictedAccessOverlay = document.querySelector('.restricted-access-overlay');
+        if (restrictedAccessOverlay) {
+            restrictedAccessOverlay.remove();
+        }
+
 
         canvasRef.current = document.createElement('canvas');
         canvasRef.current.width = getResponsiveCanvasWidth();
@@ -315,6 +321,7 @@ const AudioVisualizer = ({ result }) => {
 
         // Create a div to hold the overlay component
         const overlayDiv = document.createElement('div');
+        overlayDiv.classList.add('restricted-access-overlay');
         overlayDiv.style.position = 'absolute';
         overlayDiv.style.top = mainCanvas.offsetTop + 'px';
         overlayDiv.style.left = mainCanvas.offsetLeft + 'px';
@@ -338,6 +345,9 @@ const AudioVisualizer = ({ result }) => {
     useEffect(() => {
         // offsets = result[1]
         console.log("RESULT: ", result)
+        if (result === null) {
+            hideAndResetEverything();
+        }
         if (result && result[1] && result[1].length > 0) {
             console.log("COLORING CANVAS")
             if (user.full_access_group === true) {
@@ -384,6 +394,16 @@ const AudioVisualizer = ({ result }) => {
         replayControl.updateReplayLinePosition();
 
         offscreenCanvasRef.current.addEventListener('click', handleCanvasClick);
+    }
+
+
+
+    const hideAndResetEverything = () => {
+        replayButtonRef.current.style.display = "none";
+        replayLineRef.current.style.display = "none";
+        replayControl.stop();
+        offscreenCanvasRef.current.removeEventListener('click', handleCanvasClick);
+        initializeCanvasAndOffscreen();
     }
 
 

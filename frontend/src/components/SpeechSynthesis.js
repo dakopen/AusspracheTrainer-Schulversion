@@ -9,13 +9,15 @@ const SpeechSynthesis = ({ audioUrl }) => {
 	const synthTutorialRef = useRef(null);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [timelinePosition, setTimelinePosition] = useState(0);
-
+	const [loading, setLoading] = useState(true);
 	const switchFromTextToTimeline = () => {
 		timelineRef.current.style.display = "inherit";
 		synthTutorialRef.current.style.display = "none";
 	};
 
+
 	const toggleAudio = () => {
+		if (loading) return;
 		const audio = audioRef.current;
 		if (audio) {
 			if (audio.paused) {
@@ -51,11 +53,15 @@ const SpeechSynthesis = ({ audioUrl }) => {
 
 	// refresh the audio source when the audioUrl changes
 	useEffect(() => {
+		setLoading(true);
 		const audio = audioRef.current;
 		const source = document.getElementById("audio-source");
+
 		if (audio && source) {
 			source.src = audioUrl;
 			audio.load();
+			setIsPlaying(false);
+			setLoading(false);
 		}
 	}, [audioUrl]);
 

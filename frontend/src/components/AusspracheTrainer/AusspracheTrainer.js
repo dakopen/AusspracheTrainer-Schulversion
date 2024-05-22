@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import Textarea from "../Textarea";
 import SpeechSynthesis from "../SpeechSynthesis";
 import RecordingButton from "../RecordingButton";
@@ -17,6 +17,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
     const { authTokens } = useContext(AuthContext);
     const [result, setResult] = useState(null);
     const [pollCompleted, setPollCompleted] = useState(false);
+    const resetRef = useRef(0);
 
     useEffect(() => {
         pollTaskStatus();
@@ -38,10 +39,18 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
                     console.log()
                     setResult(data.result);
                     console.log(data)
+                    resetRef.current = 2;
 
                 }
             }, 500); // Poll every 500ms
         }
+    }
+
+    const reset = () => {
+        setPollCompleted(false);
+        setTaskStatus("PENDING");
+        setResult(null);
+        resetRef.current = 1;
     }
 
     return (
@@ -50,12 +59,20 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
             <br></br>
             {console.log("sentence Id: ", sentenceId)}
             <AudioRecordingProvider sentenceId={sentenceId} onComplete={onComplete} setTaskId={setTaskId}>
-                <AudioVisualizer result={result} />
+                <AudioVisualizer result={result} setResult={setResult} />
                 <br></br>
-                <RecordingButton pollCompleted={pollCompleted} />
+                <RecordingButton pollCompleted={pollCompleted} resetRef={resetRef} />
             </AudioRecordingProvider>
-            {user.full_access_group && <SpeechSynthesis audioUrl={audioUrl} />}
-            <button onClick={onNextSentence}>Next Sentence</button> {/* Button to proceed to the next sentence */}
+            {user.full_access_group ? <SpeechSynthesis audioUrl={audioUrl} /> : <>
+                <div style={{ marginTop: "50px" }}>
+
+                </div>
+            </>}
+            <div>
+                <button onClick={reset}>Erneut vorlesen</button> {/* Button to proceed to the next sentence */}
+
+                <button onClick={onNextSentence}>Nächster Satz</button> {/* Button to proceed to the next sentence */}
+            </div>
         </div>
     )
 }

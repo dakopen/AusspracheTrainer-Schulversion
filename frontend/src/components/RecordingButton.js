@@ -4,11 +4,12 @@ import { useAudioRecording } from '../context/AudioRecordingContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMicrophone, faStop, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-const AudioRecorder = (pollCompleted) => {
+const AudioRecorder = ({ pollCompleted, resetRef }) => {
     const { isRecording, startRecording, stopRecording, cancelRecording, recordingState, setRecordingState } = useAudioRecording();
 
     const handleToggleRecording = () => {
         if (!isRecording) {
+            resetRef.current = false;
             startRecording();
             console.log(recordingState, "RECSTATE INITIAL")
         } else {
@@ -19,23 +20,37 @@ const AudioRecorder = (pollCompleted) => {
         }
     };
 
-    const moveRecButtonDown = () => {
+    const hideRecButton = () => {
         const recButtonContainer = document.getElementById('recording-button-container');
-        recButtonContainer.style.marginTop = recButtonContainer.style.marginTop + 10 + 'px';
-        recButtonContainer.style.zIndex = 0;
+        recButtonContainer.style.display = 'none';
     }
 
+    const showRecButton = () => {
+        const recButtonContainer = document.getElementById('recording-button-container');
+        recButtonContainer.style.display = 'flex';
+    }
+
+
     useEffect(() => {
-        if (recordingState == 2) {
-            moveRecButtonDown();
+        console.log(recordingState, "RECSTATE", resetRef.current)
+        if (resetRef.current == 0 || resetRef.current == 2) {
+            if (recordingState == 2 && resetRef.current == 2) {
+                hideRecButton();
+            }
+        } else {
+            showRecButton();
+            setRecordingState(0);
+            resetRef.current = 0;
         }
-    }, [recordingState]);
+
+
+    }, [recordingState, resetRef.current]);
 
 
 
     return (
         <div className="recording-button-container" id="recording-button-container">
-            <button onClick={handleToggleRecording} className="recording-button glow-on-hover" id="recording-button" disabled={recordingState == 2 && !pollCompleted.pollCompleted}>
+            <button onClick={handleToggleRecording} className="recording-button glow-on-hover" id="recording-button" disabled={(recordingState == 2 && !pollCompleted.pollCompleted)}>
                 {((recordingState == 0) || (pollCompleted && recordingState == 2 && pollCompleted.pollCompleted)) && <FontAwesomeIcon icon={faMicrophone} size="4x" className='start-recording-icon' />}
                 {recordingState == 1 && <FontAwesomeIcon icon={faStop} size="3x" className="stop-recording-icon" />}
                 {recordingState == 2 && !(pollCompleted && recordingState == 2 && pollCompleted.pollCompleted) && <FontAwesomeIcon icon={faSpinner} spin size='4x' className='analyzing-recording-icon' />}

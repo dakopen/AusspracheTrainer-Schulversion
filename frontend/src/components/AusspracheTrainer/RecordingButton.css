@@ -9,6 +9,13 @@
 	margin-top: -150px;
 }
 
+/* Firefox-specific styles */
+@-moz-document url-prefix() {
+	.recording-button-container {
+		margin-top: -130px; /* Specific for Firefox  / I do not understand why but otherwise it is not aligned */
+	}
+}
+
 .recording-button {
 	position: relative;
 	z-index: 2;
@@ -30,27 +37,18 @@
 	align-items: center; /* Centers children vertically */
 	transition: ease-in-out 0.3s;
 }
+
+.recording-button:disabled {
+	color: var(--rosa);
+}
+
 .cancel-recording-button {
 	position: absolute;
-	right: calc(50% - 220px);
+	right: calc(50% - 200px);
 	top: 50%;
 	transform: translateY(-50%);
 	z-index: 1;
 	transition: opacity 0.3s ease;
-}
-
-glow-on-hover {
-	width: 90%;
-	height: 0;
-	border: none;
-	z-index: 0;
-	outline: 1px solid var(--lila);
-	background: var(--rosa);
-	cursor: pointer;
-	padding-bottom: 90%;
-	border-radius: 50%;
-	color: white;
-	position: relative;
 }
 
 .glow-on-hover img {
@@ -116,6 +114,17 @@ glow-on-hover {
 	top: 0;
 	color: white;
 	border-radius: 50%;
+}
+
+.glow-on-hover:disabled:after {
+	background: var(--white);
+	border: none;
+}
+
+.glow-on-hover:disabled:before {
+	background: white;
+	filter: none;
+	border: none;
 }
 
 @keyframes glowing {

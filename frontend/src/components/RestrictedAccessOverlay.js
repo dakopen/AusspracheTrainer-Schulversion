@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const RestrictedAccessOverlay = () => {
     const overlayStyle = {
@@ -29,7 +29,7 @@ const RestrictedAccessOverlay = () => {
 
     return (
         <div style={overlayStyle}>
-            <FontAwesomeIcon icon={faLock} size="1x" />
+            <FontAwesomeIcon icon={faCheck} size="xl" />
             <div style={textStyle}>
                 Dein Ergebnis wurde gespeichert. <br></br>Da du zur Kontrollgruppe gehörst, siehst du leider erst am Ende der Studie die Auswertung.
             </div>
