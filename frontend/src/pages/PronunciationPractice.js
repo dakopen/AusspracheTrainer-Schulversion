@@ -18,7 +18,6 @@ const PronunciationPractice = () => {
     let navigate = useNavigate();
 
 
-
     useEffect(() => {
         const fetchTodo = async () => {
             try {

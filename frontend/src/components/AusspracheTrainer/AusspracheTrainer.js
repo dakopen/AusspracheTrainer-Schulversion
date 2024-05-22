@@ -10,7 +10,7 @@ import { checkTaskStatus } from '../../utils/api'
 import './AusspracheTrainer.css'
 import './RecordingButton.css'
 
-const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence, onComplete }) => {
+const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence, onComplete, isTest }) => {
     const { user } = useContext(AuthContext);
     const [taskId, setTaskId] = useState(null);
     const [taskStatus, setTaskStatus] = useState("PENDING");
@@ -73,7 +73,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
                 </div>
             </>}
             <div>
-                <button onClick={reset}>Erneut vorlesen</button> {/* Button to proceed to the next sentence */}
+                {!isTest && <button onClick={reset}>Erneut vorlesen</button>} {console.log(isTest, "isTest")}
 
                 <button onClick={onNextSentence}>Nächster Satz</button> {/* Button to proceed to the next sentence */}
             </div>

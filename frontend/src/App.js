@@ -39,7 +39,6 @@ import EmailQuestionnaire from "./pages/EmailQuestionnaire";
 import "./App.css";
 import Tutorial from "./pages/Tutorial";
 import PronunciationTest from "./pages/PronunciationTest";
-import PronunciationPractice from "./pages/PronunciationPractice";
 import FinalQuestionnaire from "./pages/FinalQuestionnaire";
 import RequestPasswordReset from "./pages/RequestPasswordReset";
 import ForgotUsername from "./pages/ForgotUsername";
@@ -159,7 +158,7 @@ function App() {
 								<Route
 									element={
 										<StudentRoute
-											element={PronunciationPractice}
+											element={PronunciationTest}
 										/>
 									}
 									path="practice/"

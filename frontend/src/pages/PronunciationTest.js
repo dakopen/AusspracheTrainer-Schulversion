@@ -25,6 +25,7 @@ const PronunciationTest = () => {
 				console.log("Fetched todo:", result);
 				let id = result.id;
 				setTodo_id(id);
+				console.log(id, "id")
 				// check if todo_id is between 5 and 10
 				if (id === 4) {
 					let start_location = 1;
@@ -36,6 +37,10 @@ const PronunciationTest = () => {
 					let end_location = 100;
 					fetchData(start_location, end_location);
 
+				} else if (id >= 5 && id <= 10) {
+					let start_location = id * 10 - 29;
+					let end_location = id * 10 - 20;
+					fetchData(start_location, end_location);
 				} else {
 					addNotification("Bitte die Aufgaben Reihenfolge einhalten.", "error");
 					console.log(id, "id")
@@ -65,22 +70,7 @@ const PronunciationTest = () => {
 	}, [authTokens]);
 
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const result = await fetchSentencesByCourseAndLocation(1, 20, authTokens);
-				console.log("Fetched sentences:", result);
-				setSentences(result);
-				setLoading(false);
-			} catch (err) {
-				console.error("Error fetching sentences:", err);
-				setError(err);
-				setLoading(false);
-			}
-		};
 
-		fetchData();
-	}, [authTokens]);
 
 	if (loading) return <div>Loading...</div>;
 	if (error) return <div>Error: {error.message}</div>;
@@ -118,8 +108,14 @@ const PronunciationTest = () => {
 	};
 
 	const handleSentenceClick = index => {
+		if (todo_id == 4 || todo_id == 12) {
+			if (sentences[index].is_completed) {
+				alert("Du hast diesen Satz bereits abgeschlossen.");
+			};
+		};
 		setCurrentSentenceIndex(index);
-	};
+
+	}
 
 	const debugCompleteAll = () => {
 		setSentences(sentences.map(sentence => ({ ...sentence, is_completed: true })));
@@ -139,6 +135,7 @@ const PronunciationTest = () => {
 					audioUrl={currentSentence.sentence_as_text.synth_filename}
 					onNextSentence={handleNextSentence} // Prop to handle moving to the next sentence
 					onComplete={markSentenceAsCompleted}
+					isTest={todo_id == 4 || todo_id == 12}
 				/>
 			) : (
 				<div>No sentences found</div>
