@@ -53,6 +53,10 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
         resetRef.current = 1;
     }
 
+    useEffect(() => {  // change everything, when sentence changes
+        reset();
+    }, [sentenceId])
+
     return (
         <div className='aussprachetrainer-container'>
             <Textarea textareaValue={textareaText} />

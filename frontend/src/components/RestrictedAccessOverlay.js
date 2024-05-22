@@ -31,7 +31,7 @@ const RestrictedAccessOverlay = () => {
         <div style={overlayStyle}>
             <FontAwesomeIcon icon={faCheck} size="xl" />
             <div style={textStyle}>
-                Dein Ergebnis wurde gespeichert. <br></br>Da du zur Kontrollgruppe gehörst, siehst du leider erst am Ende der Studie die Auswertung.
+                Dein Ergebnis wurde gespeichert. <br></br>Da du zur Kontrollgruppe gehörst, erhälst du erst am Ende der Studie eine Rückmeldung.
             </div>
         </div>
     );
