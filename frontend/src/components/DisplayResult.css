@@ -13,7 +13,6 @@
 }
 
 #responsearea {
-	display: none;
 	padding-left: 0.5em;
 	padding-right: 0.5em;
 	padding-top: 0.2em;
@@ -26,18 +25,21 @@
 	white-space: normal;
 	text-align: left;
 	vertical-align: top;
+	max-width: min(95%, 800px);
+	margin-top: 10px;
 }
 
 .response-word {
-	font-size: max(min(1.5vw, 24px), 18px);
+	font-size: max(min(1.5vw, 24px), 20px);
 	font-family: "Montserrat";
-	font-weight: 500;
+	font-weight: 400;
 	display: inline-block;
 	margin-right: 5px;
 }
 
 .black-word {
-	color: black;
+	/* better to make it green */
+	color: darkgreen;
 }
 
 .darkred-word {

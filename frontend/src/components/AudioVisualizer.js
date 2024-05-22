@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useContext, useState } from 'react';
 import { useAudioRecording } from '../context/AudioRecordingContext';
 import "./AudioVisualizer.css";
 import DisplayResult from './DisplayResult';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
 const AudioVisualizer = ({ result }) => {
     const { isRecording, audioContext, recordingState, source, audioBlob, starttimeRecording, endtimeRecording } = useAudioRecording(); // Get necessary items from context
@@ -22,12 +23,12 @@ const AudioVisualizer = ({ result }) => {
     const recordedAudioRef = useRef(new Audio());
     const replayXRef = useRef(0);
     const justResumedRef = useRef(false);
-    const isPlayingRef = useRef(false);
     const replayAnimationFrameIdRef = useRef(null);
     const lastTimestampRef = useRef(0);
     const replayButtonRef = useRef(null);
     const replayLineRef = useRef(null);
-
+    const isPlayingRef = useRef(false);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     let lastMeanFrequency = 0;
     let counter = 0;
@@ -234,22 +235,22 @@ const AudioVisualizer = ({ result }) => {
     const replayControl = {
         start() {
             recordedAudioRef.current.play();
+            setIsPlaying(true);
             isPlayingRef.current = true;
-            replayButtonRef.current.style.backgroundColor = "var(--lila)";
             justResumedRef.current = true;
             replayAnimationFrameIdRef.current = requestAnimationFrame(moveReplayLine);
         },
         pause() {
             recordedAudioRef.current.pause();
+            setIsPlaying(false);
             isPlayingRef.current = false;
             cancelAnimationFrame(replayAnimationFrameIdRef.current);
-            replayButtonRef.current.style.backgroundColor = "var(--black)";
         },
         stop() {
             recordedAudioRef.current.pause();
             recordedAudioRef.current.currentTime = 0;
+            setIsPlaying(false);
             isPlayingRef.current = false;
-            replayButtonRef.current.style.backgroundColor = "var(--black)";
             cancelAnimationFrame(replayAnimationFrameIdRef.current);
             replayXRef.current = 0;
             lastTimestampRef.current = 0;
@@ -320,6 +321,7 @@ const AudioVisualizer = ({ result }) => {
             const replayButton = replayButtonRef.current;
 
             const handleReplayButtonClick = () => {
+                console.log("replay button clicked")
                 if (isPlayingRef.current) {
                     replayControl.pause();
                 } else {
@@ -374,7 +376,9 @@ const AudioVisualizer = ({ result }) => {
             <div id="canvas-parent-container">
                 <canvas className="canvas-visualizer" ref={canvasRef} width="800" height="200"></canvas>
 
-                <button id="replay-button" ref={replayButtonRef}></button>
+                <button id="replay-button" ref={replayButtonRef}>
+                    {isPlaying ? <FontAwesomeIcon icon={faPause} size="xs" /> : <FontAwesomeIcon icon={faPlay} size="xs" />}
+                </button>
                 <div id="replay-line" ref={replayLineRef}></div>
 
             </div>
