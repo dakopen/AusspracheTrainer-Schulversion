@@ -22,7 +22,7 @@
 	width: 350px;
 	padding: 10px 8px;
 	text-align: center;
-	border: 2px solid var(--lila);
+	border: 2px solid var(--rosa);
 	border-radius: 10px;
 	color: var(--black);
 	background-color: var(--white);
@@ -35,14 +35,14 @@
 
 .staff-login-form input:focus {
 	outline: none;
-	border-color: var(--rosa);
-	box-shadow: 0 0 10px var(--rosa);
+	border-color: var(--lila);
+	box-shadow: 0 0 10px var(--lila);
 }
 
 .staff-login-form input[type="submit"] {
 	padding: 8px 16px;
 	font-size: 16px;
-	background-color: var(--lila);
+	background-color: var(--rosa);
 	color: var(--white);
 	border: none;
 	border-radius: 10px;
@@ -51,7 +51,7 @@
 }
 
 .staff-login-form input[type="submit"]:hover {
-	background-color: var(--rosa);
+	background-color: var(--lila);
 }
 
 .staff-show-password {

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import "./SpeechSynthesis.css"; // Assuming styles are moved to a separate CSS file
+import "./SpeechSynthesis.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
 
 const SpeechSynthesis = ({ audioUrl }) => {
 	const audioRef = useRef(null);
@@ -8,16 +10,6 @@ const SpeechSynthesis = ({ audioUrl }) => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [timelinePosition, setTimelinePosition] = useState(0);
 
-	const playIcon = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#AA6BFD">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-    </svg>
-  `;
-	const pauseIcon = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#AA6BFD">
-      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-    </svg>
-  `;
 	const switchFromTextToTimeline = () => {
 		timelineRef.current.style.display = "inherit";
 		synthTutorialRef.current.style.display = "none";
@@ -40,8 +32,7 @@ const SpeechSynthesis = ({ audioUrl }) => {
 	const onTimeUpdate = () => {
 		const audio = audioRef.current;
 		if (audio) {
-			const percentagePosition =
-				(100 * audio.currentTime) / audio.duration;
+			const percentagePosition = (100 * audio.currentTime) / audio.duration;
 			setTimelinePosition(percentagePosition);
 			timelineRef.current.style.backgroundSize = `${percentagePosition}% 100%`;
 			timelineRef.current.value = percentagePosition;
@@ -58,6 +49,16 @@ const SpeechSynthesis = ({ audioUrl }) => {
 		event.preventDefault(); // prevents from showing browser hints
 	};
 
+	// refresh the audio source when the audioUrl changes
+	useEffect(() => {
+		const audio = audioRef.current;
+		const source = document.getElementById("audio-source");
+		if (audio && source) {
+			source.src = audioUrl;
+			audio.load();
+		}
+	}, [audioUrl]);
+
 	return (
 		<div className="audio-player-container">
 			<audio
@@ -71,13 +72,9 @@ const SpeechSynthesis = ({ audioUrl }) => {
 				Dein Browser unterstützt das Audioelement nicht.
 			</audio>
 			<div className="controls">
-				<button
-					className="player-button"
-					onClick={toggleAudio}
-					dangerouslySetInnerHTML={{
-						__html: isPlaying ? pauseIcon : playIcon,
-					}}
-				></button>
+				<button className="player-button" onClick={toggleAudio}>
+					<FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+				</button>
 				<input
 					type="range"
 					className="timeline"
@@ -97,7 +94,3 @@ const SpeechSynthesis = ({ audioUrl }) => {
 };
 
 export default SpeechSynthesis;
-
-// IDEA: the audioUrl is created when the sentences are set in the database
-// this way they do not have to be auto-generated every time a user wants
-// to hear the correct pronunciation (still in progress -> TODO)

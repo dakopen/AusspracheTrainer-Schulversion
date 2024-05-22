@@ -28,7 +28,7 @@
 
 .user-todo-button {
 	padding: 8px 16px;
-	background-color: var(--lila);
+	background-color: var(--rosa);
 	color: var(--white);
 	border: none;
 	border-radius: 4px;
@@ -37,16 +37,12 @@
 }
 
 .user-todo-button:hover {
-	background-color: var(--rosa);
+	background-color: var(--lila);
 }
 
 .user-todo-action-link {
 	color: var(--lila);
 	text-decoration: none;
-}
-
-.user-todo-action-link:hover {
-	text-decoration: underline;
 }
 
 .loading {

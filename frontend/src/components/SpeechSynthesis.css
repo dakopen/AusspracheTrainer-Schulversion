@@ -38,12 +38,15 @@
 }
 
 .player-button {
-	background-color: transparent;
-	border: 0;
-	width: var(--player-button-width);
-	height: var(--player-button-width);
+	all: unset;
+	background-color: var(--rosa);
+	color: var(--white);
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
 	cursor: pointer;
 	padding: 0;
+	margin-right: 5px;
 }
 
 .timeline {

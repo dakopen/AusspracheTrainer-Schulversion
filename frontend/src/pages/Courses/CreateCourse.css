@@ -32,7 +32,7 @@
 
 .create-course-form button {
 	padding: 10px 20px;
-	background-color: var(--lila);
+	background-color: var(--rosa);
 	color: var(--white);
 	border: none;
 	border-radius: 4px;
@@ -42,5 +42,5 @@
 }
 
 .create-course-form button:hover {
-	background-color: var(--rosa);
+	background-color: var(--lila);
 }

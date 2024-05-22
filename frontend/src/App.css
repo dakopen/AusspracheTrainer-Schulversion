@@ -31,7 +31,7 @@ body {
 
 button {
 	padding: 8px 16px;
-	background-color: var(--lila);
+	background-color: var(--rosa);
 	color: var(--white);
 	border: none;
 	border-radius: 4px;
@@ -40,5 +40,9 @@ button {
 }
 
 button:hover {
-	background-color: var(--rosa);
+	background-color: var(--lila);
+}
+
+a:hover {
+	color: var(--lila);
 }

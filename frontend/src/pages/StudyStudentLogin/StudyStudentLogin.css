@@ -23,7 +23,7 @@
 	margin: 5px;
 	padding: 10px 8px;
 	text-align: center;
-	border: 2px solid var(--lila);
+	border: 2px solid var(--rosa);
 	border-radius: 10px;
 	color: transparent; /* Hide text color */
 	text-shadow: 0 0 0 var(--black); /* Show text using shadow */
@@ -33,7 +33,7 @@
 
 .login-form input:focus {
 	outline: none;
-	border-color: var(--rosa);
+	border-color: var(--lila);
 	/* make it glow */
 	box-shadow: 0 0 10px var(--rosa);
 }
@@ -41,7 +41,7 @@
 .login-form input[type="submit"] {
 	padding: 8px 16px;
 	font-size: 16px;
-	background-color: var(--lila);
+	background-color: var(--rosa);
 	color: var(--white);
 	border: none;
 	border-radius: 10px;
@@ -50,7 +50,7 @@
 }
 
 .login-form input[type="submit"]:hover {
-	background-color: var(--rosa);
+	background-color: var(--lila);
 }
 
 .checkbox-container {

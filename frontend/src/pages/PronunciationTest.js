@@ -131,11 +131,12 @@ const PronunciationTest = () => {
 		<div style={{ zIndex: 0, position: "relative" }}>
 			<ProgressBar sentences={sentences.map(sentence => sentence.is_completed)} onSentenceClick={handleSentenceClick} currentSentenceIndex={currentSentenceIndex} />
 			<br></br>
+			{console.log("currentSentence", currentSentence)}
 			{currentSentence ? (
 				<AusspracheTrainer
 					textareaText={currentSentence.sentence_as_text.sentence}
 					sentenceId={currentSentence.sentence}
-					audioUrl={currentSentence.audioUrl}
+					audioUrl={currentSentence.sentence_as_text.synth_filename}
 					onNextSentence={handleNextSentence} // Prop to handle moving to the next sentence
 					onComplete={markSentenceAsCompleted}
 				/>
