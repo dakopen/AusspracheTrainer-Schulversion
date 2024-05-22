@@ -50,9 +50,9 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
             <br></br>
             {console.log("sentence Id: ", sentenceId)}
             <AudioRecordingProvider sentenceId={sentenceId} onComplete={onComplete} setTaskId={setTaskId}>
-                <RecordingButton pollCompleted={pollCompleted} />
-                <br></br>
                 <AudioVisualizer result={result} />
+                <br></br>
+                <RecordingButton pollCompleted={pollCompleted} />
             </AudioRecordingProvider>
             {user.full_access_group && <SpeechSynthesis audioUrl={audioUrl} />}
             <button onClick={onNextSentence}>Next Sentence</button> {/* Button to proceed to the next sentence */}

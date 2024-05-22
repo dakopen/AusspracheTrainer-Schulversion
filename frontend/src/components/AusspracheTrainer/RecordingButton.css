@@ -6,7 +6,7 @@
 	max-width: 800px;
 	width: 95%;
 	display: flex;
-	margin-top: 30px;
+	margin-top: -130px;
 }
 
 .recording-button {
@@ -28,6 +28,7 @@
 	display: flex; /* This was missing */
 	justify-content: center; /* Centers children horizontally */
 	align-items: center; /* Centers children vertically */
+	transition: ease-in-out 0.3s;
 }
 .cancel-recording-button {
 	position: absolute;

@@ -4,7 +4,7 @@
 	height: 130px;
 	display: flex;
 	align-items: flex-start; /* Keeps items aligned at the top */
-	margin-top: -130px;
+	margin-top: 30px;
 }
 
 #canvas-parent-container canvas {

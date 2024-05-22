@@ -19,22 +19,23 @@ const AudioRecorder = (pollCompleted) => {
         }
     };
 
-    const moveCanvasDown = () => {
-        const canvasParentContainer = document.getElementById('canvas-parent-container');
-        canvasParentContainer.style.marginTop = canvasParentContainer.style.marginTop + 10 + 'px';
-
+    const moveRecButtonDown = () => {
+        const recButtonContainer = document.getElementById('recording-button-container');
+        recButtonContainer.style.marginTop = recButtonContainer.style.marginTop + 10 + 'px';
+        recButtonContainer.style.zIndex = -1;
     }
 
     useEffect(() => {
-        if (pollCompleted.pollCompleted) {
-            console.log("poll completed", pollCompleted)
-            moveCanvasDown();
+        if (recordingState == 2) {
+            moveRecButtonDown();
         }
-    }, [pollCompleted]);
+    }, [recordingState]);
+
+
 
     return (
-        <div className="recording-button-container">
-            <button onClick={handleToggleRecording} className="recording-button" id="recording-button">
+        <div className="recording-button-container" id="recording-button-container">
+            <button onClick={handleToggleRecording} className="recording-button" id="recording-button" disabled={recordingState == 2 && !pollCompleted.pollCompleted}>
                 {((recordingState == 0) || (pollCompleted && recordingState == 2 && pollCompleted.pollCompleted)) && <FontAwesomeIcon icon={faMicrophone} size="4x" className='start-recording-icon' />}
                 {recordingState == 1 && <FontAwesomeIcon icon={faStop} size="3x" className="stop-recording-icon" />}
                 {recordingState == 2 && !(pollCompleted && recordingState == 2 && pollCompleted.pollCompleted) && <FontAwesomeIcon icon={faSpinner} spin size='4x' className='analyzing-recording-icon' />}
