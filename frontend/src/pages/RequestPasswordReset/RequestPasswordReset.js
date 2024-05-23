@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { useNotification } from "../context/NotificationContext";
-import { UrlContext } from "../context/UrlContext";
+import { useNavigate, Link } from "react-router-dom";
+import { useNotification } from "../../context/NotificationContext";
+import { UrlContext } from "../../context/UrlContext";
+import './RequestPasswordReset.css';
 
 function RequestPasswordReset() {
     const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ function RequestPasswordReset() {
             );
 
             if (response.ok) {
-                addNotification("Password reset link has been sent to your email.", "success");
+                addNotification("Der Link zum Zurücksetzen des Passworts wurde an Ihre E-Mail gesendet.", "success");
                 navigate("/login"); // Redirect to login page or a confirmation page
             } else {
                 const errorData = await response.json(); // Assuming the server sends back JSON
@@ -33,16 +34,16 @@ function RequestPasswordReset() {
             }
         } catch (error) {
             console.error("Error:", error);
-            addNotification("Failed to send reset email. Please try again.", "error");
+            addNotification("E-Mail zum Zurücksetzen konnte nicht gesendet werden. Bitte versuchen Sie es erneut.", "error");
         }
     };
 
     return (
-        <div>
-            <h1>Request Password Reset (Staff Only)</h1>
+        <div className="reset-password-form">
+            <h1>Passwort zurücksetzen (nur für Lehrer:innen)</h1>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Enter your email (staff only):
+                    Gib deine E-Mail-Adresse ein, um einen Link zum Zurücksetzen des Passworts zu erhalten:
                     <input
                         type="email"
                         value={email}
@@ -50,10 +51,13 @@ function RequestPasswordReset() {
                         required
                     />
                 </label>
-                <button type="submit">Send Reset Link</button>
+                <button type="submit">Link zum Zurücksetzen versenden</button>
             </form>
+
+            <p>Falls du den Benutzernamen für deinen <b>Schüleraccount</b> vergessen hast, kannst du ihn dir <Link to="/forgot-username">hier</Link> an deine Mail Adresse senden.</p>
         </div>
     );
+
 }
 
 export default RequestPasswordReset;

@@ -1,7 +1,9 @@
 import React, { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useNotification } from "../context/NotificationContext";
-import { UrlContext } from "../context/UrlContext";
+import { useNotification } from "../../context/NotificationContext";
+import { UrlContext } from "../../context/UrlContext";
+import './SetPassword.css';
+
 
 function SetPassword() {
 	const [password, setPassword] = useState("");
@@ -47,9 +49,9 @@ function SetPassword() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form className="reset-password-form" onSubmit={handleSubmit}>
 			<label>
-				New Password:
+				Neues Passwort:
 				<input
 					type="password"
 					value={password}
@@ -57,9 +59,10 @@ function SetPassword() {
 					required
 				/>
 			</label>
-			<button type="submit">Set Password</button>
+			<button type="submit">Passwort festlegen</button>
 		</form>
 	);
+	
 }
 
 export default SetPassword;

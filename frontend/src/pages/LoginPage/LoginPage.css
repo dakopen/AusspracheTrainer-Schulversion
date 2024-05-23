@@ -61,6 +61,12 @@
 	cursor: pointer;
 }
 
+.loginpage-forgot-password {
+	font-size: 12px;
+	text-decoration: none;
+	margin-left: 12px;
+}
+
 .staff-show-password:hover {
 	color: var(--lila);
 	background-color: unset;

@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useNotification } from "../context/NotificationContext";
-import { UrlContext } from "../context/UrlContext";
+import { useNotification } from "../../context/NotificationContext";
+import { UrlContext } from "../../context/UrlContext";
+import './ForgotUsername.css';
 
 function ForgotUsername() {
     const [email, setEmail] = useState("");
@@ -38,11 +39,11 @@ function ForgotUsername() {
     };
 
     return (
-        <div>
-            <h1>Retrieve Username (Students only)</h1>
+        <div className="retrieve-username-form">
+            <h1>Benutzernamen abrufen (nur für Schüler:innen)</h1>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Enter your registered email:
+                    Gib deine registrierte E-Mail-Adresse ein:
                     <input
                         type="email"
                         value={email}
@@ -50,10 +51,11 @@ function ForgotUsername() {
                         required
                     />
                 </label>
-                <button type="submit">Send Username</button>
+                <button type="submit">Benutzernamen abrufen</button>
             </form>
         </div>
     );
+
 }
 
 export default ForgotUsername;

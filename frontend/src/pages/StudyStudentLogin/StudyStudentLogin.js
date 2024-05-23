@@ -1,4 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import './StudyStudentLogin.css';
 
@@ -114,7 +115,7 @@ const StudyStudentLogin = () => {
 	};
 
 	return (
-		<div>
+		<div >
 			<h1>Studien Login</h1>
 			<form onSubmit={sendToStudyStudentLogin} className='login-form'>
 				<div className='input-container'>
@@ -153,6 +154,7 @@ const StudyStudentLogin = () => {
 				</div>
 				<input type="submit" ref={submitRef} onKeyDown={handleKeyDown(11)} value="Einloggen" />
 			</form>
+			<p className='studystudent-text-forgot-username'>Bitte gib den Benutzernamen ein, den du von deiner/deinem Lehrer:in erhalten hast.<br></br>Falls du den Benutzernamen vergessen hast, aber schon eine Mail Adresse hinterlegt hast, kannst du ihn <Link to="/forgot-username">hier</Link> abrufen. Andernfalls melde dich bei deiner/deinem Lehrer:in, um einen neuen Account zu erhalten.</p>
 		</div>
 	);
 };

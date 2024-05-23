@@ -46,3 +46,11 @@ button:hover {
 a:hover {
 	color: var(--lila);
 }
+
+.hidden {
+	visibility: hidden;
+}
+
+.center-text {
+	text-align: center;
+}

@@ -17,7 +17,7 @@ import axios from "axios";
 import Header from "./components/Header/Header";
 import "./components/Notification.css";
 
-import SetPassword from "./pages/SetPassword";
+import SetPassword from "./pages/SetPassword/SetPassword";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import StudyStudentLogin from "./pages/StudyStudentLogin/StudyStudentLogin";
 import CreateTeacher from "./pages/CreateTeacher";
@@ -40,8 +40,8 @@ import "./App.css";
 import Tutorial from "./pages/Tutorial";
 import PronunciationTest from "./pages/PronunciationTest";
 import FinalQuestionnaire from "./pages/FinalQuestionnaire";
-import RequestPasswordReset from "./pages/RequestPasswordReset";
-import ForgotUsername from "./pages/ForgotUsername";
+import RequestPasswordReset from "./pages/RequestPasswordReset/RequestPasswordReset";
+import ForgotUsername from "./pages/ForgotUsername/ForgotUsername";
 
 function App() {
 	return (

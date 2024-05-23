@@ -3,11 +3,11 @@
 	display: flex;
 	flex-direction: column; /* Change to column to stack elements vertically */
 	align-items: center;
-	height: 100vh;
 	max-width: 95%;
 	max-width: 800px;
 	margin: 0 auto;
 	padding-top: 20px;
+	margin-bottom: 40px;
 }
 
 .input-container {
@@ -98,4 +98,11 @@ h1 {
 		font-size: 14px; /* Smaller font size */
 		padding: 4px 8px; /* Smaller padding */
 	}
+}
+
+.studystudent-text-forgot-username {
+	font-size: small;
+	max-width: min(95%, 800px);
+	text-align: justify;
+	margin: 0 auto;
 }
