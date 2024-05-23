@@ -70,12 +70,20 @@ const PronunciationTest = () => {
 	}, [authTokens]);
 
 
+	useEffect(() => {
+		if (!sentences[0]) return;
+		if (sentences[0].is_completed) {
+			console.log("First sentence is already completed")
+			handleNextSentence();
+		}
+	}, [sentences]);
 
 
 	if (loading) return <div>Loading...</div>;
 	if (error) return <div>Error: {error.message}</div>;
 
 	const handleNextSentence = () => {
+		console.log("Handling next sentence")
 		// Find the next incomplete sentence starting from the sentence after the current one
 		const nextIndex = sentences.findIndex((sentence, index) => index > currentSentenceIndex && !sentence.is_completed);
 
@@ -92,7 +100,11 @@ const PronunciationTest = () => {
 				// If no incomplete sentences are found at all, alert the user that the test is completed
 				addNotification("Test completed", "success");
 				completeStandardTodo(todo_id, authTokens);
-				navigate("/");
+
+				// wait 100ms before navigating to the home page
+				setTimeout(() => {
+					navigate("/");
+				}, 100);
 
 			}
 		}
@@ -123,6 +135,8 @@ const PronunciationTest = () => {
 
 	const currentSentence = sentences[currentSentenceIndex];
 
+
+
 	return (
 		<div style={{ zIndex: 0, position: "relative" }}>
 			<ProgressBar sentences={sentences.map(sentence => sentence.is_completed)} onSentenceClick={handleSentenceClick} currentSentenceIndex={currentSentenceIndex} />
@@ -136,6 +150,7 @@ const PronunciationTest = () => {
 					onNextSentence={handleNextSentence} // Prop to handle moving to the next sentence
 					onComplete={markSentenceAsCompleted}
 					isTest={todo_id == 4 || todo_id == 12}
+					allSentencesComplete={sentences.every(sentence => sentence.is_completed)}
 				/>
 			) : (
 				<div>No sentences found</div>

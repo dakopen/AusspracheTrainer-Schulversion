@@ -138,3 +138,13 @@
 		background-position: 0 0;
 	}
 }
+
+.buttons-below-aussprachetrainer {
+	display: flex;
+	width: min(95%, 800px);
+	justify-content: space-between; /* Align items to the right */
+}
+
+.hidden {
+	visibility: hidden;
+}

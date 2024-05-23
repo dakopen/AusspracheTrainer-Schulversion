@@ -9,8 +9,10 @@ import AuthContext from '../../context/AuthContext';
 import { checkTaskStatus } from '../../utils/api'
 import './AusspracheTrainer.css'
 import './RecordingButton.css'
+import { faRedo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence, onComplete, isTest }) => {
+const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence, onComplete, isTest, allSentencesComplete }) => {
     const { user } = useContext(AuthContext);
     const [taskId, setTaskId] = useState(null);
     const [taskStatus, setTaskStatus] = useState("PENDING");
@@ -67,15 +69,16 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
                 <br></br>
                 <RecordingButton pollCompleted={pollCompleted} resetRef={resetRef} />
             </AudioRecordingProvider>
-            {user.full_access_group ? <SpeechSynthesis audioUrl={audioUrl} /> : <>
+            {(user.full_access_group && !isTest) ? <SpeechSynthesis audioUrl={audioUrl} /> : <>
                 <div style={{ marginTop: "50px" }}>
 
                 </div>
             </>}
-            <div>
-                {!isTest && <button onClick={reset}>Erneut vorlesen</button>} {console.log(isTest, "isTest")}
-
-                <button onClick={onNextSentence}>Nächster Satz</button> {/* Button to proceed to the next sentence */}
+            <div className='buttons-below-aussprachetrainer'>
+                <button className='hidden'>{allSentencesComplete ? `${isTest ? "Test" : "Übung"} abschließen` : "Nächster Satz"}</button> {/* Button to proceed to the next sentence */}
+                {!isTest && <button onClick={reset} className={pollCompleted ? "" : "hidden"}>
+                    <FontAwesomeIcon icon={faRedo} size="xs" /> Erneut üben</button>} {console.log(isTest, "isTest")}
+                <button onClick={onNextSentence}>{allSentencesComplete ? `${isTest ? "Test" : "Übung"} abschließen` : "Nächster Satz"}</button> {/* Button to proceed to the next sentence */}
             </div>
         </div>
     )
