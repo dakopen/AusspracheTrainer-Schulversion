@@ -51,6 +51,6 @@ a:hover {
 	visibility: hidden;
 }
 
-.center-text {
-	text-align: center;
+input[type="range"] {
+	accent-color: var(--rosa);
 }

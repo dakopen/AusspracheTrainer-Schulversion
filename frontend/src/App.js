@@ -33,8 +33,8 @@ import UserSettings from "./pages/UserSettings";
 import SentenceDisplay from "./pages/SentenceDisplay";
 import DeleteAccountConfirm from "./components/DeleteAccountConfirm";
 
-import FirstQuestionnaire from "./pages/FirstQuestionnaire";
-import EmailQuestionnaire from "./pages/EmailQuestionnaire";
+import FirstQuestionnaire from "./pages/FirstQuestionnaire/FirstQuestionnaire";
+import EmailQuestionnaire from "./pages/EmailQuestionnaire/EmailQuestionnaire";
 
 import "./App.css";
 import Tutorial from "./pages/Tutorial";

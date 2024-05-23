@@ -8,9 +8,15 @@
 	max-width: 80px;
 }
 
+.bulk-students-input:focus {
+	outline: none;
+	border-color: var(--lila);
+	box-shadow: 0 0 10px var(--lila);
+}
+
 .bulk-students-button {
 	padding: 5px 5px;
-	background-color: var(--lila);
+	background-color: var(--rosa);
 	color: var(--white);
 	border: none;
 	border-radius: 4px;
@@ -20,5 +26,5 @@
 }
 
 .bulk-students-button:hover {
-	background-color: var(--rosa);
+	background-color: var(--lila);
 }

@@ -1,0 +1,79 @@
+.form-container {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: var(--white-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-input {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+}
+
+.form-input input,
+.form-input select {
+	padding: 8px 10px;
+	margin-top: 8px;
+	border: 2px solid var(--lila);
+	border-radius: 4px;
+	font-size: 16px;
+}
+
+.submit-button {
+	padding: 8px 16px;
+	background-color: var(--rosa);
+	color: var(--white);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	display: block;
+	width: 100%;
+	font-size: 18px;
+}
+
+/* color the slider in rosa*/
+
+.submit-button:hover {
+	background-color: var(--lila);
+}
+
+.form-input label::after {
+	content: " *";
+	color: var(--red);
+}
+
+.form-input input:focus,
+.form-input select:focus {
+	outline: none;
+	border-color: var(--lila);
+	box-shadow: 0 0 10px var(--rosa);
+}
+
+.data-notification {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: var(--light-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	font-size: 16px;
+	color: var(--black);
+	text-align: justify;
+}
+
+.range-input {
+	position: relative;
+}
+
+.range-labels {
+	display: flex;
+	justify-content: space-between;
+	font-size: small;
+	margin: 10px 7px -20px;
+}

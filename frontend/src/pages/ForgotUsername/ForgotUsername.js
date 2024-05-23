@@ -40,7 +40,7 @@ function ForgotUsername() {
 
     return (
         <div className="retrieve-username-form">
-            <h1>Benutzernamen abrufen (nur für Schüler:innen)</h1>
+            <h1>Benutzername abrufen (nur für Schüler:innen)</h1>
             <form onSubmit={handleSubmit}>
                 <label>
                     Gib deine registrierte E-Mail-Adresse ein:
@@ -51,7 +51,7 @@ function ForgotUsername() {
                         required
                     />
                 </label>
-                <button type="submit">Benutzernamen abrufen</button>
+                <button type="submit">Benutzername abrufen</button>
             </form>
         </div>
     );

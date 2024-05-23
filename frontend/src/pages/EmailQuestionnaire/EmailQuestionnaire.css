@@ -1,0 +1,64 @@
+.email-notification {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: var(--light-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	font-size: 16px;
+	color: var(--black);
+	text-align: justify;
+}
+
+.email-form {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+	background-color: var(--white-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.email-input {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+}
+
+.email-input input {
+	padding: 8px 10px;
+	margin-top: 8px;
+	border: 2px solid var(--lila);
+	border-radius: 4px;
+	font-size: 16px;
+}
+
+.confirm-button {
+	padding: 8px 16px;
+	background-color: var(--rosa);
+	color: var(--white);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	display: block;
+	width: 100%;
+	font-size: medium;
+}
+
+.confirm-button:hover {
+	background-color: var(--lila);
+}
+
+.email-input label::after {
+	content: " *";
+	color: var(--dark-red);
+}
+
+.email-input input:focus {
+	outline: none;
+	border-color: var(--lila);
+	box-shadow: 0 0 10px var(--rosa);
+}

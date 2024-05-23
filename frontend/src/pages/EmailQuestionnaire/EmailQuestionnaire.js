@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
-import AuthContext from "../context/AuthContext";
-import { UrlContext } from "../context/UrlContext";
+import AuthContext from "../../context/AuthContext";
+import { UrlContext } from "../../context/UrlContext";
 import { useNavigate } from "react-router-dom";
-import { useNotification } from "../context/NotificationContext";
+import { useNotification } from "../../context/NotificationContext";
+import './EmailQuestionnaire.css';
 
 const EmailQuestionnaire = () => {
 	const [email, setEmail] = useState("");
@@ -53,15 +54,18 @@ const EmailQuestionnaire = () => {
 
 	return (
 		<>
-			<p>
+			<p className="email-notification">
 				Diese E-Mail-Adresse wird für wichtige Benachrichtigungen und
-				das Zurücksetzen des Passworts verwendet. Falls keine eigene
-				E-Mail-Adresse vorhanden ist, kann die E-Mail-Adresse der Eltern
-				verwendet werden.
+				das Zurücksetzen des Benutzernamens verwendet. Du kannst eine eigene
+				oder die Mail Adresse deiner Eltern angeben.
+
+				Falls möglich, nutze eine E-Mail-Adresse, die keine persönlichen
+				Informationen (wie den Namen) enthält.
 			</p>
-			<form onSubmit={handleSubmit}>
-				<label>
+			<form onSubmit={handleSubmit} className="email-form">
+				<label className="email-input">
 					E-Mail-Adresse:
+
 					<input
 						type="email"
 						value={email}
@@ -69,8 +73,9 @@ const EmailQuestionnaire = () => {
 						required
 					/>
 				</label>
-				<label>
+				<label className="email-input">
 					E-Mail-Adresse wiederholen:
+
 					<input
 						type="email"
 						value={confirmEmail}
@@ -78,9 +83,11 @@ const EmailQuestionnaire = () => {
 						required
 					/>
 				</label>
-				<button type="submit">bestätigen</button>
+				<button type="submit" className="confirm-button">bestätigen</button>
 			</form>
 		</>
+
+
 	);
 };
 

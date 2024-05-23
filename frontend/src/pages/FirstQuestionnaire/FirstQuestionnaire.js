@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
-import AuthContext from "../context/AuthContext";
-import { UrlContext } from "../context/UrlContext";
-import { useNotification } from "../context/NotificationContext";
+import AuthContext from "../../context/AuthContext";
+import { UrlContext } from "../../context/UrlContext";
+import { useNotification } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
+import './FirstQuestionnaire.css';
+
 
 const FirstQuestionnaire = () => {
 	const [age, setAge] = useState(null);
@@ -75,7 +77,7 @@ const FirstQuestionnaire = () => {
 				const responseData = await response.json();
 				addNotification(
 					responseData[0] ||
-						"Beim Einreichen des Fragebogens ist ein Fehler aufgetreten.",
+					"Beim Einreichen des Fragebogens ist ein Fehler aufgetreten.",
 					"error"
 				);
 			}
@@ -86,54 +88,63 @@ const FirstQuestionnaire = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<label>
-				Alter:
-				<input
-					type="number"
-					value={age || ""}
-					onChange={(e) => setAge(e.target.value)}
-					min="1"
-					max="99"
-				/>
-			</label>
-			<label>
-				Geschlecht:
-				<select
-					value={sex || ""}
-					onChange={(e) => setSex(e.target.value)}
-				>
-					<option value="">Auswählen</option>
-					<option value="m">männlich</option>
-					<option value="w">weiblich</option>
-					<option value="d">divers</option>
-				</select>
-			</label>
-			<label>
-				Selbsteinschätzung der eigenen Aussprache (1-10) in{" "}
-				{user.language}:
-				<input
-					type="range"
-					value={pronunciationSkill || 5}
-					onChange={(e) => setPronunciationSkill(e.target.value)}
-					min="1"
-					max="10"
-				/>
-			</label>
-			<label>
-				Wöchentliche Stunden Kontakt (Serie, Podcast, Musik, Gespräche,
-				etc.) mit {user.language}:
-				<input
-					type="number"
-					value={weeklyLanguageContactHours || ""}
-					onChange={(e) =>
-						setWeeklyLanguageContactHours(e.target.value)
-					}
-					min="0"
-				/>
-			</label>{" "}
-			<button type="submit">Fragebogen abschicken</button>
-		</form>
+		<>
+			<p className="data-notification">
+
+				Diese Daten helfen uns, Verbesserungen in der Aussprache über verschiedene Altersgruppen und Sprachvertrautheitsstufen hinweg nachzuvollziehen.
+				Alle Angaben sind freiwillig und die Antworten werden nicht mit der/dem Lehrer:in geteilt.
+			</p>
+			<form onSubmit={handleSubmit} className="form-container">
+
+				<label className="form-input">
+					Alter:
+					<input
+						type="number"
+						value={age || ""}
+						onChange={(e) => setAge(e.target.value)}
+						min="1"
+						max="99"
+					/>
+				</label>
+				<label className="form-input">
+					Geschlecht:
+					<select
+						value={sex || ""}
+						onChange={(e) => setSex(e.target.value)}
+					>
+						<option value="">Auswählen</option>
+						<option value="m">männlich</option>
+						<option value="w">weiblich</option>
+						<option value="d">divers</option>
+					</select>
+				</label>
+				<label className="form-input range-input">
+					Selbsteinschätzung der eigenen {user.language === 1 ? "englischen" : "französischen"} Aussprache:
+					<div className="range-labels">
+						<span>nicht so gut</span>
+						<span>hervorragend</span>
+					</div>
+					<input
+						type="range"
+						value={pronunciationSkill || 5}
+						onChange={(e) => setPronunciationSkill(e.target.value)}
+						min="1"
+						max="10"
+					/>
+				</label>
+				<label className="form-input">
+					Wöchentliche Stunden Kontakt (Serie, Podcast, Musik, Gespräche, etc.) mit {user.language === 1 ? "Englisch" : "Französisch"}:
+					<input
+						type="number"
+						value={weeklyLanguageContactHours || ""}
+						onChange={(e) => setWeeklyLanguageContactHours(e.target.value)}
+						min="0"
+					/>
+				</label>
+				<button type="submit" className="submit-button">Fragebogen abschicken</button>
+			</form>
+
+		</>
 	);
 };
 

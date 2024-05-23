@@ -454,7 +454,7 @@ class ForgotUsernameView(APIView):
                 if user.role != User.STUDYSTUDENT:
                     return Response({'error': 'Nur Schüler:innen können ihren Benutzernamen anfordern.'}, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    usernames.append(f'{i}.: {user.username[:10]}')
+                    usernames.append(f'{i}) {user.username[:10]}')
                     i += 1
             
             if len(usernames) > 1:

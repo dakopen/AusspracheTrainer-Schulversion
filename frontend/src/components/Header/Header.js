@@ -121,14 +121,12 @@ const Header = () => {
 								<li className="nav-item">
 									<Link to="/login" className="nav-link" onClick={closeMobileMenu}>Login</Link>
 								</li>
-								<li className="nav-item">
-									<Link to="/rolelogin" className="nav-link" onClick={closeMobileMenu}>Lehrer-Login</Link>
-								</li>
-								<li className="nav-item">
-									<Link to="/request-password-reset" className="nav-link" onClick={closeMobileMenu}>Passwort vergessen</Link>
-								</li>
+
 								<li className="nav-item">
 									<Link to="/forgot-username" className="nav-link" onClick={closeMobileMenu}>Benutzername vergessen</Link>
+								</li>
+								<li className="nav-item">
+									<Link to="/rolelogin" className="nav-link" onClick={closeMobileMenu}>Lehrer-Login</Link>
 								</li>
 							</>
 						)}
