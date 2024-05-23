@@ -1,63 +1,87 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { completeStandardTodo, fetchLowestPriorityUserToDo } from "../utils/api";
-import AuthContext from "../context/AuthContext";
-import { useNotification } from "../context/NotificationContext";
-import { useNavigate } from "react-router-dom";
+import React, { Component, useEffect } from 'react';
+import Joyride, { STATUS, ACTIONS } from 'react-joyride';
 
-const Tutorial = () => {
-    let { authTokens } = useContext(AuthContext);
-    const { addNotification } = useNotification();
-    let navigate = useNavigate();
-    const [todo_id, setTodo_id] = useState(-1);
-
-    useEffect(() => {
-        const fetchTodo = async () => {
-            try {
-                const result = await fetchLowestPriorityUserToDo(authTokens);
-                console.log("Fetched todo:", result);
-                let id = result.id;
-                if (id == 3 || id == 11) {
-                    setTodo_id(id);
-                } else {
-                    addNotification("Bitte die Aufgaben Reihenfolge einhalten.", "error");
-                    navigate("/");
+class Tutorial extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            run: false,
+            steps: [
+                {
+                    target: '#textarea',
+                    content: 'Den Satz, der in diesem Textfeld steht sollst du vorlesen.',
+                    placement: 'top',
+                },
+                {
+                    target: '.player-button',
+                    content: 'Wenn du dir erstmal die korrekte Aussprache anhören möchtest, drücke auf diesen Button.',
+                    placement: 'top',
+                    spotlightClicks: true,
+                },
+                {
+                    target: '.recording-button-container',
+                    content: 'Drücke diesen Button und lese den Satz vor. Drücke ihn erneut, um die Aufnahme zu beenden.',
+                    placement: 'bottom',
+                    title: 'Jetzt bist du dran',
+                    spotlightClicks: true,
+                    disableOverlay: true,
+                    styles: {
+                        tooltip: {
+                            marginTop: -10,
+                        },
+                    },
                 }
-            } catch (err) {
-                console.error("Error fetching todo:", err);
-            }
+            ],
         };
+    }
 
-        fetchTodo();
-    }, [authTokens]);
+    
+    handleJoyrideCallback = (data) => {
+        const { status, action } = data;
+        const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
 
-    const handleCompleteClick = () => {
-        completeStandardTodo(todo_id, authTokens)
-            .then(response => {
-                addNotification(
-                    "Tutorial abgeschlossen",
-                    "success"
-                );
-                navigate("/");
-
-            }).catch(error => {
-                console.error("Error completing tutorial:", error);
-                addNotification(
-                    "Fehler ist im Tutorial aufgetreten abgeschlossen",
-                    "error"
-                );
-            });
+        if (finishedStatuses.includes(status) || action === ACTIONS.CLOSE) {
+            this.setState({ run: false });
+        }
     };
 
-    return (
-        <div>
-            <h1>Tutorial</h1>
+    startTour = () => {
+        this.setState({ run: true });
+    };
+
+    render() {
+        const { run, steps } = this.state;
+
+        return (
             <div>
-                <h2>Complete the Tutorial</h2>
-                <p>Press the button below to complete the tutorial.</p>
-                <button onClick={handleCompleteClick}>Complete Tutorial</button> {/* Add the onClick event listener */}
+                <Joyride
+                    continuous
+                    run={run}
+                    steps={steps}
+                    callback={this.handleJoyrideCallback}
+                    styles={{
+                        options: {
+                            zIndex: 1000,
+                        },
+                        buttonNext: {
+                            backgroundColor: 'var(--rosa)'
+                        },
+                        buttonBack: {
+                            color: 'var(--rosa)'
+                        }
+                    }}
+                    locale={{
+                        back: 'Zurück',
+                        close: 'Schließen',
+                        last: 'Fertig',
+                        next: 'Weiter',
+                        skip: 'Überspringen',
+                    }}
+                />
+                <button onClick={this.startTour}>Tour starten</button>
             </div>
-        </div>
-    );
-};
+        );
+    }
+}
 
 export default Tutorial;

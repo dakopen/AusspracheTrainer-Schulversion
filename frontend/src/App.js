@@ -42,6 +42,7 @@ import PronunciationTest from "./pages/PronunciationTest";
 import FinalQuestionnaire from "./pages/FinalQuestionnaire";
 import RequestPasswordReset from "./pages/RequestPasswordReset/RequestPasswordReset";
 import ForgotUsername from "./pages/ForgotUsername/ForgotUsername";
+import TutorialPage from "./pages/TutorialPage";
 
 function App() {
 	return (
@@ -144,7 +145,7 @@ function App() {
 									path="delete-account-confirm/:uidb64/:token/"
 								/>
 								<Route
-									element={<Tutorial />}
+									element={<TutorialPage />}
 									path="/tutorial/"
 								/>
 								<Route

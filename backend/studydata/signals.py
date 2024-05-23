@@ -69,4 +69,12 @@ def assign_sentences(sender, instance, created, **kwargs):
             StudySentencesCourseAssignment.objects.create(course=instance, sentence=sentence, location_value=i)
             i += 1
 
+        # add 4 tutorial sentences
+        tutorial_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences]).exclude(id__in=[sentence.id for sentence in final_test_sentences]).exclude(id__in=[sentence.id for sentence in train_sentences])[:4]
+        for sentence in tutorial_sentences:
+            StudySentencesCourseAssignment.objects.create(course=instance, sentence=sentence, location_value=i)
+            i += 1
+        
+
+
 

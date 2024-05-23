@@ -1,5 +1,4 @@
-#responsearea-scores {
-	display: none;
+#response-area-scores {
 	height: auto;
 	white-space: normal;
 	text-align: center;
@@ -10,6 +9,7 @@
 	padding-bottom: 0.2em;
 	background-color: var(--light-rosa);
 	font-size: smaller;
+	margin-bottom: 10px;
 }
 
 #responsearea {

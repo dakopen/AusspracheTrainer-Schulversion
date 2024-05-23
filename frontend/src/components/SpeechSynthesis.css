@@ -39,6 +39,9 @@
 
 .player-button {
 	all: unset;
+	display: flex; /* Enables flexbox */
+	justify-content: center; /* Centers content horizontally */
+	align-items: center; /* Centers content vertically */
 	background-color: var(--rosa);
 	color: var(--white);
 	border-radius: 50%;

@@ -126,7 +126,6 @@ const PronunciationTest = () => {
 			};
 		};
 		setCurrentSentenceIndex(index);
-
 	}
 
 	const debugCompleteAll = () => {
