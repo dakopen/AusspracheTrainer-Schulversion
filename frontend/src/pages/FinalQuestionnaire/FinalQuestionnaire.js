@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
-import AuthContext from "../context/AuthContext";
-import { UrlContext } from "../context/UrlContext";
-import { useNotification } from "../context/NotificationContext";
+import AuthContext from "../../context/AuthContext";
+import { UrlContext } from "../../context/UrlContext";
+import { useNotification } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
+import './FinalQuestionnaire.css';
 
 const FinalQuestionnaire = () => {
 	const [motivation, setMotivation] = useState(null);
@@ -81,40 +82,60 @@ const FinalQuestionnaire = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<label>
-				Wie viele Minuten hast du im Schnitt pro Woche deine Aussprache trainiert?:
-				<input
-					type="number"
-					value={weeklyTrainingMinutes || ""}
-					onChange={(e) => setweeklyTrainingMinutes(e.target.value)}
-					min="1"
-					max="1000"
-				/>
-			</label>
+		<>
+			<p className="data-notification">
+				Dies ist der finale Fragebogen. Alle angaben sind weiterhin freiwillig, helfen uns aber, die Effekte des Aussprachetrainings besser zu verstehen. Vielen Dank für deine Teilnahme!
+			</p>
+			<form onSubmit={handleSubmit} className="final-questionnaire-form-container">
+				<label className="final-questionnaire-form-input">
+					Wie viele Minuten hast du im Schnitt pro Woche deine Aussprache trainiert?:
+					<input
+						type="number"
+						value={weeklyTrainingMinutes || ""}
+						onChange={(e) => setweeklyTrainingMinutes(e.target.value)}
+						min="1"
+						max="1000"
+					/>
+				</label>
 
-			<label>
-				Wie glaubst du, haben sich deine Aussprachefähigkeiten verändert?
-				<input
-					type="range"
-					value={feelingOfImprovement || 5}
-					onChange={(e) => setFeelingOfImprovement(e.target.value)}
-					min="1"
-					max="10"
-				/>
-			</label>
-			<label>
-				Wie motiviert warst du, deine Aussprache zu verbessern?
-				<input
-					type="range"
-					value={motivation || 5}
-					onChange={(e) => setMotivation(e.target.value)}
-					min="1"
-					max="10"
-				/>
-			</label>
-			<button type="submit">Fragebogen abschicken</button>
-		</form>
+				<div className="final-questionnaire-form-input range-input">
+					<label>
+						Wie glaubst du, haben sich deine Aussprachefähigkeiten verändert?
+						<div className="range-labels">
+							<span>gar nicht verbessert</span>
+							<span>stark verbessert</span>
+						</div>
+						<input
+							type="range"
+							value={feelingOfImprovement || 5}
+							onChange={(e) => setFeelingOfImprovement(e.target.value)}
+							min="1"
+							max="10"
+						/>
+
+					</label>
+				</div>
+
+				<div className="final-questionnaire-form-input range-input">
+					<label>
+						Wie motiviert warst du, deine Aussprache zu verbessern?
+						<div className="range-labels">
+							<span>wenig motiviert</span>
+							<span>sehr motiviert</span>
+						</div>
+						<input
+							type="range"
+							value={motivation || 5}
+							onChange={(e) => setMotivation(e.target.value)}
+							min="1"
+							max="10"
+						/>
+					</label>
+				</div>
+
+				<button type="submit" className="submit-button">Fragebogen abschicken</button>
+			</form>
+		</>
 	);
 };
 

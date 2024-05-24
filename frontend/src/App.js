@@ -39,7 +39,7 @@ import EmailQuestionnaire from "./pages/EmailQuestionnaire/EmailQuestionnaire";
 import "./App.css";
 import Tutorial from "./pages/Tutorial";
 import PronunciationTest from "./pages/PronunciationTest";
-import FinalQuestionnaire from "./pages/FinalQuestionnaire";
+import FinalQuestionnaire from "./pages/FinalQuestionnaire/FinalQuestionnaire";
 import RequestPasswordReset from "./pages/RequestPasswordReset/RequestPasswordReset";
 import ForgotUsername from "./pages/ForgotUsername/ForgotUsername";
 import TutorialPage from "./pages/TutorialPage";

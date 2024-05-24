@@ -1,4 +1,5 @@
-.form-container {
+/* General Form Container Styling */
+.final-questionnaire-form-container {
 	max-width: 800px;
 	margin: 20px auto;
 	padding: 20px;
@@ -8,14 +9,15 @@
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-input {
+/* Input and Label Grouping */
+.final-questionnaire-form-input {
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 20px;
 }
 
-.form-input input,
-.form-input select {
+.final-questionnaire-form-input input,
+.final-questionnaire-form-input select {
 	padding: 8px 10px;
 	margin-top: 8px;
 	border: 2px solid var(--lila);
@@ -23,6 +25,7 @@
 	font-size: 16px;
 }
 
+/* Button Specific Styling */
 .submit-button {
 	padding: 8px 16px;
 	background-color: var(--rosa);
@@ -36,24 +39,20 @@
 	font-size: 18px;
 }
 
-/* color the slider in rosa*/
-
+/* Button Hover Effect */
 .submit-button:hover {
 	background-color: var(--lila);
 }
 
-.form-input label::after {
-	content: " *";
-	color: var(--red);
-}
-
-.form-input input:focus,
-.form-input select:focus {
+/* Focus Effect on Inputs */
+.final-questionnaire-form-input input:focus,
+.final-questionnaire-form-input select:focus {
 	outline: none;
 	border-color: var(--lila);
 	box-shadow: 0 0 10px var(--rosa);
 }
 
+/* Notification Styling */
 .data-notification {
 	max-width: 800px;
 	margin: 20px auto;
@@ -67,12 +66,9 @@
 	text-align: justify;
 }
 
+/* Range Input Specific Styling */
 .range-input {
 	position: relative;
-}
-
-.range-input input[type="range"] {
-	width: calc(100% - 20px);
 }
 
 .range-labels {
