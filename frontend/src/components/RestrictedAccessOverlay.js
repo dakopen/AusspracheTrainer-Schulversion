@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
-const RestrictedAccessOverlay = () => {
+const RestrictedAccessOverlay = (isTest) => {
     const overlayStyle = {
         position: 'absolute',
         top: 0,
@@ -30,9 +30,11 @@ const RestrictedAccessOverlay = () => {
     return (
         <div style={overlayStyle}>
             <FontAwesomeIcon icon={faCheck} size="xl" />
-            <div style={textStyle}>
+            {isTest ? <div style={textStyle}>
+                Dein Ergebnis wurde gespeichert. <br></br>Du erhälst erst am Ende der Studie Rückmeldung zu deinem Testergebnis.
+            </div> : <div style={textStyle}>
                 Dein Ergebnis wurde gespeichert. <br></br>Da du zur Kontrollgruppe gehörst, erhälst du erst am Ende der Studie eine Rückmeldung.
-            </div>
+            </div>}
         </div>
     );
 };

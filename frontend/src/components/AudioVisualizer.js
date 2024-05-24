@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import RestrictedAccessOverlay from './RestrictedAccessOverlay';
 
-const AudioVisualizer = ({ result, setResult }) => {
+const AudioVisualizer = ({ result, setResult, isTest }) => {
     const { user } = useContext(AuthContext);
 
     const { isRecording, audioContext, recordingState, source, audioBlob, starttimeRecording, endtimeRecording } = useAudioRecording(); // Get necessary items from context
@@ -100,7 +100,7 @@ const AudioVisualizer = ({ result, setResult }) => {
             }
             resizeAndCopyCanvasContent();
 
-            if (user.full_access_group === true) showReplayButtonAndReplayLine();
+            if (user.full_access_group === true && !isTest) showReplayButtonAndReplayLine();
         }
     }, [recordingState]);
 
@@ -334,7 +334,7 @@ const AudioVisualizer = ({ result, setResult }) => {
         mainCanvas.parentElement.appendChild(overlayDiv);
 
         // Render the React component into the overlay div
-        ReactDOM.render(<RestrictedAccessOverlay />, overlayDiv);
+        ReactDOM.render(<RestrictedAccessOverlay isTest={isTest} />, overlayDiv);
     };
 
 
@@ -350,7 +350,7 @@ const AudioVisualizer = ({ result, setResult }) => {
         }
         if (result && result[1] && result[1].length > 0) {
             console.log("COLORING CANVAS")
-            if (user.full_access_group === true) {
+            if (user.full_access_group === true && !isTest) {
                 colorCanvas(result[1]);
             } else {
                 restrictedAccessCanvas();
@@ -434,7 +434,7 @@ const AudioVisualizer = ({ result, setResult }) => {
                 <div id="replay-line" ref={replayLineRef}></div>
 
             </div>
-            {result && (user.full_access_group === true) && <DisplayResult result={result} jumpToWaveformTimestamp={jumpToWaveformTimestamp} />}
+            {result && (user.full_access_group === true) && !isTest && <DisplayResult result={result} jumpToWaveformTimestamp={jumpToWaveformTimestamp} />}
 
         </>
     );

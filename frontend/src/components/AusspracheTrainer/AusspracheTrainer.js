@@ -65,7 +65,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
             <br></br>
             {console.log("sentence Id: ", sentenceId)}
             <AudioRecordingProvider sentenceId={sentenceId} onComplete={onComplete} setTaskId={setTaskId}>
-                <AudioVisualizer result={result} setResult={setResult} />
+                <AudioVisualizer result={result} setResult={setResult} isTest={isTest}/>
                 <br></br>
                 <RecordingButton pollCompleted={pollCompleted} resetRef={resetRef} />
             </AudioRecordingProvider>
@@ -77,7 +77,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
             <div className='buttons-below-aussprachetrainer'>
                 <button className='hidden'>{allSentencesComplete ? `${isTest ? "Test" : "Übung"} abschließen` : "Nächster Satz"}</button> {/* Button to proceed to the next sentence */}
                 {!isTest && <button onClick={reset} className={pollCompleted ? "repeat-training-button" : "hidden repeat-training-button"}>
-                    <FontAwesomeIcon icon={faRedo} size="xs" /> Erneut üben</button>} {console.log(isTest, "isTest")}
+                    <FontAwesomeIcon icon={faRedo} size="xs" /> Erneut üben</button>}
                 <button onClick={onNextSentence} className='next-sentence-or-finish'>{allSentencesComplete ? `${isTest ? "Test" : "Übung"} abschließen` : "Nächster Satz"}</button> {/* Button to proceed to the next sentence */}
             </div>
         </div>

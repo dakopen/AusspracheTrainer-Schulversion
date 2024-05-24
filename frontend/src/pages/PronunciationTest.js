@@ -15,6 +15,7 @@ const PronunciationTest = () => {
 	const [error, setError] = useState(null);
 	const { addNotification } = useNotification();
 	const [todo_id, setTodo_id] = useState(-1);
+	const [firstTimeLoading, setFirstTimeLoading] = useState(true);
 	let navigate = useNavigate();
 
 
@@ -72,8 +73,8 @@ const PronunciationTest = () => {
 
 	useEffect(() => {
 		if (!sentences[0]) return;
-		if (sentences[0].is_completed) {
-			console.log("First sentence is already completed")
+		if (firstTimeLoading && sentences[0].is_completed) {
+			setFirstTimeLoading(false);
 			handleNextSentence();
 		}
 	}, [sentences]);
@@ -123,6 +124,7 @@ const PronunciationTest = () => {
 		if (todo_id == 4 || todo_id == 12) {
 			if (sentences[index].is_completed) {
 				alert("Du hast diesen Satz bereits abgeschlossen.");
+				return;
 			};
 		};
 		setCurrentSentenceIndex(index);
