@@ -5,48 +5,48 @@ class Tutorial extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            run: false,
-            steps: [
-                {
-                    target: '#textarea',
-                    content: 'Den Satz, der in diesem Textfeld steht sollst du vorlesen.',
-                    placement: 'top',
-                },
-                {
-                    target: '.player-button',
-                    content: 'Wenn du dir erstmal die korrekte Aussprache anhören möchtest, drücke auf diesen Button.',
-                    placement: 'top',
-                    spotlightClicks: true,
-                },
-                {
-                    target: '.recording-button-container',
-                    content: 'Drücke diesen Button und lese den Satz vor. Drücke ihn erneut, um die Aufnahme zu beenden.',
-                    placement: 'bottom',
-                    title: 'Jetzt bist du dran',
-                    spotlightClicks: true,
-                    disableOverlay: true,
-                    styles: {
-                        tooltip: {
-                            marginTop: -10,
-                        },
-                    },
-                }
-            ],
+            run: this.props.run || false,
+            steps: this.props.steps || []  // Ensure there are default steps or it starts empty
         };
     }
 
-    
+    componentDidUpdate(prevProps) {
+        // stop the tour if its running
+
+        // Start the tour if steps are updated
+        if (this.props.steps !== prevProps.steps) {
+            this.handleJoyrideCallback({ status: STATUS.FINISHED });
+
+            this.setState({
+
+                run: true,
+                steps: this.props.steps  // Update steps dynamically
+            });
+        }
+        if (this.props.run !== prevProps.run) {
+            this.setState({
+                run: this.props.run,
+            });
+        }
+
+        if (this.props.startTour !== prevProps.startTour) {
+            console.log("startTour", this.props.startTour, this.props.steps)
+            this.setState({
+                run: this.props.startTour,
+            });
+        }
+    }
+
     handleJoyrideCallback = (data) => {
         const { status, action } = data;
         const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
 
         if (finishedStatuses.includes(status) || action === ACTIONS.CLOSE) {
             this.setState({ run: false });
+            if (this.props.onTourComplete) {
+                this.props.onTourComplete();
+            }
         }
-    };
-
-    startTour = () => {
-        this.setState({ run: true });
     };
 
     render() {
@@ -78,7 +78,6 @@ class Tutorial extends Component {
                         skip: 'Überspringen',
                     }}
                 />
-                <button onClick={this.startTour}>Tour starten</button>
             </div>
         );
     }

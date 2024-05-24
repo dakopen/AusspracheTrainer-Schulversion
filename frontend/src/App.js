@@ -145,7 +145,7 @@ function App() {
 									path="delete-account-confirm/:uidb64/:token/"
 								/>
 								<Route
-									element={<TutorialPage />}
+									element={<StudentRoute element={TutorialPage} />}
 									path="/tutorial/"
 								/>
 								<Route
