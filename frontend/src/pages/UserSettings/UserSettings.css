@@ -1,0 +1,49 @@
+/* Style for the user settings page */
+.user-settings-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	max-width: 600px; /* Adjust based on your layout needs */
+	margin: 30px auto;
+	background-color: var(--white-rosa);
+	border-radius: 8px;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.user-settings-title {
+	color: var(--lila);
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+
+.account-management-section {
+	width: 100%;
+}
+
+.account-management-title {
+	color: var(--lila);
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+
+.account-management-description {
+	font-size: 16px;
+	color: var(--black);
+	margin-bottom: 20px;
+}
+
+.change-username-section,
+.delete-account-section {
+	background-color: var(--light-rosa);
+	border: 1px solid var(--rosa);
+	padding: 20px;
+	border-radius: 8px;
+	margin-bottom: 20px;
+}
+
+.section-title {
+	font-size: 18px;
+	color: var(--lila);
+	margin-bottom: 10px;
+}

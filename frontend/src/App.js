@@ -29,7 +29,7 @@ import ShowSchool from "./pages/ShowSchool";
 import Courses from "./pages/Courses/Courses";
 import ShowCourse from "./pages/ShowCourse/ShowCourse";
 import StudySentences from "./pages/StudySentences";
-import UserSettings from "./pages/UserSettings";
+import UserSettings from "./pages/UserSettings/UserSettings";
 import SentenceDisplay from "./pages/SentenceDisplay";
 import DeleteAccountConfirm from "./components/DeleteAccountConfirm";
 
