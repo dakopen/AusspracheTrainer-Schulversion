@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.validators import RegexValidator
 from rest_framework import serializers
 
-from .models import Course, School
+from .models import Course, School, ChangedUsernames
 
 import random
 import string
@@ -117,3 +117,9 @@ class UserEmailSerializer(serializers.ModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.save()
         return instance
+    
+
+class ChangedUsernamesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChangedUsernames
+        fields = ['user', 'old_username', 'new_username', 'created_at']

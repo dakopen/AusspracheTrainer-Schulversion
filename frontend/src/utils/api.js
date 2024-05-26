@@ -140,6 +140,33 @@ export const fetchStudentsByCourse = async (authTokens, courseId) => {
 	}
 };
 
+export const fetchChangedUsernamesByCourse = async (authTokens, courseId) => {
+	try {
+		const response = await fetch(
+			`${ACCOUNT_BASE_URL}/courses/${courseId}/changed_usernames/`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch changed usernames");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching changed usernames:", error);
+		throw error;
+	}
+};
+
+
 export const updateCourseField = async (authTokens, courseId, data) => {
 	try {
 		const response = await fetch(

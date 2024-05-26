@@ -70,3 +70,9 @@ class User(AbstractUser):
 
     REQUIRED_FIELDS = []
 
+
+class ChangedUsernames(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    old_username =  models.EmailField('E-Mail Adresse', validators=[EmailValidator()])
+    new_username =  models.EmailField('E-Mail Adresse', validators=[EmailValidator()])
+    created_at = models.DateTimeField(auto_now_add=True)

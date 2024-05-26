@@ -18,8 +18,8 @@ from datetime import date
 from django.db import connection
 
 from .utils import generate_random_username
-from .models import School, Course
-from .serializers import UserEmailSerializer, UserSerializer, SchoolSerializer, CourseSerializer
+from .models import School, Course, ChangedUsernames
+from .serializers import UserEmailSerializer, UserSerializer, SchoolSerializer, CourseSerializer, ChangedUsernamesSerializer
 from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsSecretaryOrAdmin, \
                         IsTeacher, IsTeacherOrAdmin, IsTeacherOrSecretaryOrAdmin, IsStudystudent
 
@@ -379,13 +379,21 @@ class ChangeUsernameView(APIView):
 
     def post(self, request):
         user = request.user
+        old_username = user.username
         new_username = generate_random_username()
 
         # Update the username in the database
         user.username = f"{new_username}@studie.aussprachetrainer.org"
         user.set_password(new_username)
-        
+
+
         user.save(update_fields=['username', 'password'])
+
+        ChangedUsernames.objects.create(
+            user=user,
+            old_username=old_username,
+            new_username=user.username,
+        )
 
         # Send an email with the new username
         if user.email:
@@ -394,7 +402,7 @@ class ChangeUsernameView(APIView):
                 message=f"Hallo, dein neuer Benutzername für die Studie lautet: {new_username}",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[user.email],
-                fail_silently=False,
+                fail_silently=True,
             )
 
         return Response({"message": f"Dein Benutzername wurde geändert zu {new_username}."}, status=status.HTTP_200_OK)
@@ -476,3 +484,25 @@ class ForgotUsernameView(APIView):
             return Response({'message': 'Dein Benutzername wurde an die hinterlegte Email Adresse gesendet.'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'error': 'Keinen Account mit dieser Mail gefunden.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CourseChangedUsernamesView(APIView):
+    permission_classes = [IsTeacherOrSecretaryOrAdmin]
+
+    def get(self, request, course_id):
+        try:
+            course = Course.objects.get(id=course_id)
+            if not course:
+                return Response({'message': 'Course not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+            user = self.request.user
+            if not (user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user) or (user.role == User.SECRETARY and course.teacher.school == user.school)):
+                raise PermissionDenied({'message': 'Du hast nicht die Berechtigung, Schüler zu diesem Kurs hinzuzufügen.'})
+            
+        except Course.DoesNotExist:
+            return Response({"error": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        changed_usernames = ChangedUsernames.objects.filter(user__belongs_to_course=course)
+        serializer = ChangedUsernamesSerializer(changed_usernames, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)

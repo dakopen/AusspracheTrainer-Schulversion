@@ -30,7 +30,7 @@ const DeleteAccount = () => {
             if (response.ok) {
                 setMessage("Ein Bestätigungslink wurde an deine E-Mail gesendet. Bitte bestätige die Löschung deines Kontos in deiner E-Mail.");
             } else {
-                throw new Error(data.detail || "An error occurred while requesting account deletion.");
+                throw new Error(data.detail || "Bei der Beantragung der Kontolöschung ist ein Fehler aufgetreten. Wahrscheinlich ist die Mail Adresse ungültig. Bitte melde dich per Mail an Daniel Busch (kontakt@aussprachetrainer.org).");
             }
         } catch (error) {
             setMessage(error.message);

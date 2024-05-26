@@ -28,12 +28,12 @@ const ChangeUsername = () => {
 
             const data = await response.json();
             if (response.ok) {
-                setMessage(`Dein neuer Benutzname lautet: ${data.message}`);
+                setMessage(`${data.message}`);
             } else {
-                throw new Error(data.detail || "An error occurred while updating your username.");
+                throw new Error(data.detail || "Ein Fehler ist aufgetreten (wahrscheinlich ungültige Mail Adresse).");
             }
         } catch (error) {
-            setMessage(error.message);
+            setMessage("Ein Fehler ist aufgetreten (wahrscheinlich ungültige Mail Adresse).");
             console.error(error);
         } finally {
             setLoading(false);
