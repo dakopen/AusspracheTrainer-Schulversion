@@ -296,7 +296,7 @@ class RetrieveStudySentencesByCourseAndLocationWithScore(APIView):
             location_value__range=(int(start_location), int(end_location))
         ).select_related('sentence')
 
-        results = {'sentences': []}
+        results = {'sentences': [], 'language': course.language}
         for sentence in sentences:
             sentence = sentence.sentence
             words = sentence.sentence.split()

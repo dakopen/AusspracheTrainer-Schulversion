@@ -7,6 +7,7 @@ function SentenceDisplay() {
     const { courseId, todoId } = useParams();
     const { authTokens } = useContext(AuthContext);
     const [sentenceData, setSentenceData] = useState([]);
+    const [language, setLanguage] = useState('en-GB');
 
     useEffect(() => {
         const fetchSentences = async () => {
@@ -27,6 +28,11 @@ function SentenceDisplay() {
             try {
                 const data = await fetchAverageScoresByCourseAndSentence(courseId, startLocation, endLocation, authTokens);
                 setSentenceData(data.sentences);
+                if (data.language == 1) {
+                    setLanguage('en-GB');
+                } else {
+                    setLanguage('fr-FR');
+                }
             } catch (error) {
                 console.error('Error fetching sentence scores:', error);
                 alert('Failed to fetch sentence scores.');
@@ -81,6 +87,12 @@ function SentenceDisplay() {
                                     {wordScore.word}{idx < item.scores.length - 1 ? ' ' : ''}
                                 </span>
                             ))}
+                            &nbsp;&nbsp;
+                            <a href={`https://www.aussprachetrainer.org/de/?text=${encodeURIComponent(item.sentence_text)}&language=${language}`} target="_blank" rel="noopener">
+                                <button>
+                                    Selber üben
+                                </button>
+                            </a>
                         </p>
                     </div>
                 ))
