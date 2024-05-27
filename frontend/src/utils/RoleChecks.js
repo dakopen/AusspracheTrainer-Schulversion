@@ -15,6 +15,8 @@ const isSecretaryOrAdmin = (user) => isSecretary(user) || isAdmin(user);
 const isTeacherOrSecretaryOrAdmin = (user) =>
 	isTeacher(user) || isSecretary(user) || isAdmin(user);
 
+const isNotLoggedIn = (user) => !user;
+
 export {
 	isTeacher,
 	isSecretary,
@@ -24,4 +26,5 @@ export {
 	isTeacherOrAdmin,
 	isSecretaryOrAdmin,
 	isTeacherOrSecretaryOrAdmin,
+	isNotLoggedIn,
 };

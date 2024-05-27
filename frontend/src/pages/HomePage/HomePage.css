@@ -1,0 +1,153 @@
+.center-container-no-background {
+	width: 90%;
+	max-width: 500px;
+	margin: 40px auto;
+	padding: 20px;
+	text-align: center;
+}
+
+.dropdown-files-container {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+.dropdown-files {
+	display: flex;
+	font-size: medium;
+	width: 100%;
+	align-items: center;
+	padding: 8px;
+}
+
+.line-files {
+	flex-grow: 1;
+	height: 1px;
+	background-color: var(--black);
+}
+
+.text-files {
+	margin-left: 8px;
+	margin-right: 4px;
+	color: var(--black);
+}
+
+.dropdown-icon-files {
+	margin-right: 8px;
+	transition: transform 0.3s ease-in-out;
+}
+
+/* Optional: Add a hover effect for the dropdown text and arrow */
+.dropdown-files:hover .text-files,
+.dropdown-files:hover .dropdown-icon-files {
+	color: var(--lila);
+}
+.icon-container {
+	display: flex;
+	justify-content: space-around;
+	align-items: start; /* Align items to the start of the container */
+	font-size: small;
+	background-color: var(--white-rosa);
+	padding-top: 10px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+}
+
+.icon-wrapper {
+	flex: 1; /* Allows the wrapper to grow and fill the container */
+	text-align: center; /* Ensures text is centered under the icon */
+	display: flex;
+	flex-direction: column; /* Stacks icon and text vertically */
+	align-items: center; /* Aligns items (icon and text) in the center horizontally */
+	padding: 0 10px; /* Adds some padding on the sides */
+}
+
+.icon {
+	width: 40px; /* Fixed width for the icon */
+	height: 40px; /* Fixed height to maintain a circle */
+	border-radius: 50%; /* Keeps it round */
+	padding: 10px;
+	font-size: 20px; /* Icon size */
+	background-color: var(--lila); /* Icon background color */
+	color: var(--white); /* Icon color */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 5px; /* Space between the icon and the text */
+}
+
+.icon-inactive {
+	background-color: var(--rosa) !important; /* Grau für inaktive Icons */
+}
+
+.info-text {
+	margin-top: 10px;
+	font-size: small;
+	text-align: justify;
+}
+
+.icon-wrapper p {
+	white-space: normal;
+	word-wrap: break-word;
+	margin-bottom: 10px;
+}
+
+.dropdown-rotate {
+	transform: rotate(90deg);
+}
+
+.inactive {
+	display: none;
+}
+
+.school-form form {
+	display: flex;
+	flex-direction: column;
+	width: 98%;
+	margin: 0 auto;
+}
+
+.school-form label {
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+.school-form input[type="text"],
+.school-form input[type="email"],
+.school-form textarea {
+	font-family: "Montserrat";
+	width: 98%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 5px; /* Rounded corners for input fields */
+	border: 1px solid #ccc; /* Light gray border */
+	box-sizing: border-box; /* Include padding and border in the element's total width and height */
+	max-width: 98%;
+	min-width: 98%;
+}
+
+.school-form input[type="submit"] {
+	background-color: var(--lila); /* Purple background for the submit button */
+	color: var(--white);
+	padding: 10px;
+	border: none;
+	border-radius: 5px; /* Rounded corners for the button */
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	width: 98%;
+}
+
+.school-form input[type="submit"]:hover {
+	background-color: var(--rosa); /* Lighter purple on hover */
+}
+
+.school-form label.form-required::after {
+	content: " *";
+	color: var(--darkred);
+}
+
+.submit-error {
+	color: var(--darkred);
+	font-size: small;
+	margin-top: 10px;
+}
