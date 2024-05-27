@@ -17,6 +17,7 @@ const PronunciationTest = () => {
 	const [todo_id, setTodo_id] = useState(-1);
 	const [firstTimeLoading, setFirstTimeLoading] = useState(true);
 	let navigate = useNavigate();
+	const [allowOneTimeRepeat, setAllowOneTimeRepeat] = useState(false);
 
 
 	useEffect(() => {
@@ -86,6 +87,7 @@ const PronunciationTest = () => {
 	if (error) return <div>Error: {error.message}</div>;
 
 	const handleNextSentence = () => {
+		setAllowOneTimeRepeat(false);
 		console.log("Handling next sentence")
 		// Find the next incomplete sentence starting from the sentence after the current one
 		const nextIndex = sentences.findIndex((sentence, index) => index > currentSentenceIndex && !sentence.is_completed);
@@ -120,6 +122,8 @@ const PronunciationTest = () => {
 		);
 		console.log(sentences, updatedSentences)
 		setSentences(updatedSentences);
+		setAllowOneTimeRepeat(false);
+
 	};
 
 	const handleSentenceClick = index => {
@@ -130,6 +134,7 @@ const PronunciationTest = () => {
 			};
 		};
 		setCurrentSentenceIndex(index);
+		setAllowOneTimeRepeat(false);
 	}
 
 	const debugCompleteAll = () => {
@@ -137,6 +142,11 @@ const PronunciationTest = () => {
 	};
 
 	const currentSentence = sentences[currentSentenceIndex];
+
+	const audioNotRight = () => {
+		addNotification("Es gab Probleme bei der Analyse der Audio. Bitte überprüfe dein Mikrofon.", "error");
+		setAllowOneTimeRepeat(true);
+	}
 
 
 
@@ -154,6 +164,9 @@ const PronunciationTest = () => {
 					onComplete={markSentenceAsCompleted}
 					isTest={todo_id == 4 || todo_id == 12}
 					allSentencesComplete={sentences.every(sentence => sentence.is_completed)}
+					onAudioNotRight={audioNotRight}
+					allowOneTimeRepeat={allowOneTimeRepeat}
+
 				/>
 			) : (
 				<div>No sentences found</div>

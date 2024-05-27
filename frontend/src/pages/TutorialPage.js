@@ -19,6 +19,9 @@ const TutorialPage = () => {
     const [startTour, setStartTour] = useState(true);
     const [initiallyStartTour, setInitiallyStartTour] = useState(false);
     const [runTour, setRunTour] = useState(true);
+    const [firstTimeLoading, setFirstTimeLoading] = useState(true);
+    const [allowOneTimeRepeat, setAllowOneTimeRepeat] = useState(false);
+
     const [tourSteps, setTourSteps] = useState([
         {
             target: '#textarea',
@@ -83,6 +86,7 @@ const TutorialPage = () => {
     }, []);
 
     const handleNextSentence = () => {
+        setAllowOneTimeRepeat(false);
         console.log("Handling next sentence")
         // Find the next incomplete sentence starting from the sentence after the current one
         const nextIndex = sentences.findIndex((sentence, index) => index > currentSentenceIndex && !sentence.is_completed);
@@ -112,6 +116,15 @@ const TutorialPage = () => {
     };
 
 
+    useEffect(() => {
+        if (!sentences[0]) return;
+        if (firstTimeLoading && sentences[0].is_completed) {
+            setFirstTimeLoading(false);
+            handleNextSentence();
+        } else if (firstTimeLoading) {
+            setFirstTimeLoading(false);
+        }
+    }, [sentences]);
 
     const generateTourSteps = () => {
         return [
@@ -155,6 +168,7 @@ const TutorialPage = () => {
             sentence.sentence === sentenceId ? { ...sentence, is_completed: true } : sentence
         );
         console.log(sentences, updatedSentences)
+        allowOneTimeRepeat(false);
         setRunTour(false);
         setSentences(updatedSentences);
 
@@ -172,6 +186,7 @@ const TutorialPage = () => {
             };
         };
         setCurrentSentenceIndex(index);
+        setAllowOneTimeRepeat(false);
     }
 
     const debugCompleteAll = () => {
@@ -188,7 +203,10 @@ const TutorialPage = () => {
 
 
 
-
+    const audioNotRight = () => {
+        addNotification("Es gab Probleme bei der Analyse der Audio. Bitte überprüfe dein Mikrofon.", "error");
+        setAllowOneTimeRepeat(true);
+    }
 
     return (
         <div style={{ zIndex: 0, position: "relative" }}>
@@ -204,6 +222,8 @@ const TutorialPage = () => {
                     onComplete={markSentenceAsCompleted}
                     isTest={todo_id == 4 || todo_id == 12}
                     allSentencesComplete={sentences.every(sentence => sentence.is_completed)}
+                    onAudioNotRight={audioNotRight}
+                    allowOneTimeRepeat={allowOneTimeRepeat}
                 />
             ) : (
                 <div>No sentences found</div>
