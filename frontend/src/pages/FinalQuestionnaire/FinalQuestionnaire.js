@@ -4,6 +4,7 @@ import { UrlContext } from "../../context/UrlContext";
 import { useNotification } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
 import './FinalQuestionnaire.css';
+import { triggerAnalysis } from "../../utils/api";
 
 const FinalQuestionnaire = () => {
 	const [motivation, setMotivation] = useState(null);
@@ -32,6 +33,8 @@ const FinalQuestionnaire = () => {
 				return; // Early return if the user cancels
 			}
 		}
+		// triggers re-analysis of the test-sentences if the user submits the final questionnaire
+		triggerAnalysis(authTokens);
 
 		const payload = {
 			motivation: motivation || null,

@@ -127,7 +127,7 @@
 }
 
 .school-form input[type="submit"] {
-	background-color: var(--lila); /* Purple background for the submit button */
+	background-color: var(--rosa);
 	color: var(--white);
 	padding: 10px;
 	border: none;
@@ -138,7 +138,7 @@
 }
 
 .school-form input[type="submit"]:hover {
-	background-color: var(--rosa); /* Lighter purple on hover */
+	background-color: var(--lila);
 }
 
 .school-form label.form-required::after {

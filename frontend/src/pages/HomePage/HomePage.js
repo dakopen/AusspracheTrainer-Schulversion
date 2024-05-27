@@ -21,32 +21,34 @@ const HomePage = () => {
 	const [activeInfoIndex, setActiveInfoIndex] = useState(1);
 
 	useEffect(() => {
-		const form = document.getElementById("schoolForm");
+		if (isNotLoggedIn(user)) {
+			const form = document.getElementById("schoolForm");
 
-		const handleSubmit = async (e) => {
-			e.preventDefault();
+			const handleSubmit = async (e) => {
+				e.preventDefault();
 
-			const response = await fetch("https://formspree.io/f/mrgnybzv", {
-				method: 'POST',
-				body: new FormData(form),
-				headers: {
-					'Accept': 'application/json'
+				const response = await fetch("https://formspree.io/f/mrgnybzv", {
+					method: 'POST',
+					body: new FormData(form),
+					headers: {
+						'Accept': 'application/json'
+					}
+				});
+
+				if (response.ok) {
+					form.reset();
+					alert("Erfolg! Ihre Nachricht wurde gesendet.");
+				} else {
+					alert("Es gab einen Fehler beim Senden Ihrer Nachricht. Bitte versuchen Sie es später erneut.");
 				}
-			});
+			};
 
-			if (response.ok) {
-				form.reset();
-				alert("Erfolg! Ihre Nachricht wurde gesendet.");
-			} else {
-				alert("Es gab einen Fehler beim Senden Ihrer Nachricht. Bitte versuchen Sie es später erneut.");
-			}
-		};
-
-		form.addEventListener('submit', handleSubmit);
-		return () => {
-			form.removeEventListener('submit', handleSubmit);
-		};
-	}, []);
+			form.addEventListener('submit', handleSubmit);
+			return () => {
+				form.removeEventListener('submit', handleSubmit);
+			};
+		}
+	}, [user]);
 
 	const handleDropdownClick = () => {
 		setIsAdditionalInfoVisible(prevState => !prevState);

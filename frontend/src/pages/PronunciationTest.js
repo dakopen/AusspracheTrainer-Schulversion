@@ -76,6 +76,8 @@ const PronunciationTest = () => {
 		if (firstTimeLoading && sentences[0].is_completed) {
 			setFirstTimeLoading(false);
 			handleNextSentence();
+		} else if (firstTimeLoading) {
+			setFirstTimeLoading(false);
 		}
 	}, [sentences]);
 
