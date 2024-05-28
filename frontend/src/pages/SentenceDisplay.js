@@ -28,6 +28,7 @@ function SentenceDisplay() {
             try {
                 const data = await fetchAverageScoresByCourseAndSentence(courseId, startLocation, endLocation, authTokens);
                 setSentenceData(data.sentences);
+                console.log(data, "LANGGGG")
                 if (data.language == 1) {
                     setLanguage('en-GB');
                 } else {

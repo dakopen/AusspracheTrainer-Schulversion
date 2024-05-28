@@ -266,6 +266,7 @@ class SentenceScoreSerializer(serializers.Serializer):
 
 class AverageScoreSerializer(serializers.Serializer):
     sentences = SentenceScoreSerializer(many=True)
+    language = serializers.IntegerField()
 
     def to_representation(self, instance):
         # Custom representation to handle nested data
