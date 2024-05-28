@@ -33,7 +33,8 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id):
     if not json_response:
         json_response = ["No response from the API"]
 
-
+    if not result:
+        return ["No result from the API"]
         
     user = User.objects.get(id=user_id) if user_id is not None else None
 
@@ -46,13 +47,15 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id):
             sentence=StudySentences.objects.get(id=sentence_id),
             recognized_sentence=" ".join(result["RecognizedWords"]),
             language=language,
-            full_result=json_response,
+            json_response=json_response,
+            json_result=result,
         )
     except:  # the API format has likely changed
         PronunciationAssessmentResult.objects.create(
             user=user,
             language=language,
-            full_result=json_response,
+            json_response=json_response,
+            json_result=result,
         )
 
     if result and result["Words"]:

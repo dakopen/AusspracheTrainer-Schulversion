@@ -176,7 +176,7 @@ const ShowCourse = () => {
 					</div>
 
 					<p><strong>Sprache:</strong> {course.language === 1 ? "Englisch" : "Französisch"}</p>
-					<CourseStudents />
+					<CourseStudents courseName={name}/>
 					<br></br>
 
 					<div className="show-course-detail">

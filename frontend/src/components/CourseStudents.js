@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { UrlContext } from "../context/UrlContext";
 import { useNotification } from "../context/NotificationContext";
-import { fetchStudentsByCourse, fetchChangedUsernamesByCourse } from "../utils/api";
+import { fetchStudentsByCourse, fetchChangedUsernamesByCourse, generateUsernamesPDF } from "../utils/api";
 import CreateBulkStudents from "./CreateBulkStudents";
 
-const CourseStudents = () => {
+const CourseStudents = ({ courseName }) => {
 	const { courseId } = useParams();
 	const [students, setStudents] = useState([]);
 	const { authTokens } = useContext(AuthContext);
@@ -46,6 +46,35 @@ const CourseStudents = () => {
 		}
 	}
 
+	function sanitizeFilename(name) {
+		// Regular expression for characters allowed in filenames
+		const allowedChars = /^[a-zA-Z0-9._-]+$/;
+		name = name.replace(" ", "_");
+		// Filter the input string, keeping only allowed characters
+		const filteredName = name.replace(/[^a-zA-Z0-9._-]/g, "");
+
+		// If the filtered name is empty, use a default
+		return filteredName.length > 0 ? filteredName : "";
+	}
+
+	const handleDownloadPDF = async () => {
+		try {
+			const url = await generateUsernamesPDF(authTokens, courseId);
+			if (url.error) {
+				throw new Error('Failed to generate PDF');
+			}
+			const link = document.createElement('a');
+			link.href = url;
+			link.download = `${sanitizeFilename(courseName)}_Zugangsdaten_Schueler.pdf`;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		} catch (error) {
+			console.error("Error generating PDF:", error);
+			addNotification("Es ist ein Fehler beim Generieren aufgetreten.", "error");
+		}
+	};
+
 	return (
 		<div>
 			<h4>Schüler:innen Accounts: {students.length}</h4>
@@ -58,6 +87,8 @@ const CourseStudents = () => {
 							</li>
 						))}
 					</ul>
+					<button onClick={handleDownloadPDF}>Zugangsdaten als PDF herunterladen</button>
+					<CreateBulkStudents refreshStudents={refreshCourseStudents} />
 					{changedStudentNames.length > 0 &&
 						<>
 							<h4> Geänderte Benutzernamen:</h4>
@@ -74,10 +105,13 @@ const CourseStudents = () => {
 					}
 				</>
 			) : (
-				<p>Bisher keine Schüleraccounts hinzugefügt.</p>
+				<>
+					<p>Bisher keine Schüleraccounts hinzugefügt.</p>
+					<CreateBulkStudents refreshStudents={refreshCourseStudents} />
+				</>
 			)
 			}
-			<CreateBulkStudents refreshStudents={refreshCourseStudents} />
+
 		</div >
 	);
 };

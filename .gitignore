@@ -65,3 +65,5 @@ tmp_email/
 media/
 
 *.rdb
+
+*.pdf

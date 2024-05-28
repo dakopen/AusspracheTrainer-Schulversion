@@ -17,7 +17,7 @@ from backend import settings
 from datetime import date
 from django.db import connection
 
-from .utils import generate_random_username
+from .utils import generate_random_username, create_pdf_for_usernames
 from .models import School, Course, ChangedUsernames
 from .serializers import UserEmailSerializer, UserSerializer, SchoolSerializer, CourseSerializer, ChangedUsernamesSerializer
 from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsSecretaryOrAdmin, \
@@ -506,3 +506,19 @@ class CourseChangedUsernamesView(APIView):
         serializer = ChangedUsernamesSerializer(changed_usernames, many=True)
         
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class GenerateAndDownloadPDFView(APIView):
+    permission_classes = [IsTeacherOrSecretaryOrAdmin]
+
+    def post(self, request, course_id):
+
+        # check if the course belongs to the teacher or the course teacher school belongs to the secretary
+        course = get_object_or_404(Course, pk=course_id)
+        user = self.request.user
+        if not (user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user) or (user.role == User.SECRETARY and course.teacher.school == user.school)):
+            raise PermissionDenied({'message': 'Du hast nicht die Berechtigung.'})
+        
+        usernames = [user.username[:10] for user in course.students.all()]
+
+        presigned_url = create_pdf_for_usernames(usernames, course.name, course_id)
+        return JsonResponse({'url': presigned_url})

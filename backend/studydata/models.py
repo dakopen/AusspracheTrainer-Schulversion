@@ -55,7 +55,9 @@ class PronunciationAssessmentResult(models.Model):
     completeness = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], null=True, blank=True)
     fluency = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], null=True, blank=True)
 
-    full_result = models.JSONField()
+    json_response = models.JSONField()
+
+    json_result = models.JSONField()
 
     def __str__(self):
         return f"Pronunciation Assessment Result for {self.user.username} on {self.date_submitted}"

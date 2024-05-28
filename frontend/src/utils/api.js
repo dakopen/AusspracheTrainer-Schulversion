@@ -521,6 +521,28 @@ export const triggerAnalysis = async (authTokens) => {
 	}
 };
 
+export const generateUsernamesPDF = async (authTokens, courseId) => {
+	try {
+		const response = await fetch(`${ACCOUNT_BASE_URL}/courses/${courseId}/generate_usernames_pdf/`, {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${authTokens.access}`,
+				'ngrok-skip-browser-warning': 'true',
+				'Content-Type': 'application/json'  // Include if your endpoint expects JSON
+			},
+		});
+		const data = await response.json();
+		if (!response.ok) {
+			throw new Error(data.error || 'Failed to generate PDF');
+		}
+		return data.url;
+	} catch (error) {
+		console.error("Error generating PDF:", error);
+		return { error: "ERROR" };
+	}
+};
+
+
 export const fetchAverageScoresByCourseAndSentence = async (courseId, startLocation, endLocation, authTokens) => {
 	try {
 		// Construct the URL with dynamic path segments for the GET request
