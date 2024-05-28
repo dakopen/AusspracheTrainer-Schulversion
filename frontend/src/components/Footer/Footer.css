@@ -1,0 +1,27 @@
+.footer-nav {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.footer-menu {
+	list-style: none;
+	display: flex;
+	margin: 0;
+	padding: 0;
+}
+
+.footer-item {
+	margin: 0 10px;
+}
+
+.footer-link {
+	text-decoration: none;
+	color: var(--black);
+	transition: color 0.3s;
+	font-weight: normal;
+}
+
+.footer-link:hover {
+	color: var(--lila);
+}

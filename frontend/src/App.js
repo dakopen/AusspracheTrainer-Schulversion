@@ -15,6 +15,7 @@ import { UrlProvider } from "./context/UrlContext";
 import axios from "axios";
 
 import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 import "./components/Notification.css";
 
 import SetPassword from "./pages/SetPassword/SetPassword";
@@ -43,6 +44,7 @@ import FinalQuestionnaire from "./pages/FinalQuestionnaire/FinalQuestionnaire";
 import RequestPasswordReset from "./pages/RequestPasswordReset/RequestPasswordReset";
 import ForgotUsername from "./pages/ForgotUsername/ForgotUsername";
 import TutorialPage from "./pages/TutorialPage";
+import Contact from "./pages/Legal/Contact";
 
 function App() {
 	return (
@@ -52,139 +54,142 @@ function App() {
 					<NotificationProvider>
 						<AuthProvider>
 							<Header />
-							<Routes>
-								<Route element={<HomePage />} path="/" />
-								<Route
-									element={<AdminRoute element={HomePage} />}
-									path="/adminroute"
-								/>
-								<Route
-									element={<LoginPage />}
-									path="/rolelogin"
-								/>
-								<Route
-									element={<StudyStudentLogin />}
-									path="/login"
-								/>
-								<Route
-									element={
-										<SecretaryOrAdminRoute
-											element={CreateTeacher}
-										/>
-									}
-									path="/create-teacher"
-								/>
-								<Route
-									element={
-										<AdminRoute element={CreateAnyRole} />
-									}
-									path="/create-any-role"
-								/>
-								<Route
-									element={<SetPassword />}
-									path="set-password/"
-								/>
-								<Route
-									element={<AdminRoute element={Schools} />}
-									path="/schools"
-								/>
-								<Route
-									element={
-										<SecretaryOrAdminRoute
-											element={ShowSchool}
-										/>
-									}
-									path="/schools/:schoolId"
-								/>
-								<Route
-									element={
-										<TeacherOrAdminRoute
-											element={Courses}
-										/>
-									}
-									path="/courses"
-								/>
-								<Route
-									element={
-										<TeacherOrAdminRoute
-											element={ShowCourse}
-										/>
-									}
-									path="/courses/:courseId"
-								/>
-								<Route
-									element={
-										<StudentRoute
-											element={FirstQuestionnaire}
-										/>
-									}
-									path="/first-questionnaire/"
-								/>
-								<Route
-									element={
-										<StudentRoute
-											element={EmailQuestionnaire}
-										/>
-									}
-									path="/set-email/"
-								/>
-								<Route
-									element={
-										<TeacherOrSecretaryOrAdminRoute
-											element={StudySentences}
-										/>
-									}
-									path="/sentences"
-								/>
-								<Route
-									element={<StudentRoute element={UserSettings} />}
-									path="/account-settings"
-								/>
-								<Route
-									element={<DeleteAccountConfirm />}
-									path="delete-account-confirm/:uidb64/:token/"
-								/>
-								<Route
-									element={<StudentRoute element={TutorialPage} />}
-									path="/tutorial/"
-								/>
-								<Route
-									element={
-										<StudentRoute
-											element={PronunciationTest}
-										/>
-									}
-									path="test/"
-								/>
-								<Route
-									element={
-										<StudentRoute
-											element={PronunciationTest}
-										/>
-									}
-									path="practice/"
-								/>
-								<Route
-									element={<StudentRoute element={FinalQuestionnaire} />}
-									path="/final-questionnaire/"
-								/>
-								<Route
-									element={<RequestPasswordReset />}
-									path="request-password-reset/"
-								/>
-								<Route
-									element={<ForgotUsername />}
-									path="forgot-username/"
-								/>
-								<Route
-									element={
-										<TeacherOrSecretaryOrAdminRoute
-											element={SentenceDisplay}
-										/>
-									}
-									path="/courses/:courseId/:todoId" />
-							</Routes>
-
+							<div style={{ minHeight: "90vh" }}>
+								<Routes>
+									<Route element={<HomePage />} path="/" />
+									<Route
+										element={<AdminRoute element={HomePage} />}
+										path="/adminroute"
+									/>
+									<Route
+										element={<LoginPage />}
+										path="/rolelogin"
+									/>
+									<Route
+										element={<StudyStudentLogin />}
+										path="/login"
+									/>
+									<Route
+										element={
+											<SecretaryOrAdminRoute
+												element={CreateTeacher}
+											/>
+										}
+										path="/create-teacher"
+									/>
+									<Route
+										element={
+											<AdminRoute element={CreateAnyRole} />
+										}
+										path="/create-any-role"
+									/>
+									<Route
+										element={<SetPassword />}
+										path="set-password/"
+									/>
+									<Route
+										element={<AdminRoute element={Schools} />}
+										path="/schools"
+									/>
+									<Route
+										element={
+											<SecretaryOrAdminRoute
+												element={ShowSchool}
+											/>
+										}
+										path="/schools/:schoolId"
+									/>
+									<Route
+										element={
+											<TeacherOrAdminRoute
+												element={Courses}
+											/>
+										}
+										path="/courses"
+									/>
+									<Route
+										element={
+											<TeacherOrAdminRoute
+												element={ShowCourse}
+											/>
+										}
+										path="/courses/:courseId"
+									/>
+									<Route
+										element={
+											<StudentRoute
+												element={FirstQuestionnaire}
+											/>
+										}
+										path="/first-questionnaire/"
+									/>
+									<Route
+										element={
+											<StudentRoute
+												element={EmailQuestionnaire}
+											/>
+										}
+										path="/set-email/"
+									/>
+									<Route
+										element={
+											<TeacherOrSecretaryOrAdminRoute
+												element={StudySentences}
+											/>
+										}
+										path="/sentences"
+									/>
+									<Route
+										element={<StudentRoute element={UserSettings} />}
+										path="/account-settings"
+									/>
+									<Route
+										element={<DeleteAccountConfirm />}
+										path="delete-account-confirm/:uidb64/:token/"
+									/>
+									<Route
+										element={<StudentRoute element={TutorialPage} />}
+										path="/tutorial/"
+									/>
+									<Route
+										element={
+											<StudentRoute
+												element={PronunciationTest}
+											/>
+										}
+										path="test/"
+									/>
+									<Route
+										element={
+											<StudentRoute
+												element={PronunciationTest}
+											/>
+										}
+										path="practice/"
+									/>
+									<Route
+										element={<StudentRoute element={FinalQuestionnaire} />}
+										path="/final-questionnaire/"
+									/>
+									<Route
+										element={<RequestPasswordReset />}
+										path="request-password-reset/"
+									/>
+									<Route
+										element={<ForgotUsername />}
+										path="forgot-username/"
+									/>
+									<Route
+										element={
+											<TeacherOrSecretaryOrAdminRoute
+												element={SentenceDisplay}
+											/>
+										}
+										path="/courses/:courseId/:todoId" />
+									<Route element={<Contact />} path="/contact" />
+								</Routes>
+							</div>
+							<Footer />
 						</AuthProvider>
 					</NotificationProvider>
 				</UrlProvider>

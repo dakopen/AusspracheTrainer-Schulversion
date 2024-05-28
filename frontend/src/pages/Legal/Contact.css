@@ -1,0 +1,40 @@
+/* General Impressum Container Styling */
+.impressum-container {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: var(--white-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Impressum Content Styling */
+.impressum-content {
+	font-size: 16px;
+	color: var(--black);
+	text-align: justify;
+}
+
+.impressum-content h2 {
+	margin-top: 20px;
+	color: var(--lila);
+}
+
+.impressum-content p {
+	margin-bottom: 20px;
+}
+
+/* Notification Styling */
+.data-notification {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: var(--light-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	font-size: 16px;
+	color: var(--black);
+	text-align: justify;
+}
