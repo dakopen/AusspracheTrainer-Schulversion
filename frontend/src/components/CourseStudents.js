@@ -96,7 +96,7 @@ const CourseStudents = ({ courseName }) => {
 							<ul>
 								{changedStudentNames.map((student) => (
 									<li key={student.id}>
-										{student.old_username.substring(0, 10)} {"-->"} {student.new_username.substring(0, 10)}
+										{student.old_username.substring(0, 10)} {<span>&rarr;</span>} {student.new_username.substring(0, 10)}
 									</li>
 
 								))}
