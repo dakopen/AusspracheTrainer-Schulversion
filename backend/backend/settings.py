@@ -252,3 +252,9 @@ LOGGING = {
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
+CELERY_BEAT_SCHEDULE = {
+    'send-reminder-emails-every-minute': {
+        'task': 'accounts.tasks.send_reminder_emails',
+        'schedule': 60.0,  # Run every minute
+    },
+}

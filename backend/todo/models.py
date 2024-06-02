@@ -19,6 +19,7 @@ class ToDoDates(models.Model):
     standard_todo = models.ForeignKey(StandardToDo, on_delete=models.CASCADE, related_name='todo_dates')
     due_date = models.DateTimeField(default=timezone.now)
     activation_date = models.DateTimeField(default=timezone.now)
+    sent_reminder = models.BooleanField(default=False)
 
 
 class UserToDo(models.Model):
