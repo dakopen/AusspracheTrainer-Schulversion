@@ -168,7 +168,7 @@ const TutorialPage = () => {
             sentence.sentence === sentenceId ? { ...sentence, is_completed: true } : sentence
         );
         console.log(sentences, updatedSentences)
-        allowOneTimeRepeat(false);
+        setAllowOneTimeRepeat(false);
         setRunTour(false);
         setSentences(updatedSentences);
 

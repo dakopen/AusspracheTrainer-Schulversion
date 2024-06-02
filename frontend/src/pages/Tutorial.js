@@ -77,6 +77,7 @@ class Tutorial extends Component {
                         next: 'Weiter',
                         skip: 'Überspringen',
                     }}
+                    disableScrolling={true}
                 />
             </div>
         );

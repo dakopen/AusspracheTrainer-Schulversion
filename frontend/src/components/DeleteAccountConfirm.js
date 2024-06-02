@@ -19,7 +19,7 @@ function DeleteAccountConfirm() {
 
         try {
             const response = await fetch(
-                `${ACCOUNT_BASE_URL}/delete-account/confirm/${uidb64}/${token}/`, // Updated to use path parameters
+                `${ACCOUNT_BASE_URL}/delete-account/confirm/${uidb64}/${token}/`,
                 {
                     method: "POST",
                     headers: {
@@ -29,9 +29,9 @@ function DeleteAccountConfirm() {
             );
 
             if (response.ok) {
-                alert("Your account has been successfully deleted.");
+                alert("Dein Konto wurde erfolgreich gelöscht.");
                 logoutUser();
-                navigate("/"); // Redirect to home or any other page
+                navigate("/");
             } else {
                 const errorData = await response.json();
                 console.log("Response:", errorData);
@@ -39,7 +39,7 @@ function DeleteAccountConfirm() {
             }
         } catch (error) {
             console.error("Error:", error);
-            addNotification("Failed to delete account due to a network error", "error");
+            addNotification("Konto konnte aufgrund eines Netzwerkfehlers nicht gelöscht werden.", "error");
         } finally {
             setIsDeleting(false);
         }
@@ -47,10 +47,10 @@ function DeleteAccountConfirm() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h1>Delete Your Account</h1>
-            <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+            <h1>Account löschen</h1>
+            <p>Bist du sicher, dass du dein Konto löschen willst? Diese Aktion kann nicht rückgängig gemacht werden.</p>
             <button type="submit" disabled={isDeleting}>
-                {isDeleting ? "Deleting..." : "Delete My Account"}
+                {isDeleting ? "Löschen..." : "Mein Konto löschen und alle Studiendaten unwiderruflich löschen"}
             </button>
         </form>
     );

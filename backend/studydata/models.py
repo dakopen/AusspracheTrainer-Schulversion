@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from backend.custom_storages import PrivateMediaStorage
+import os
 
 User = get_user_model()
 
@@ -66,6 +67,8 @@ class TestSentencesWithAudio(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     sentence = models.ForeignKey('StudySentences', on_delete=models.CASCADE)
     audio_file_path = models.CharField(max_length=255)
+    deleted = models.BooleanField(default=False)
+
 
 class StudySentences(models.Model):
     sentence = models.TextField(unique=True)

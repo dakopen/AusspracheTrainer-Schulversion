@@ -1,9 +1,10 @@
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
-from .models import StudySentences, StudySentencesCourseAssignment
+from .models import StudySentences, StudySentencesCourseAssignment, TestSentencesWithAudio
 from .synth_speech import synthesize_speech
 from accounts.models import Course
 import random
+import os
 
 @receiver(pre_save, sender=StudySentences)
 def create_synth_speech(sender, instance, **kwargs):
@@ -76,5 +77,7 @@ def assign_sentences(sender, instance, created, **kwargs):
             i += 1
         
 
-
-
+@receiver(post_delete, sender=TestSentencesWithAudio)
+def delete_audio_file(sender, instance, **kwargs):
+    if instance.audio_file_path and os.path.exists(instance.audio_file_path):
+        os.remove(instance.audio_file_path)

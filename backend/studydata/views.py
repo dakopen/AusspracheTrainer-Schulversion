@@ -99,7 +99,7 @@ class AudioAnalysisView(APIView):
 
             user_course = request.user.belongs_to_course
             location_value = StudySentencesCourseAssignment.objects.get(course=user_course, sentence=sentence_id).location_value
-            if location_value <= 20 or location_value >= 80:
+            if location_value <= 20:
                 TestSentencesWithAudio.objects.create(
                     user=request.user, 
                     sentence_id=sentence_id, 
@@ -107,7 +107,7 @@ class AudioAnalysisView(APIView):
                 )
             
             # Dispatch the pronunciation assessment task to Celery
-            task = async_pronunciation_assessment.delay(file_path, sentence_id, request.user.belongs_to_course.language, user_id=request.user.id)
+            task = async_pronunciation_assessment.delay(file_path, sentence_id, request.user.belongs_to_course.language, user_id=request.user.id, delete_after_analysis=location_value>20)
 
             return Response({'task_id': task.id}, status=status.HTTP_200_OK)
         else:
@@ -127,7 +127,9 @@ class TriggerAudioAnalysisView(APIView):
             audio_file_path = test_sentence.audio_file_path
             # retrieve the sentence
             sentence_id = test_sentence.sentence.id
-            async_pronunciation_assessment(audio_file_path, sentence_id, user.belongs_to_course.language, user_id=user.id)
+            async_pronunciation_assessment(audio_file_path, sentence_id, user.belongs_to_course.language, user_id=user.id, delete_after_analysis=True)
+            sentenceAudioLink = TestSentencesWithAudio.objects.filter(user=user, sentence=test_sentence.sentence)
+            sentenceAudioLink.update(deleted=True)
         return Response({'message': 'Analysis triggered'}, status=status.HTTP_200_OK)
 
 def prepare_for_analysis(audio_file_path, sentence_id, language, user_id):

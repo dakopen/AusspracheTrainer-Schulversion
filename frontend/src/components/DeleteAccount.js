@@ -7,6 +7,7 @@ const DeleteAccount = () => {
     const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [alreadySent, setAlreadySent] = useState(false);
 
     const handleDeleteAccount = async () => {
         const confirmed = window.confirm("Bist du sicher, dass du deinen Konto löschen möchtest? Nach Bestätigung der Löschungsmail wird dein Konto unwiderruflich gelöscht.");
@@ -29,6 +30,7 @@ const DeleteAccount = () => {
             const data = await response.json();
             if (response.ok) {
                 setMessage("Ein Bestätigungslink wurde an deine E-Mail gesendet. Bitte bestätige die Löschung deines Kontos in deiner E-Mail.");
+                setAlreadySent(true);
             } else {
                 throw new Error(data.detail || "Bei der Beantragung der Kontolöschung ist ein Fehler aufgetreten. Wahrscheinlich ist die Mail Adresse ungültig. Bitte melde dich per Mail an Daniel Busch (kontakt@aussprachetrainer.org).");
             }
@@ -44,8 +46,8 @@ const DeleteAccount = () => {
         <div>
             <p style={{ textAlign: "justify" }}>Bitte bestätige, dass du dein Konto endgültig löschen möchtest. Eine E-Mail mit weiteren Anweisungen wird an deine registrierte E-Mail-Adresse gesendet. Wenn du keinen Zugriff mehr auf deine hinterlegte Mail Adresse hast, melde dich bei Daniel Busch (kontakt@aussprachetrainer.org).</p>
             {message && <p>{message}</p>}
-            <button onClick={handleDeleteAccount} disabled={loading}>
-                {loading ? "Verarbeiten..." : "Mein Konto löschen"}
+            <button onClick={handleDeleteAccount} disabled={loading || alreadySent}>
+                {loading ? "Verarbeiten..." : (alreadySent ? "Löschung wurde beantragt. Weiter im Mail Programm." : "Mein Konto löschen")}
             </button>
         </div>
     );

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from .models import PronunciationAssessmentResult, StudySentences, StudySentenceByWord
 from .pronunciation_assessment import pronunciation_assessment_continuous_from_file
-
+import os
 User = get_user_model()
 
 import logging
@@ -19,7 +19,7 @@ def retrieve_study_sentence_by_id(sentence_id):
 
 
 @shared_task()
-def async_pronunciation_assessment(filename, sentence_id, language, user_id):
+def async_pronunciation_assessment(filename, sentence_id, language, user_id, delete_after_analysis=True):
     reference_text = retrieve_study_sentence_by_id(sentence_id)
     if reference_text is None:
         return None
@@ -98,7 +98,9 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id):
                 phoneme_result.save()
 
     """
-
+    if delete_after_analysis:
+        if os.path.exists(filename):
+            os.remove(filename)
 
 
     return result, word_offset_duration
