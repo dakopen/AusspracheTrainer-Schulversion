@@ -105,6 +105,7 @@ const PronunciationTest = () => {
 				// If no incomplete sentences are found at all, alert the user that the test is completed
 				addNotification("Test completed", "success");
 				completeStandardTodo(todo_id, authTokens);
+				
 
 				// wait 100ms before navigating to the home page
 				setTimeout(() => {

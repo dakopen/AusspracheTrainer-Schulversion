@@ -45,6 +45,7 @@ import RequestPasswordReset from "./pages/RequestPasswordReset/RequestPasswordRe
 import ForgotUsername from "./pages/ForgotUsername/ForgotUsername";
 import TutorialPage from "./pages/TutorialPage";
 import Contact from "./pages/Legal/Contact";
+import Privacy from "./pages/Legal/Privacy";
 
 function App() {
 	return (
@@ -187,6 +188,7 @@ function App() {
 										}
 										path="/courses/:courseId/:todoId" />
 									<Route element={<Contact />} path="/contact" />
+									<Route element={<Privacy />} path="/privacy" />
 								</Routes>
 							</div>
 							<Footer />
