@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react";
 import React, { useState, useContext, useEffect, createRef } from "react";
 import { useNotification } from "../../context/NotificationContext";
 import { isStudyStudent, isTeacher, isNotLoggedIn } from "../../utils/RoleChecks";

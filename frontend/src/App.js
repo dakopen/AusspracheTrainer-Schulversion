@@ -47,6 +47,7 @@ import TutorialPage from "./pages/TutorialPage";
 import Contact from "./pages/Legal/Contact";
 import Privacy from "./pages/Legal/Privacy";
 
+
 function App() {
 	return (
 		<div>

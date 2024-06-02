@@ -67,3 +67,4 @@ media/
 *.rdb
 
 *.pdf
+backend/celerybeat-schedule
