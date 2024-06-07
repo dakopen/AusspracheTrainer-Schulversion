@@ -3,7 +3,7 @@ from pathlib import Path
 from .keyvault_manager import get_secret
 from corsheaders.defaults import default_headers
 import os
-
+import sentry_sdk
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,6 +24,21 @@ MS_SPEECH_SERVICES_REGION = "germanywestcentral"
 
 DELETE_AUDIO_FILE_AFTER_ANALYSIS = True
 # Application definition
+
+
+
+
+sentry_sdk.init(
+    dsn="https://cdfa3ecf76bbadfe421f351711f126cf@o4505771582750720.ingest.us.sentry.io/4507391552913408",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
+
 
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
