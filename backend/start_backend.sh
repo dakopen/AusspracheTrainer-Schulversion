@@ -9,7 +9,8 @@ sleep 1
 
 cd /app/backend
 # Start Django
-python3 manage.py runserver 0.0.0.0:8000 &
+# python3 manage.py runserver 0.0.0.0:8000 &
+gunicorn --bind 0.0.0.0:8000 backend.wsgi:application &
 
 # Start Celery
 celery -A backend worker --loglevel=info &

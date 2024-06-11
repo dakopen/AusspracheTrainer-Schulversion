@@ -1,70 +1,25 @@
-version: "3.8"
-
 services:
     frontend:
         build:
-            context: .
+            context: ./frontend
             dockerfile: Dockerfile
-        container_name: frontend
-        stdin_open: true
-        tty: true
         ports:
             - "3000:3000"
         depends_on:
             - backend
-
-    redis:
-        image: "redis:alpine"
-        container_name: redis
-
-    celery:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: celery
-        command: celery -A backend worker --loglevel=info
-        env_file:
-            - .env
-        depends_on:
-            - backend
-            - redis
-
-    celery_beat:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: celery_beat
-        command: celery -A backend beat --loglevel=info
-        env_file:
-            - .env
-        depends_on:
-            - backend
-            - redis
-
     backend:
         build:
-            context: .
+            context: ./backend
             dockerfile: Dockerfile
-        container_name: backend
-        stdin_open: true
-        tty: true
-        # command: /app/backend/start_backend.sh # Use the shell script to start services
-        volumes:
-            - .:/app
-        env_file:
-            - .env
         ports:
             - "8000:8000"
+        environment:
+            - ENV_FILE=.env
         depends_on:
             - redis
 
-    nginx:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: nginx
+    redis:
+        image: "redis:6.0"
+        container_name: redis
         ports:
-            - "80:80"
-        depends_on:
-            - frontend
-            - backend
+            - "6379:6379"
