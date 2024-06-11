@@ -26,8 +26,8 @@ const CreateBulkStudents = ({ refreshStudents }) => {
 			});
 
 			if (!response.ok) {
-				addNotification("Failed to create students.", "error");
-				throw new Error("Failed to create students");
+				addNotification("Die Erstellung von Schülern ist fehlgeschlagen.", "error");
+				throw new Error("Schüler konnten nicht angelegt werden.");
 			}
 
 			const data = await response.json();
@@ -37,8 +37,8 @@ const CreateBulkStudents = ({ refreshStudents }) => {
 
 			refreshStudents(); // Trigger the refresh
 		} catch (error) {
-			addNotification("Failed to create students.", "error");
-			console.error("Error creating students:", error.message);
+			addNotification("Die Erstellung von Schülern ist fehlgeschlagen.", "error");
+			console.error("Fehler beim Anlegen von Schülern:", error.message);
 		}
 	};
 

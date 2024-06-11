@@ -103,7 +103,7 @@ const PronunciationTest = () => {
 				setCurrentSentenceIndex(wrapAroundIndex);
 			} else {
 				// If no incomplete sentences are found at all, alert the user that the test is completed
-				addNotification("Test completed", "success");
+				addNotification("Test abgeschlossen", "success");
 				completeStandardTodo(todo_id, authTokens);
 				
 

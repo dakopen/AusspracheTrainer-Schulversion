@@ -26,7 +26,7 @@ function ForgotUsername() {
             );
 
             if (response.ok) {
-                addNotification("Your username has been sent to your email.", "success");
+                addNotification("Dein Benutzername wurde an deine E-Mail-Adresse geschickt.", "success");
                 navigate("/login"); // Redirect to the login page or a confirmation page
             } else {
                 const errorData = await response.json(); // Assuming the server sends back JSON

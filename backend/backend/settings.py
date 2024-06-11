@@ -4,15 +4,22 @@ from .keyvault_manager import get_secret
 from corsheaders.defaults import default_headers
 import os
 import sentry_sdk
+from django.core.management.utils import get_random_secret_key  
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DJANGO_DEV = os.getenv("DJANGO_DEV") == "True"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_oyf1=b^b(p*&o@pdq4uv)hxayo#cfl#c6+!sq5#c(5nz$w*-f'
+if DJANGO_DEV:
+    SECRET_KEY = 'django-insecure-_oyf1=b^b(p*&o@pdq4uv)hxayo#cfl#c6+!sq5#c(5nz$w*-f'
+else:
+    SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -24,8 +31,6 @@ MS_SPEECH_SERVICES_REGION = "germanywestcentral"
 
 DELETE_AUDIO_FILE_AFTER_ANALYSIS = True
 # Application definition
-
-
 
 
 sentry_sdk.init(

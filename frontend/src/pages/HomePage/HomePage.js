@@ -155,8 +155,6 @@ const HomePage = () => {
 					</div>
 				</>
 			}
-			<br /><br />
-			<button onClick={() => { triggerAnalysis(authTokens); }}>TRIGGER ANALYSIS</button>
 		</div>
 	);
 };

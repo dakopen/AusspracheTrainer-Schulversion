@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import {
 	isTeacher,
@@ -15,6 +15,7 @@ const Header = () => {
 	const hamburgerRef = useRef(null);
 	const navMenuRef = useRef(null);
 	const navBarRef = useRef(null);
+	const navigate = useNavigate();
 
 	const mobileMenu = () => {
 		hamburgerRef.current.classList.toggle("active");
@@ -50,6 +51,7 @@ const Header = () => {
 	const logoutAndCloseMenu = () => {
 		logoutUser();
 		closeMobileMenu();
+		navigate("/");
 	}
 
 	return (
@@ -141,17 +143,6 @@ const Header = () => {
 				</nav>
 			</header >
 			<div className="margin-for-header"></div>
-			{user &&
-				<p>
-					Hello user with Role: {user.role} with the study language:{" "}
-					{user.language === 1 ? "Englisch" : "Französisch"} and{" "}
-					{user.full_access_group === true
-						? "Full Access"
-						: "Restricted Access"}
-				</p>
-			}
-
-
 
 
 			{/*

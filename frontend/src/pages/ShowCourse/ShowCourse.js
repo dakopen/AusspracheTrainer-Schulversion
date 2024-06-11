@@ -59,10 +59,10 @@ const ShowCourse = () => {
 			await updateCourseField(authTokens, courseId, { name });
 			setCourse(prev => ({ ...prev, name }));
 			setEditName(false);
-			addNotification("Course name updated successfully", "success");
+			addNotification("Kursname erfolgreich aktualisiert", "success");
 		} catch (error) {
-			addNotification("Failed to update course name", "error");
-			console.error("Error updating course name:", error);
+			addNotification("Aktualisierung des Kursnamens fehlgeschlagen", "error");
+			console.error("Fehler beim Aktualisieren des Kursnamens:", error);
 		}
 	};
 
@@ -70,7 +70,7 @@ const ShowCourse = () => {
 		try {
 			await updateCourseField(authTokens, courseId, { [field]: value });
 			setCourse(prev => ({ ...prev, [field]: value }));
-			addNotification(`${field} date updated successfully`, "success");
+			addNotification(`${field} Datum erfolgreich aktualisiert`, "success");
 			let startfield = "study_started";
 
 			if (field === 'scheduled_final_test') {
@@ -82,7 +82,7 @@ const ShowCourse = () => {
 			setCourse(updatedCourse);
 
 		} catch (error) {
-			addNotification(`Failed to update ${field} date`, "error");
+			addNotification(`Fehlgeschlagen, das ${field} Datum zu aktualisieren`, "error");
 			console.error(`Error updating ${field} date:`, error);
 		}
 	};
@@ -92,10 +92,10 @@ const ShowCourse = () => {
 			await updateCourseField(authTokens, courseId, { grade });
 			setCourse(prev => ({ ...prev, grade }));
 			setEditGrade(false);
-			addNotification("Course grade updated successfully", "success");
+			addNotification("Kursstufe erfolgreich aktualisiert", "success");
 		} catch (error) {
-			addNotification("Failed to update course grade", "error");
-			console.error("Error updating course grade:", error);
+			addNotification("Aktualisierung der Kursstufe fehlgeschlagen", "error");
+			console.error("Fehler beim Aktualisieren der Kursstufe:", error);
 		}
 	};
 
@@ -105,10 +105,10 @@ const ShowCourse = () => {
 			const updatedCourse = await updateCourseField(authTokens, courseId, { study_started: studyStarted });
 			setCourse(updatedCourse);
 			setFinalTestActivated(false);
-			addNotification("Study status updated successfully", "success");
+			addNotification("Studienstatus erfolgreich aktualisiert", "success");
 		} catch (error) {
-			addNotification("Failed to update study status", "error");
-			console.error("Error updating study status:", error);
+			addNotification("Aktualisierung des Studienstatus fehlgeschlagen", "error");
+			console.error("Fehler bei der Aktualisierung des Studienstatus:", error);
 		}
 	};
 
@@ -119,7 +119,7 @@ const ShowCourse = () => {
 			setIsDemo(updatedCourse.demo);
 			addNotification(`Demo Status erfolgreich geändert`, "success");
 		} catch (error) {
-			console.error('Failed to update demo status:', error);
+			console.error('Aktualisierung des Demostatus fehlgeschlagen:', error);
 			addNotification('Demo Status Änderung war nicht erfolgreich.', 'error');
 		}
 	};
@@ -130,10 +130,10 @@ const ShowCourse = () => {
 			setCourse(updatedCourse);
 			setFinalTestActivated(!finalTestActivated);
 
-			addNotification("Final Test activated successfully", "success");
+			addNotification("Finalen Test erfolgreich aktiviert", "success");
 		} catch (error) {
-			addNotification("Failed to activate the final test", "error");
-			console.error("Error updating study status:", error);
+			addNotification("Der finale Test konnte nicht aktiviert werden", "error");
+			console.error("Fehler bei der Aktualisierung des Studienstatus:", error);
 		}
 	};
 
