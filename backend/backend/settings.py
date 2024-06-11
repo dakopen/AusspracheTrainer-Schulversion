@@ -15,14 +15,16 @@ DJANGO_DEV = os.getenv("DJANGO_DEV") == "True"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+
 # SECURITY WARNING: keep the secret key used in production secret!
-if DJANGO_DEV:
+if DEBUG or DJANGO_DEV:
     SECRET_KEY = 'django-insecure-_oyf1=b^b(p*&o@pdq4uv)hxayo#cfl#c6+!sq5#c(5nz$w*-f'
 else:
     SECRET_KEY = get_random_secret_key()
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
 
 ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost"]
 
@@ -103,12 +105,25 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG or DJANGO_DEV and not os.getenv("USE_AWS_DATABASE") == "True":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+
+else:
+    DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'postgres',
+                'USER': 'awsadmin',
+                'PASSWORD': get_secret("STUDIENVERSION-DATABASE-PASSWORD"),
+                'HOST': 'ls-cfd9c8c29bf334d0356cfa2189433299f6df6852.cfmiweyqykva.eu-central-1.rds.amazonaws.com',  # This should match the service name in docker-compose
+                'PORT': '5432',
+            }
+        }
 
 
 # Password validation
