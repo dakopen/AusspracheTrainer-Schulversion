@@ -237,27 +237,28 @@ class BulkCreateStudyStudentsView(APIView):
         # Adjust number to not exceed maximum allowed students per course
         number_of_students = min(number_of_students, max_number_of_students - course.students.count())
 
-        if settings.DEBUG or connection.vendor == "sqlite":  # TODO: Change later, but db.sqlite does not allow autoincrement for bulk_create
-            with transaction.atomic():
-                zero_or_one = random.randint(0, 1)
-                for i in range(number_of_students):
-                    username = generate_random_username()
-                    study_student = User.objects.create(
-                        username=f"{username}@studie.aussprachetrainer.org",
-                        school=course.teacher.school,
-                        role=User.STUDYSTUDENT,
-                        belongs_to_course=course,
-                        is_active=True,
-                        language=course.language,
-                        full_access_group=(i % 2 == zero_or_one),  # so when only 1 student is created, it's still random
-                    )
-                    study_student.set_password(username)
-                    study_student.save()
+        # if settings.DEBUG or connection.vendor == "sqlite":  # TODO: Change later, but db.sqlite does not allow autoincrement for bulk_create
+        with transaction.atomic():
+            zero_or_one = random.randint(0, 1)
+            for i in range(number_of_students):
+                username = generate_random_username()
+                study_student = User.objects.create(
+                    username=f"{username}@studie.aussprachetrainer.org",
+                    school=course.teacher.school,
+                    role=User.STUDYSTUDENT,
+                    belongs_to_course=course,
+                    is_active=True,
+                    language=course.language,
+                    full_access_group=(i % 2 == zero_or_one),  # so when only 1 student is created, it's still random
+                )
+                study_student.set_password(username)
+                study_student.save()
 
+        """
         else:
             study_students = []
             zero_or_one = random.randint(0, 1)
-            for _ in range(number_of_students):
+            for i in range(number_of_students):
                 username = generate_random_username()
                 study_student = User.objects.create( 
                     username=f"{username}@studie.aussprachetrainer.org",
@@ -274,7 +275,7 @@ class BulkCreateStudyStudentsView(APIView):
 
             with transaction.atomic():
                 User.objects.bulk_create(study_students)
-
+        """
 
         return Response({'message': f'{number_of_students} study students created successfully for course {course.name}.'},
                         status=status.HTTP_201_CREATED)

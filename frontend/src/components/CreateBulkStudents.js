@@ -10,11 +10,13 @@ const CreateBulkStudents = ({ refreshStudents }) => {
 	const { authTokens } = useContext(AuthContext);
 	const { BASE_URL, ACCOUNT_BASE_URL } = useContext(UrlContext);
 	const { addNotification } = useNotification();
+	const [creating, setCreating] = useState(false);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		if (creating) return;
 		const url = `${ACCOUNT_BASE_URL}/courses/${courseId}/students/bulkcreate`; // Adjust as per your actual API endpoint
-
+		setCreating(true);
 		try {
 			const response = await fetch(url, {
 				method: "POST",
@@ -36,9 +38,11 @@ const CreateBulkStudents = ({ refreshStudents }) => {
 			setNumberOfStudents(10);
 
 			refreshStudents(); // Trigger the refresh
+			setCreating(false);
 		} catch (error) {
 			addNotification("Die Erstellung von Schülern ist fehlgeschlagen.", "error");
 			console.error("Fehler beim Anlegen von Schülern:", error.message);
+			setCreating(false);
 		}
 	};
 
@@ -57,7 +61,7 @@ const CreateBulkStudents = ({ refreshStudents }) => {
 						required
 					/>
 				</label>
-				<button type="submit" className="bulk-students-button">Schüleraccounts erstellen</button>
+				<button type="submit" className="bulk-students-button">{creating ? "Lädt... (dauert kurz)" : "Schüleraccounts erstellen"}</button>
 			</form>
 		</div>
 	);
