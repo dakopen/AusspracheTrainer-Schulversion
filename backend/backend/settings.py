@@ -29,7 +29,7 @@ if DJANGO_DEV or DEBUG:
     ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost"]
 
 else:
-    ALLOWED_HOSTS = ["*.aussprachetrainer.org", "https://aws-amplify.d1ucddks599o2p.amplifyapp.com"]
+    ALLOWED_HOSTS = ["*.aussprachetrainer.org", "https://aws-amplify.d1ucddks599o2p.amplifyapp.com", "3.71.19.16"]
 
 MS_SPEECH_SERVICES_API_KEY = get_secret("AzureSpeechKey1")
 MS_SPEECH_SERVICES_REGION = "germanywestcentral"
