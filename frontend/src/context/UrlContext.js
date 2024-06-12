@@ -4,7 +4,8 @@ import React from "react";
 export const UrlContext = React.createContext({
 	//BASE_URL: `${window.location.protocol}//${window.location.hostname}:8000`,
 	//BASE_URL: "https://tapir-perfect-thankfully.ngrok-free.app",
-	BASE_URL: process.env.REACT_APP_API_BASE_URL,
+	//BASE_URL: process.env.REACT_APP_API_BASE_URL,
+	BASE_URL: "http://127.0.0.1/t",
 	API_URL: "/api",  // will be combined with BASE_URL
 	ACCOUNT_URL: "/accounts",
 	STUDYDATA_URL: "/studydata",
