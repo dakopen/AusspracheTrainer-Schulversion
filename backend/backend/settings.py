@@ -25,8 +25,11 @@ else:
     SECRET_KEY = get_random_secret_key()
 
 
+if DJANGO_DEV or DEBUG:
+    ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost"]
 
-ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost"]
+else:
+    ALLOWED_HOSTS = ["*.aussprachetrainer.org", "https://aws-amplify.d1ucddks599o2p.amplifyapp.com"]
 
 MS_SPEECH_SERVICES_API_KEY = get_secret("AzureSpeechKey1")
 MS_SPEECH_SERVICES_REGION = "germanywestcentral"
