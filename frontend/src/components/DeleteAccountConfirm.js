@@ -34,7 +34,6 @@ function DeleteAccountConfirm() {
                 navigate("/");
             } else {
                 const errorData = await response.json();
-                console.log("Response:", errorData);
                 addNotification(errorData.error, "error");
             }
         } catch (error) {

@@ -20,7 +20,6 @@ const Textarea = ({ textareaValue }) => {
 
 			resizeTextarea(); // Call resizeTextarea to adjust width and height
 		};
-		console.log(textareaRef.current.style.height, "resizeTextarea")
 
 		// Initial resize
 

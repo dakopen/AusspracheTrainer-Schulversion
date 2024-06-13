@@ -566,7 +566,6 @@ export const fetchAverageScoresByCourseAndSentence = async (courseId, startLocat
 		}
 
 		const data = await response.json();
-		console.log('Average scores:', data)
 		return data;
 	} catch (error) {
 		console.error("Error fetching average scores:", error);

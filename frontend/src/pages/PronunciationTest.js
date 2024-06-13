@@ -24,10 +24,8 @@ const PronunciationTest = () => {
 		const fetchTodo = async () => {
 			try {
 				const result = await fetchLowestPriorityUserToDo(authTokens);
-				console.log("Fetched todo:", result);
 				let id = result.id;
 				setTodo_id(id);
-				console.log(id, "id")
 				// check if todo_id is between 5 and 10
 				if (id === 4) {
 					let start_location = 1;
@@ -59,7 +57,6 @@ const PronunciationTest = () => {
 		const fetchData = async (start_location, end_location) => {
 			try {
 				const result = await fetchSentencesByCourseAndLocation(start_location, end_location, authTokens);
-				console.log("Fetched sentences:", result);
 				setSentences(result);
 				setLoading(false);
 			} catch (err) {
@@ -88,7 +85,6 @@ const PronunciationTest = () => {
 
 	const handleNextSentence = () => {
 		setAllowOneTimeRepeat(false);
-		console.log("Handling next sentence")
 		// Find the next incomplete sentence starting from the sentence after the current one
 		const nextIndex = sentences.findIndex((sentence, index) => index > currentSentenceIndex && !sentence.is_completed);
 
@@ -117,11 +113,9 @@ const PronunciationTest = () => {
 	};
 
 	const markSentenceAsCompleted = (sentenceId) => {
-		console.log("Marking sentence as completed:", sentenceId)
 		const updatedSentences = sentences.map(sentence =>
 			sentence.sentence === sentenceId ? { ...sentence, is_completed: true } : sentence
 		);
-		console.log(sentences, updatedSentences)
 		setSentences(updatedSentences);
 		setAllowOneTimeRepeat(false);
 
@@ -155,7 +149,6 @@ const PronunciationTest = () => {
 		<div style={{ zIndex: 0, position: "relative" }}>
 			<ProgressBar sentences={sentences.map(sentence => sentence.is_completed)} onSentenceClick={handleSentenceClick} currentSentenceIndex={currentSentenceIndex} />
 			<br></br>
-			{console.log("currentSentence", currentSentence)}
 			{currentSentence ? (
 				<AusspracheTrainer
 					textareaText={currentSentence.sentence_as_text.sentence}
@@ -172,7 +165,6 @@ const PronunciationTest = () => {
 			) : (
 				<div>No sentences found</div>
 			)}
-			<button onClick={debugCompleteAll}>DEBUG: Complete all</button>
 		</div>
 	);
 };

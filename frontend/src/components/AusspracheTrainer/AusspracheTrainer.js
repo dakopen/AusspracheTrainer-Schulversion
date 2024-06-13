@@ -31,18 +31,14 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
         if (taskId) {
             const intervalId = setInterval(async () => {
                 const data = await checkTaskStatus(taskId, authTokens);
-                console.log(data.status)
                 setTaskStatus(data.status);
                 if (data.status === "SUCCESS" || data.status === "FAILURE") {
                     clearInterval(intervalId);
                     setPollCompleted(true);
                 }
                 if (data.status === "SUCCESS") {
-                    console.log()
                     setResult(data.result);
-                    console.log(data)
                     resetRef.current = 2;
-                    console.log("WOWOWOWOOWOW")
 
 
                     if (data.result && data.result[0] && data.result[0].Paragraph && data.result[0].Paragraph.accuracy_score > 5) { // not empty audio
@@ -72,7 +68,6 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
         <div className='aussprachetrainer-container'>
             <Textarea textareaValue={textareaText} />
             <br></br>
-            {console.log("sentence Id: ", sentenceId)}
             <AudioRecordingProvider sentenceId={sentenceId} onComplete={onComplete} setTaskId={setTaskId}>
                 <AudioVisualizer result={result} setResult={setResult} isTest={isTest} />
                 <br></br>

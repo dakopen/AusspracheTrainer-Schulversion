@@ -14,7 +14,6 @@ const Tutorial = () => {
         const fetchTodo = async () => {
             try {
                 const result = await fetchLowestPriorityUserToDo(authTokens);
-                console.log("Fetched todo:", result);
                 let id = result.id;
                 if (id == 3 || id == 11) {
                     setTodo_id(id);

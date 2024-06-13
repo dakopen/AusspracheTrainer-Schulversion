@@ -98,7 +98,6 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete, setTa
 
     const handleSubmit = async (blob) => {
         const formData = new FormData();
-        console.log(blob, sentenceId);
         formData.append("audio", blob);
         formData.append("audio_mimetype", audioType);
         formData.append("sentence_id", sentenceId);
@@ -113,7 +112,6 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete, setTa
             });
             const data = await response.json();
             setTaskId(data.task_id);
-            console.log(data);
             if (response.ok) {
                 console.log("Complete")
                 // onComplete(sentenceId)

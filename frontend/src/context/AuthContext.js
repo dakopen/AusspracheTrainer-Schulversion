@@ -65,7 +65,6 @@ export const AuthProvider = ({ children }) => {
 			}),
 		});
 		let data = await response.json();
-		console.log("data:", data);
 		if (response.status === 200) {
 			setAuthTokens(data);
 			setUser(jwtDecode(data.access));
@@ -90,7 +89,6 @@ export const AuthProvider = ({ children }) => {
 			}),
 		});
 		let data = await response.json();
-		console.log("data:", data);
 		if (response.status === 200) {
 			setAuthTokens(data);
 			setUser(jwtDecode(data.access));
@@ -108,9 +106,7 @@ export const AuthProvider = ({ children }) => {
 	}, []);
 
 	let updateToken = useCallback(async () => {
-		console.log("Updated token!");
-		console.log(API_BASE_URL);
-		console.log("AUTHTOKENREFRESH", authTokens?.refresh)
+		console.log(API_BASE_URL, "<-- das ist die Adresse des Backends (für Interessierte)");
 		let response = await fetch(`${API_BASE_URL}/token/refresh/`, {
 			method: "POST",
 			headers: {
@@ -119,7 +115,6 @@ export const AuthProvider = ({ children }) => {
 			body: JSON.stringify({ refresh: authTokens?.refresh }),
 		});
 		let data = await response.json();
-		console.log("data:", data);
 		if (response.status === 200) {
 			setAuthTokens(data);
 			setUser(jwtDecode(data.access));

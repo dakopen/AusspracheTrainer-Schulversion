@@ -11,11 +11,9 @@ const AudioRecorder = ({ pollCompleted, resetRef }) => {
         if (!isRecording) {
             resetRef.current = false;
             startRecording();
-            console.log(recordingState, "RECSTATE INITIAL")
         } else {
             // short delay to allow the last audio buffer to be recorded
             setTimeout(() => stopRecording(), 200);
-            console.log(recordingState, "RECSTATE")
 
         }
     };
@@ -32,7 +30,6 @@ const AudioRecorder = ({ pollCompleted, resetRef }) => {
 
 
     useEffect(() => {
-        console.log(recordingState, "RECSTATE", resetRef.current)
         if (resetRef.current == 0 || resetRef.current == 2) {
             if (recordingState == 2 && resetRef.current == 2) {
                 hideRecButton();

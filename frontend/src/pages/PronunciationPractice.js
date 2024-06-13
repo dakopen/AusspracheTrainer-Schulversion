@@ -22,7 +22,6 @@ const PronunciationPractice = () => {
         const fetchTodo = async () => {
             try {
                 const result = await fetchLowestPriorityUserToDo(authTokens);
-                console.log("Fetched todo:", result);
                 let id = result.id;
                 setTodo_id(id);
                 // check if todo_id is between 5 and 10
@@ -46,7 +45,6 @@ const PronunciationPractice = () => {
         const fetchData = async (start_location, end_location) => {
             try {
                 const result = await fetchSentencesByCourseAndLocation(start_location, end_location, authTokens);
-                console.log("Fetched sentences:", result);
                 setSentences(result);
                 setLoading(false);
             } catch (err) {
@@ -85,11 +83,9 @@ const PronunciationPractice = () => {
     };
 
     const markSentenceAsCompleted = (sentenceId) => {
-        console.log("Marking sentence as completed:", sentenceId)
         const updatedSentences = sentences.map(sentence =>
             sentence.sentence === sentenceId ? { ...sentence, is_completed: true } : sentence
         );
-        console.log(sentences, updatedSentences)
         setSentences(updatedSentences);
     };
 

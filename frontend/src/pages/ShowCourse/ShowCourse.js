@@ -34,7 +34,6 @@ const ShowCourse = () => {
 				setName(fetchedCourse.name);
 				setGrade(fetchedCourse.grade);
 				setFinalTestActivated(fetchedCourse.activate_final_test);
-				console.log(fetchedCourse);
 				setScheduledStudyStart(fetchedCourse.scheduled_study_start || "");
 				setScheduledFinalTest(fetchedCourse.scheduled_final_test || "");
 				setIsDemo(fetchedCourse.demo || false);
@@ -183,7 +182,6 @@ const ShowCourse = () => {
 						<strong>Geplantes Startdatum:</strong>
 
 
-						{console.log(scheduledStudyStart, "scheduledStudyStart")}
 						{!course.study_started &&
 							<>
 								<input type="date" className="show-course-input show-course-input-date" value={formatDate(scheduledStudyStart)} onChange={(e) => setScheduledStudyStart(e.target.value)} onBlur={() => updateScheduledDate('scheduled_study_start', scheduledStudyStart)} />

@@ -3,7 +3,6 @@ import React from 'react';
 const ProgressBar = ({ sentences, onSentenceClick, currentSentenceIndex }) => {
     return (
         <div style={{ display: 'flex', width: '100%', backgroundColor: '#ddd' }}>
-            {console.log("completed: ", sentences, "new prop")}
             {sentences.map((completed, index) => (
 
                 <div key={index} style={{

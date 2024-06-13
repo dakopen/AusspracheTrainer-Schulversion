@@ -39,7 +39,6 @@ function SetPassword() {
 				navigate("/rolelogin");
 			} else {
 				const errorData = await response.json(); // Assuming the server sends back JSON
-				console.log("Response:", errorData);
 
 				addNotification(errorData.error, "error");
 			}
