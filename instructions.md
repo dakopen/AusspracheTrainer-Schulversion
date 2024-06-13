@@ -30,6 +30,60 @@
 13. `sudo apt-get install redis-server`
 14. `sudo systemctl enable redis-server`
 15. `sudo systemctl start redis-server`
+16. create gunicorn files: 
+
+- vim setup_gunicorn_service.sh
+- add the following script:
+
+```bash	
+#!/bin/bash
+
+# Automatically obtain the username
+USER=$(whoami)
+
+# Automatically obtain the current working directory (project path)
+PROJECT_PATH=$(pwd)
+
+# Automatically obtain the virtual environment path (assuming it's in the project directory)
+VENV_PATH=$(find $PROJECT_PATH -type d -name "bin" | grep -m1 'bin' | sed 's/\/bin//')
+
+# Create the Gunicorn systemd service file
+SERVICE_FILE="/etc/systemd/system/gunicorn.service"
+
+echo "[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=$USER
+Group=www-data
+WorkingDirectory=$PROJECT_PATH
+ExecStart=$VENV_PATH/bin/gunicorn --config $PROJECT_PATH/gunicorn_config.py myproject.wsgi
+
+[Install]
+WantedBy=multi-user.target" | sudo tee $SERVICE_FILE
+
+# Reload systemd to apply the new service file
+sudo systemctl daemon-reload
+
+# Start and enable the Gunicorn service
+sudo systemctl start gunicorn
+sudo systemctl enable gunicorn
+
+echo "Gunicorn service setup complete."
+```
+
+`chmod +x setup_gunicorn_service.sh`
+`./setup_gunicorn_service.sh`
+
+add gunicorn_config.py to the project directory:
+
+```python
+# gunicorn_config.py
+
+bind = '0.0.0.0:8000'
+workers = 3
+```
 
 13. `python backend/manage.py runserver 0.0.0.0:8000` (later use gunicorn)
 
