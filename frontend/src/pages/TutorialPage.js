@@ -55,7 +55,6 @@ const TutorialPage = () => {
         const fetchTodo = async () => {
             try {
                 const result = await fetchLowestPriorityUserToDo(authTokens);
-                console.log("Fetched todo:", result);
                 let id = result.id;
                 if (id == 3 || id == 11) {
                     setTodo_id(id);
@@ -76,7 +75,6 @@ const TutorialPage = () => {
         const fetchData = async () => {
             try {
                 const result = await fetchSentencesByCourseAndLocation(101, 102, authTokens);
-                console.log("Fetched sentences:", result);
                 setSentences(result);
             } catch (err) {
                 console.error("Error fetching sentences:", err);
@@ -87,7 +85,6 @@ const TutorialPage = () => {
 
     const handleNextSentence = () => {
         setAllowOneTimeRepeat(false);
-        console.log("Handling next sentence")
         // Find the next incomplete sentence starting from the sentence after the current one
         const nextIndex = sentences.findIndex((sentence, index) => index > currentSentenceIndex && !sentence.is_completed);
 
@@ -163,11 +160,9 @@ const TutorialPage = () => {
     }
 
     const markSentenceAsCompleted = (sentenceId) => {
-        console.log("Marking sentence as completed:", sentenceId)
         const updatedSentences = sentences.map(sentence =>
             sentence.sentence === sentenceId ? { ...sentence, is_completed: true } : sentence
         );
-        console.log(sentences, updatedSentences)
         setAllowOneTimeRepeat(false);
         setRunTour(false);
         setSentences(updatedSentences);
@@ -212,7 +207,6 @@ const TutorialPage = () => {
         <div style={{ zIndex: 0, position: "relative" }}>
             <ProgressBar sentences={sentences.map(sentence => sentence.is_completed)} onSentenceClick={handleSentenceClick} currentSentenceIndex={currentSentenceIndex} />
             <br></br>
-            {console.log("currentSentence", currentSentence)}
             {currentSentence ? (
                 <AusspracheTrainer
                     textareaText={currentSentence.sentence_as_text.sentence}

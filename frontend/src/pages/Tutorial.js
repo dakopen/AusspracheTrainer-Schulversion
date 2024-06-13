@@ -30,7 +30,6 @@ class Tutorial extends Component {
         }
 
         if (this.props.startTour !== prevProps.startTour) {
-            console.log("startTour", this.props.startTour, this.props.steps)
             this.setState({
                 run: this.props.startTour,
             });
