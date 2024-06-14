@@ -78,13 +78,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware'
 ]
 
-if DEBUG or DJANGO_DEV:
-    CORS_ORIGIN_ALLOW_ALL = True
-else:
-    CORS_ORIGIN_WHITELIST = [
-        "https://studie.aussprachetrainer.org",
-        "https://backend.aussprachetrainer.org",
-    ]
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 CSRF_TRUSTED_ORIGINS = [
     "https://studie.aussprachetrainer.org",
