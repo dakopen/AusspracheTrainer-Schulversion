@@ -95,7 +95,6 @@ const TeacherRoute = ({ element: Element, ...rest }) => {
 		if (!user) {
 			addNotification("Bitte logge dich zuerst ein!", "error");
 		} else if (user.role !== 1) {
-			console.log("User not logged in");
 			addNotification("Nicht die nötige Berechtigung.", "error");
 		}
 	}, [user, addNotification]);

@@ -154,7 +154,7 @@ class SchoolSecretaryListView(generics.ListAPIView):
 class CourseListView(generics.ListAPIView):
     serializer_class = CourseSerializer
     permission_classes = [IsTeacherOrAdmin]
-
+    
     def get_queryset(self):
         user = self.request.user
         if user.role == User.ADMIN:

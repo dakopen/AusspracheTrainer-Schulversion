@@ -19,14 +19,14 @@ DJANGO_DEV = os.getenv("DJANGO_DEV") == "True"
 DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
-if DEBUG or DJANGO_DEV:
-    SECRET_KEY = 'django-insecure-_oyf1=b^b(p*&o@pdq4uv)hxayo#cfl#c6+!sq5#c(5nz$w*-f'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
+
+
+if DJANGO_DEV or DEBUG:
+    ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost", "127.0.0.1", 'localhost:3000']
+
 else:
-    SECRET_KEY = get_random_secret_key()
-
-
-
-ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost"]
+    ALLOWED_HOSTS = [".aussprachetrainer.org", "aws-amplify.d1ucddks599o2p.amplifyapp.com", "3.71.19.16", "172.26.10.38"]
 
 MS_SPEECH_SERVICES_API_KEY = get_secret("AzureSpeechKey1")
 MS_SPEECH_SERVICES_REGION = "germanywestcentral"
@@ -76,6 +76,12 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://studie.aussprachetrainer.org",
+    "https://backend.aussprachetrainer.org",
+]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'ngrok-skip-browser-warning'
@@ -197,7 +203,6 @@ DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
@@ -211,7 +216,7 @@ SIMPLE_JWT = {
     "ISSUER": None,
     "JSON_ENCODER": None,
     "JWK_URL": None,
-    "LEEWAY": 0,
+    "LEEWAY": 60,
 
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
@@ -250,9 +255,9 @@ if DEBUG:
     BACKEND_URL = 'http://localhost:8000'
 
 else:
-    FRONTEND_URL = 'http://localhost:3000'
+    FRONTEND_URL = 'https://studie.aussprachetrainer.org'
     # FRONTEND_URL = "https://263b-2a02-8070-8e83-2e20-6dd4-dfc5-1e1e-e626.ngrok-free.app"
-    BACKEND_URL = 'https://tapir-perfect-thankfully.ngrok-free.app'
+    BACKEND_URL = 'https://backend.aussprachetrainer.org'
 
 
 # EMAIL SETTINGS:
@@ -266,6 +271,7 @@ DEFAULT_FROM_EMAIL = 'AusspracheTrainer <kontakt@aussprachetrainer.org>'
 
 
 # LOGGING
+# LOGGING
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -273,15 +279,20 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'logfile.log',  # Specify the path to your log file
+        },
     },
     'loggers': {
         '': {
-            'handlers': ['console'],
-            'level': 'INFO',
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     },
 }
+
 
 # CELERY
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
@@ -293,3 +304,6 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 900.0,  # Run every 15min
     },
 }
+
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True

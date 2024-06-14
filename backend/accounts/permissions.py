@@ -1,5 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import permissions
+import logging
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 

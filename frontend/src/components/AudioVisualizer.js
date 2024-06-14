@@ -302,7 +302,6 @@ const AudioVisualizer = ({ result, setResult, isTest }) => {
 
         replayLineRef.current.style.height = `${offscreenCanvasRef.current.height}px`;
         offscreenCtxRef.current.drawImage(tempCanvas, 0, 0, originalWidth, originalHeight, 0, 0, offscreenCanvasRef.current.width, offscreenCanvasRef.current.height);
-        console.log("offsets inside: ", offsets);
         offsets.forEach((offset) => {
             const percentage = offset[2];
             if (percentage < 70) {
@@ -344,12 +343,10 @@ const AudioVisualizer = ({ result, setResult, isTest }) => {
 
     useEffect(() => {
         // offsets = result[1]
-        console.log("RESULT: ", result)
         if (result === null) {
             hideAndResetEverything();
         }
         if (result && result[1] && result[1].length > 0) {
-            console.log("COLORING CANVAS")
             if (user.full_access_group === true && !isTest) {
                 colorCanvas(result[1]);
             } else {
@@ -363,7 +360,6 @@ const AudioVisualizer = ({ result, setResult, isTest }) => {
             const replayButton = replayButtonRef.current;
 
             const handleReplayButtonClick = () => {
-                console.log("replay button clicked")
                 if (isPlayingRef.current) {
                     replayControl.pause();
                 } else {

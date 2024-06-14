@@ -61,10 +61,11 @@ tmp_email/
 *.aac
 *.mp4
 
-# the media folder
-media/
+
 
 *.rdb
 
 *.pdf
 backend/celerybeat-schedule
+
+*.log

@@ -141,8 +141,6 @@ const CourseToDoDates = ({ final_test_activated }) => {
         <div className="todo-dates-container">
             <hr></hr>
             <h3 className="todo-dates-header">Zeitpunkte der Übungen</h3>
-            {console.log(editData)}
-            {console.log(editData.length)}
             {editData["group1to4"] &&
                 // <div className="todo-date-group" {/**/} onClick={() => handleHeadlineClick(editData["group1to4"].standard_todo)}>
                 <div className="todo-date-group">
@@ -167,7 +165,6 @@ const CourseToDoDates = ({ final_test_activated }) => {
                             const isPast = currentDate > dueDate;
                             const className = isActive ? 'currently-active-tododate' : isPast ? 'passed-tododate' : '';
 
-                            console.log(dateKey.includes('group5to10'))
                             if (dateKey.includes('group5to10')) {
                                 return (
                                     <div className={`todo-dates-training ${className}`}>

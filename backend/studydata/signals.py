@@ -5,6 +5,8 @@ from .synth_speech import synthesize_speech
 from accounts.models import Course
 import random
 import os
+from itertools import groupby
+from operator import attrgetter
 
 @receiver(pre_save, sender=StudySentences)
 def create_synth_speech(sender, instance, **kwargs):
@@ -44,34 +46,45 @@ def assign_sentences(sender, instance, created, **kwargs):
     if created:
         i = 1
 
-        test_sentences = StudySentences.objects.filter(language=language).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[: NUM_SENTENCES_TEST]
-        random.shuffle(list(test_sentences))
+        def shuffle_within_groups(queryset, *fields):
+            sorted_qs = sorted(queryset, key=attrgetter(*fields))
+            grouped = groupby(sorted_qs, key=attrgetter(*fields))
+            shuffled_sentences = []
+            for key, group in grouped:
+                group_list = list(group)
+                random.shuffle(group_list)
+                shuffled_sentences.extend(group_list)
+            return shuffled_sentences
+
+        # Select and shuffle test sentences
+        test_sentences = StudySentences.objects.filter(language=language).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')
+        test_sentences = shuffle_within_groups(test_sentences, 'number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[:NUM_SENTENCES_TEST]
         for sentence in test_sentences:
             sentence.number_of_times_assigned_as_test += 1
             sentence.save()
             StudySentencesCourseAssignment.objects.create(course=instance, sentence=sentence, location_value=i)
             i += 1
-        
-        final_test_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences]).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[:NUM_SENTENCES_TEST]
-        random.shuffle(list(final_test_sentences))    
+
+        # Select and shuffle final test sentences
+        final_test_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences]).order_by('number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')
+        final_test_sentences = shuffle_within_groups(final_test_sentences, 'number_of_times_assigned_as_test', 'number_of_times_assigned_as_train')[:NUM_SENTENCES_TEST]
         for sentence in final_test_sentences:
             sentence.number_of_times_assigned_as_test += 1
             sentence.save()
             StudySentencesCourseAssignment.objects.create(course=instance, sentence=sentence, location_value=i)
             i += 1
 
-
-        # filter out test sentences from test sentences
-        train_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences]).exclude(id__in=[sentence.id for sentence in final_test_sentences]).order_by('number_of_times_assigned_as_train', 'number_of_times_assigned_as_test')[:NUM_SENTENCES_PER_WEEK * NUM_WEEKS]
-        random.shuffle(list(train_sentences))
+        # Select and shuffle training sentences
+        train_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences + final_test_sentences]).order_by('number_of_times_assigned_as_train', 'number_of_times_assigned_as_test')
+        train_sentences = shuffle_within_groups(train_sentences, 'number_of_times_assigned_as_train', 'number_of_times_assigned_as_test')[:NUM_SENTENCES_PER_WEEK * NUM_WEEKS]
         for sentence in train_sentences:
             sentence.number_of_times_assigned_as_train += 1
             sentence.save()
             StudySentencesCourseAssignment.objects.create(course=instance, sentence=sentence, location_value=i)
             i += 1
 
-        # add 4 tutorial sentences
-        tutorial_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences]).exclude(id__in=[sentence.id for sentence in final_test_sentences]).exclude(id__in=[sentence.id for sentence in train_sentences])[:4]
+        # Select tutorial sentences
+        tutorial_sentences = StudySentences.objects.filter(language=language).exclude(id__in=[sentence.id for sentence in test_sentences + final_test_sentences + train_sentences])[:4]
         for sentence in tutorial_sentences:
             StudySentencesCourseAssignment.objects.create(course=instance, sentence=sentence, location_value=i)
             i += 1

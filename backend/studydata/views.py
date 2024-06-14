@@ -19,7 +19,6 @@ from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, 
     StudySentencesSerializer, StudySentencesCourseAssignmentSerializer, FinalQuestionnaireSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from .utils import download_file_from_s3
 from celery.result import AsyncResult
 
 logger = logging.getLogger(__name__)

@@ -41,7 +41,6 @@ const CreateCourse = ({ setCourses }) => {
 				setCourses(fetchedCourses);
 			} else {
 				const responseData = await response.json();
-				console.log(responseData);
 				throw new Error(
 					responseData.detail ||
 					"An error occurred while creating the course."
