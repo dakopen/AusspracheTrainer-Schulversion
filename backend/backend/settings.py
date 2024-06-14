@@ -211,7 +211,6 @@ DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
@@ -313,3 +312,6 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 900.0,  # Run every 15min
     },
 }
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True

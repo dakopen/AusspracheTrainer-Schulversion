@@ -13,8 +13,8 @@
 
 4. `python manage.py populate_standard_todos`
 
-
 ### Putting on the server:
+
 1. `sudo apt update`
 2. `sudo apt upgrade`
 3. `sudo apt install ffmpeg`
@@ -30,12 +30,12 @@
 13. `sudo apt-get install redis-server`
 14. `sudo systemctl enable redis-server`
 15. `sudo systemctl start redis-server`
-16. create gunicorn files: 
+16. create gunicorn files:
 
-- vim setup_gunicorn_service.sh
-- add the following script:
+-   vim setup_gunicorn_service.sh
+-   add the following script:
 
-```bash	
+```bash
 #!/bin/bash
 
 # Automatically obtain the username
@@ -87,3 +87,4 @@ workers = 3
 
 13. `python backend/manage.py runserver 0.0.0.0:8000` (later use gunicorn)
 
+14. add nginx
