@@ -26,7 +26,7 @@ else:
 
 
 if DJANGO_DEV or DEBUG:
-    ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost", "127.0.0.1"]
+    ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost", "127.0.0.1", 'localhost:3000']
 
 else:
     ALLOWED_HOSTS = [".aussprachetrainer.org", "aws-amplify.d1ucddks599o2p.amplifyapp.com", "3.71.19.16", "172.26.10.38"]
@@ -219,7 +219,7 @@ SIMPLE_JWT = {
     "ISSUER": None,
     "JSON_ENCODER": None,
     "JWK_URL": None,
-    "LEEWAY": 0,
+    "LEEWAY": 60,
 
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
