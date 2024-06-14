@@ -26,7 +26,7 @@ else:
 
 
 if DJANGO_DEV or DEBUG:
-    ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost"]
+    ALLOWED_HOSTS = ["tapir-perfect-thankfully.ngrok-free.app", "localhost", "127.0.0.1"]
 
 else:
     ALLOWED_HOSTS = [".aussprachetrainer.org", "aws-amplify.d1ucddks599o2p.amplifyapp.com", "3.71.19.16", "172.26.10.38"]
@@ -269,6 +269,7 @@ DEFAULT_FROM_EMAIL = 'AusspracheTrainer <kontakt@aussprachetrainer.org>'
 
 
 # LOGGING
+# LOGGING
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -276,15 +277,20 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'logfile.log',  # Specify the path to your log file
+        },
     },
     'loggers': {
         '': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': True,
         },
     },
 }
+
 
 # CELERY
 CELERY_BROKER_URL = 'redis://localhost:6379/0'

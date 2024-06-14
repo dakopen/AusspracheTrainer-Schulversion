@@ -68,3 +68,5 @@ media/
 
 *.pdf
 backend/celerybeat-schedule
+
+*.log
