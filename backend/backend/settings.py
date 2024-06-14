@@ -78,8 +78,18 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware'
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
+if DEBUG or DJANGO_DEV:
+    CORS_ORIGIN_ALLOW_ALL = True
+else:
+    CORS_ORIGIN_WHITELIST = [
+        "https://studie.aussprachetrainer.org",
+        "https://backend.aussprachetrainer.org",
+    ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://studie.aussprachetrainer.org",
+    "https://backend.aussprachetrainer.org",
+]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'ngrok-skip-browser-warning'
