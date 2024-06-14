@@ -35,9 +35,6 @@ class IsTeacher(permissions.BasePermission):
 
 class IsTeacherOrAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
-        logger.warn(f"User role: {request.user.role}")
-        logger.warn(request.headers.get('Authorization'))
-
         return request.user.is_authenticated and request.user.role in [User.TEACHER, User.ADMIN]
     
 class IsTeacherOrSecretaryOrAdmin(permissions.BasePermission):
