@@ -79,6 +79,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'ngrok-skip-browser-warning'
@@ -214,7 +215,7 @@ SIMPLE_JWT = {
     "ISSUER": None,
     "JSON_ENCODER": None,
     "JWK_URL": None,
-    "LEEWAY": 60,
+    "LEEWAY": 0,
 
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
