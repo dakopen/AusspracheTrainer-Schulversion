@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import { useNotification } from "../../context/NotificationContext";
 import CourseStudents from "../../components/CourseStudents";
@@ -20,6 +20,7 @@ const ShowCourse = () => {
 	const [finalTestActivated, setFinalTestActivated] = useState(false);
 	const { authTokens } = useContext(AuthContext);
 	const { addNotification } = useNotification();
+	const navigate = useNavigate();
 
 	const [scheduledStudyStart, setScheduledStudyStart] = useState("");
 	const [scheduledFinalTest, setScheduledFinalTest] = useState("");
@@ -135,6 +136,11 @@ const ShowCourse = () => {
 			console.error("Fehler bei der Aktualisierung des Studienstatus:", error);
 		}
 	};
+
+	const goBackToOverview = () => {
+		navigate("/courses");
+	};
+
 
 	return (
 		<>
