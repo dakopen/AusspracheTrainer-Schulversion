@@ -61,8 +61,7 @@ tmp_email/
 *.aac
 *.mp4
 
-# the media folder
-media/
+
 
 *.rdb
 
