@@ -136,6 +136,10 @@ const ShowCourse = () => {
 		}
 	};
 
+	const goBackToOverview = () => {
+		navigate("/courses");
+	};
+
 	return (
 		<>
 			<div className="back-to-overview-container">
