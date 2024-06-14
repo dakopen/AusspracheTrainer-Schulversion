@@ -106,7 +106,9 @@ export const AuthProvider = ({ children }) => {
 	}, []);
 
 	let updateToken = useCallback(async () => {
-		console.log(API_BASE_URL, "<-- das ist die Adresse des Backends (für Interessierte)");
+		console.log("Updated token!");
+		console.log(API_BASE_URL);
+		console.log("AUTHTOKENREFRESH", authTokens?.refresh)
 		let response = await fetch(`${API_BASE_URL}/token/refresh/`, {
 			method: "POST",
 			headers: {
