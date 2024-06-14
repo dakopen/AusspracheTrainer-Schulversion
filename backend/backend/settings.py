@@ -19,10 +19,7 @@ DJANGO_DEV = os.getenv("DJANGO_DEV") == "True"
 DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
-if DEBUG or DJANGO_DEV:
-    SECRET_KEY = 'django-insecure-_oyf1=b^b(p*&o@pdq4uv)hxayo#cfl#c6+!sq5#c(5nz$w*-f'
-else:
-    SECRET_KEY = get_random_secret_key()
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 
 if DJANGO_DEV or DEBUG:
