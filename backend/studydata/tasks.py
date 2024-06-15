@@ -20,6 +20,7 @@ def retrieve_study_sentence_by_id(sentence_id):
 
 @shared_task()
 def async_pronunciation_assessment(filename, sentence_id, language, user_id, delete_after_analysis=True):
+    logger.warn(f"Starting pronunciation assessment for {filename} with sentence_id {sentence_id} and language {language} 1")
     reference_text = retrieve_study_sentence_by_id(sentence_id)
     if reference_text is None:
         return None
