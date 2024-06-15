@@ -53,6 +53,6 @@ class StudySentencesCourseAssignmentSerializer(serializers.ModelSerializer):
         completed = PronunciationAssessmentResult.objects.filter(
             user=user, 
             sentence=obj.sentence,
-            accuracy__gt=5
+            completeness__gt=25
         ).exists()
         return completed

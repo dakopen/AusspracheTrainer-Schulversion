@@ -87,4 +87,8 @@ workers = 3
 
 13. `python backend/manage.py runserver 0.0.0.0:8000` (later use gunicorn)
 
-14. add nginx
+14. add nginx (see nginx.conf)
+
+15. `celery -A backend worker --detach` (go to the backend directory and activate venv first)
+
+
