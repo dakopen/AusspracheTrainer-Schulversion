@@ -304,9 +304,9 @@ const AudioVisualizer = ({ result, setResult, isTest }) => {
         offscreenCtxRef.current.drawImage(tempCanvas, 0, 0, originalWidth, originalHeight, 0, 0, offscreenCanvasRef.current.width, offscreenCanvasRef.current.height);
         offsets.forEach((offset) => {
             const percentage = offset[2];
-            if (percentage < 70) {
+            if (percentage < 60) {
                 offscreenCtxRef.current.fillStyle = "rgba(255, 0, 0, 0.5)";
-            } else if (percentage < 95) {
+            } else if (percentage < 87) {
                 offscreenCtxRef.current.fillStyle = "rgba(255, 255, 0, 0.5)";
             } else {
                 offscreenCtxRef.current.fillStyle = "rgba(0, 255, 0, 0.5)";
