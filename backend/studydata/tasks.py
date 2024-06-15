@@ -28,10 +28,11 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id, del
         human_readable_language = "en-US"
     elif language == 2:
         human_readable_language = "fr-FR"
-    
+    logger.warn(f"Starting pronunciation assessment for {filename} with sentence_id {sentence_id} and language {language}")
     result, word_offset_duration, phoneme_dicts, json_response = pronunciation_assessment_continuous_from_file(filename, reference_text, human_readable_language)
     if not json_response:
         json_response = ["No response from the API"]
+        logger.warn("No response from the API")
 
     if not result:
         return ["No result from the API"]
