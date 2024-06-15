@@ -104,7 +104,6 @@ class AudioAnalysisView(APIView):
                     sentence_id=sentence_id, 
                     audio_file_path=file_path
                 )
-            logger.error(f"Location value: {location_value}")
             
             # Dispatch the pronunciation assessment task to Celery
             task = async_pronunciation_assessment.delay(file_path, sentence_id, request.user.belongs_to_course.language, user_id=request.user.id, delete_after_analysis=location_value>20)

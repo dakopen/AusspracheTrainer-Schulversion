@@ -104,5 +104,7 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id, del
         if os.path.exists(filename):
             os.remove(filename)
 
+    logger.warn(f"Finished pronunciation assessment for {filename} with sentence_id {sentence_id} and language {language}")
+
 
     return result, word_offset_duration

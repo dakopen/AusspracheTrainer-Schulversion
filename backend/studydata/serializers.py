@@ -50,6 +50,7 @@ class StudySentencesCourseAssignmentSerializer(serializers.ModelSerializer):
     
     def get_is_completed(self, obj):
         user = self.context['request'].user
+        
         completed = PronunciationAssessmentResult.objects.filter(
             user=user, 
             sentence=obj.sentence,
