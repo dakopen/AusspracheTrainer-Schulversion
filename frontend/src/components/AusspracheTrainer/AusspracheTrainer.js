@@ -41,7 +41,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
                     resetRef.current = 2;
 
 
-                    if (data.result && data.result[0] && data.result[0].Paragraph && data.result[0].Paragraph.accuracy_score > 5) { // not empty audio
+                    if (data.result && data.result[0] && data.result[0].Paragraph && data.result[0].Paragraph.completeness_score > 25) { // not empty audio
                         onComplete(sentenceId);
                     } else {
                         onAudioNotRight();
