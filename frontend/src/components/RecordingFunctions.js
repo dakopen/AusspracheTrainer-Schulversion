@@ -506,8 +506,8 @@ function resizeAndCopyCanvasContent() {
 
 
 function getColorBasedOnPercentage(percentage) {
-    if (percentage < 70) return "rgba(255, 0, 0, 0.5)";
-    if (percentage < 95) return "rgba(255, 255, 0, 0.5)";
+    if (percentage < 60) return "rgba(255, 0, 0, 0.5)";
+    if (percentage < 87) return "rgba(255, 255, 0, 0.5)";
     return "rgba(0, 255, 0, 0.5)";
 }
 
