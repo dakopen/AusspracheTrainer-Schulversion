@@ -13,7 +13,7 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete, setTa
     const [recordingState, setRecordingState] = useState(0); // 0: idle, 1: recording, 2: submitted
     const { authTokens } = useContext(AuthContext);
     const [source, setSource] = useState(null);
-    const [audioContext, setAudioContext] = useState(new AudioContext());
+    const [audioContext, setAudioContext] = useState(null);
     const [audioBlob, setAudioBlob] = useState(null);
     const [starttimeRecording, setStarttimeRecording] = useState(0);
     const [endtimeRecording, setEndtimeRecording] = useState(0);
@@ -41,11 +41,23 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete, setTa
     };
 
     const startRecording = async () => {
+        let functionAudioContext;
         if (!audioType) return;
+        if (!audioContext) {
+            const newAudioContext = new AudioContext();
+            if (newAudioContext.state === 'suspended') {
+                await newAudioContext.resume();  // Ensure the context is active
+            }
+            setAudioContext(newAudioContext);
+            functionAudioContext = newAudioContext;
+        } else {
+            functionAudioContext = audioContext;
+        }
+
         setStarttimeRecording(Date.now());
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         //source = audioContext.createMediaStreamSource(stream);
-        setSource(audioContext.createMediaStreamSource(stream));
+        setSource(functionAudioContext.createMediaStreamSource(stream));
         // source.connect(analyser);
         const recorder = new MediaRecorder(stream, { mimeType: audioType });
         let chunks = [];

@@ -38,12 +38,19 @@ const AudioVisualizer = ({ result, setResult, isTest }) => {
     let lastMeanFrequency = 0;
     let counter = 0;
 
-    let analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
+    const [analyser, setAnalyser] = useState(null);
+    const [bufferLength, setBufferLength] = useState(null);
+    const [dataArray, setDataArray] = useState(null);
 
-
-    let bufferLength = analyser.frequencyBinCount;
-    let dataArray = new Uint8Array(bufferLength);
+    useEffect(() => {
+        if (audioContext) {
+            const tempAnalyser = audioContext.createAnalyser();
+            tempAnalyser.fftSize = 2048;
+            setAnalyser(tempAnalyser);
+            setBufferLength(tempAnalyser.frequencyBinCount);
+            setDataArray(new Uint8Array(tempAnalyser.frequencyBinCount));
+        }
+    }, [audioContext]);
 
 
     useEffect(() => {
