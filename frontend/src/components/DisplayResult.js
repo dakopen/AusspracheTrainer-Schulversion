@@ -27,8 +27,8 @@ const DisplayResult = ({ result, jumpToWaveformTimestamp }) => {
 
                             case 'Mispronunciation':
                             case 'None':
-                                wordStyle = word.accuracy_score < 70 ? "darkred-word" :
-                                    word.accuracy_score < 95 ? "yellow-word" : "black-word";
+                                wordStyle = word.accuracy_score < 60 ? "darkred-word" :
+                                    word.accuracy_score < 87 ? "yellow-word" : "black-word";
                                 let time = timestamps[timestamp_index++][0] / 1000;
                                 onClickHandler = () => jumpToWaveformTimestamp(time);
                                 break;
