@@ -91,4 +91,6 @@ workers = 3
 
 15. `celery -A backend worker --detach` (go to the backend directory and activate venv first)
 
+16. `celery -A backend beat --detach` (go to the backend directory and activate venv first)
+
 

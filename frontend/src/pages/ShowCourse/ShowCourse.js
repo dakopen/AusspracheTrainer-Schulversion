@@ -206,7 +206,7 @@ const ShowCourse = () => {
 							<div className="show-course-detail">
 								<strong>Geplanter finaler Test:</strong>
 
-								{finalTestActivated &&
+								{!finalTestActivated &&
 									<>
 										<input type="date" className="show-course-input show-course-input-date" value={formatDate(scheduledFinalTest)} onChange={(e) => setScheduledFinalTest(e.target.value)} onBlur={() => updateScheduledDate('scheduled_final_test', scheduledFinalTest)} />
 										<p> oder </p>
