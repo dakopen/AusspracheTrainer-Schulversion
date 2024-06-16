@@ -83,7 +83,7 @@ def async_pronunciation_assessment(filename, sentence_id, language, user_id, del
         StudySentenceByWord.objects.bulk_create(study_sentence_by_word_objects)
         logger.warn(f"Batch created {len(study_sentence_by_word_objects)} StudySentenceByWord objects")
 
-
+    logger.error(f"123 Phoneme dicts: {phoneme_dicts}")
     """
     if user is not None:
         for phoneme_dict in phoneme_dicts:
