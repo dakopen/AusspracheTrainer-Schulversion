@@ -81,7 +81,7 @@ export const AudioRecordingProvider = ({ children, sentenceId, onComplete, setTa
 
 
 
-        recorder.start();  // TODO?: add 10ms to avoid missing the first part of the audio
+        recorder.start(1000);
         setMediaRecorder(recorder);
         setIsRecording(true);
         setRecordingState(1);

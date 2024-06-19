@@ -194,7 +194,7 @@ function startRecording() {
   startUserMediaStream().then(stream => {
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.ondataavailable = event => chunks.push(event.data);
-    mediaRecorder.start(100);
+    mediaRecorder.start(1000);
     animationFrameId = requestAnimationFrame(draw);
     starttimeRecording = Date.now();
     updateUIForRecordingState("start");
