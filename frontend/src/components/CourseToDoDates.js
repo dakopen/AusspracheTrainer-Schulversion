@@ -157,50 +157,53 @@ const CourseToDoDates = ({ final_test_activated }) => {
                     <div className="todo-index-display">2</div>
                     <div className="todo-dates-content">
                         <h4>Wöchentliche Übungen (zuhause)</h4>
-                        {Object.entries(editData).map(([dateKey, date]) => {
-                            const currentDate = new Date();
-                            const activationDate = new Date(date.activation_date);
-                            const dueDate = new Date(date.due_date);
-                            const isActive = currentDate >= activationDate && currentDate <= dueDate;
-                            const isPast = currentDate > dueDate;
-                            const className = isActive ? 'currently-active-tododate' : isPast ? 'passed-tododate' : '';
+                        {Object.entries(editData)
+                            .filter(([dateKey, date]) => dateKey.includes('group5to10'))
+                            .sort(([, dateA], [, dateB]) => dateA.standard_todo - dateB.standard_todo)
+                            .map(([dateKey, date]) => {
+                                const currentDate = new Date();
+                                const activationDate = new Date(date.activation_date);
+                                const dueDate = new Date(date.due_date);
+                                const isActive = currentDate >= activationDate && currentDate <= dueDate;
+                                const isPast = currentDate > dueDate;
+                                const className = isActive ? 'currently-active-tododate' : isPast ? 'passed-tododate' : '';
 
-                            if (dateKey.includes('group5to10')) {
-                                return (
-                                    <div className={`todo-dates-training ${className}`}>
-                                        <p className="todo-date-training-week">Training Woche {parseInt(dateKey.replace('group5to10-', '')) + 1} - <Link to={generateDetailWeekLink(date.standard_todo)}>hier</Link> klicken für Details</p>
-                                        <div className="date-input-container">
-                                            <label className="todo-date-label">Start: <small>17:00 Uhr</small></label>
-                                            <input
-                                                type="date"
-                                                className="todo-date-input"
-                                                value={new Date(date.activation_date).toISOString().slice(0, 10)}
-                                                onChange={e => handleDateChange(dateKey, 'activation_date', e.target.value)}
-                                            />
+                                if (dateKey.includes('group5to10')) {
+                                    return (
+                                        <div className={`todo-dates-training ${className}`}>
+                                            <p className="todo-date-training-week">Training Woche {date.standard_todo - 4} - <Link to={generateDetailWeekLink(date.standard_todo)}>hier</Link> klicken für Details</p>
+                                            <div className="date-input-container">
+                                                <label className="todo-date-label">Start: <small>19:00 Uhr</small></label>
+                                                <input
+                                                    type="date"
+                                                    className="todo-date-input"
+                                                    value={new Date(date.activation_date).toISOString().slice(0, 10)}
+                                                    onChange={e => handleDateChange(dateKey, 'activation_date', e.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="date-input-container">
+                                                <label className="todo-date-label">Fälligkeit: <small>18:59 Uhr</small></label>
+                                                <input
+                                                    type="date"
+                                                    className="todo-date-input"
+                                                    value={new Date(date.due_date).toISOString().slice(0, 10)}
+                                                    onChange={e => handleDateChange(dateKey, 'due_date', e.target.value)}
+                                                />
+                                            </div>
+                                            <button
+                                                className="todo-date-button"
+                                                onClick={() => saveDateChanges(dateKey)}
+                                                disabled={!hasChanged[dateKey] || !isDateValid(date.activation_date) || !isDateValid(date.due_date)}
+                                            >
+                                                Änderung speichern
+                                            </button>
                                         </div>
 
-                                        <div className="date-input-container">
-                                            <label className="todo-date-label">Fälligkeit: <small>16:59 Uhr</small></label>
-                                            <input
-                                                type="date"
-                                                className="todo-date-input"
-                                                value={new Date(date.due_date).toISOString().slice(0, 10)}
-                                                onChange={e => handleDateChange(dateKey, 'due_date', e.target.value)}
-                                            />
-                                        </div>
-                                        <button
-                                            className="todo-date-button"
-                                            onClick={() => saveDateChanges(dateKey)}
-                                            disabled={!hasChanged[dateKey] || !isDateValid(date.activation_date) || !isDateValid(date.due_date)}
-                                        >
-                                            Änderung speichern
-                                        </button>
-                                    </div>
-
-                                );
-                            }
-                            return null;
-                        })}
+                                    );
+                                }
+                                return null;
+                            })}
                     </div>
                 </div>
             }

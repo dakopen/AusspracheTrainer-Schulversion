@@ -129,8 +129,11 @@ const ShowCourse = () => {
 			const updatedCourse = await updateCourseField(authTokens, courseId, { activate_final_test: !finalTestActivated });
 			setCourse(updatedCourse);
 			setFinalTestActivated(!finalTestActivated);
-
-			addNotification("Finalen Test erfolgreich aktiviert", "success");
+			if (finalTestActivated) {
+				addNotification("Der finale Test wurde erfolgreich zurückgenommen", "success");
+			} else {
+				addNotification("Finalen Test erfolgreich aktiviert", "success");
+			}
 		} catch (error) {
 			addNotification("Der finale Test konnte nicht aktiviert werden", "error");
 			console.error("Fehler bei der Aktualisierung des Studienstatus:", error);
