@@ -299,29 +299,45 @@ class RetrieveStudySentencesByCourseAndLocationWithScore(APIView):
         ).select_related('sentence')
 
         results = {'sentences': [], 'language': course.language}
-        for sentence in sentences:
-            sentence = sentence.sentence
-            words = sentence.sentence.split()
+        # Fetch all relevant StudySentenceByWord records in a single query
+        study_sentences = StudySentenceByWord.objects.filter(course=course).values(
+            'sentence_id', 'word_index').annotate(
+            best_score=Max('accuracy_score'))
+
+        # Create a dictionary to hold the best scores by sentence and word index
+        best_scores_dict = {}
+        for record in study_sentences:
+            key = (record['sentence_id'], record['word_index'])
+            if key not in best_scores_dict:
+                best_scores_dict[key] = []
+            best_scores_dict[key].append(record['best_score'])
+
+        # Compute average scores for each sentence and word index
+        average_scores_dict = {
+            key: sum(scores) / len(scores)
+            for key, scores in best_scores_dict.items()
+        }
+
+        # Process each sentence and calculate scores
+        for sentence_obj in sentences:
+            sentence_text = sentence_obj.sentence.sentence
+            words = sentence_text.split()
             sentence_scores = []
             for index, word in enumerate(words):
-                best_scores = StudySentenceByWord.objects.filter(
-                    course=course,
-                    sentence=sentence,
-                    word_index=index + 1
-                ).values('user').annotate(best_score=Max('accuracy_score')).aggregate(average_score=Avg('best_score'))
-                average_score = best_scores.get('average_score', -1)
-                if average_score is None:
-                    average_score = -1
+
+                key = (sentence_obj.sentence.id, index + 1)
+                average_score = average_scores_dict.get(key, -1)
                 sentence_scores.append({
                     'word': word,
                     'average_score': average_score
                 })
-
+            
             results['sentences'].append({
-                'sentence_id': sentence.id,
-                'sentence_text': sentence.sentence,
+                'sentence_id': sentence_obj.sentence.id,
+                'sentence_text': sentence_text,
                 'scores': sentence_scores
             })
+
         serializer = AverageScoreSerializer(data=results)
         if serializer.is_valid():
             return Response(serializer.validated_data)
