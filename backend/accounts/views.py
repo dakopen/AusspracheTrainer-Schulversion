@@ -202,7 +202,7 @@ class CourseStudentListView(generics.ListAPIView):
 
         user = self.request.user
         if user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user) or (user.role == User.SECRETARY and course.teacher.school == user.school):
-            return course.students.all()
+            return course.students.all().order_by('-created_at')
         else:
             raise PermissionDenied({'message': 'Du hast nicht die Berechtigung, die Schüler dieses Kurses anzuzeigen.'})
         
@@ -519,7 +519,7 @@ class GenerateAndDownloadPDFView(APIView):
         if not (user.role == User.ADMIN or (user.role == User.TEACHER and course.teacher == user) or (user.role == User.SECRETARY and course.teacher.school == user.school)):
             raise PermissionDenied({'message': 'Du hast nicht die Berechtigung.'})
         
-        usernames = [user.username[:10] for user in course.students.all()]
+        usernames = [user.username[:10] for user in course.students.all().order_by('-created_at')]
 
         presigned_url = create_pdf_for_usernames(usernames, course.name, course_id)
         return JsonResponse({'url': presigned_url})
