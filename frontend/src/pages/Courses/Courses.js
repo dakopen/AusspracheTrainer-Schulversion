@@ -26,7 +26,7 @@ const Courses = () => {
 
 	return (
 		<div className="course-container">
-			{courses.map((course) => (
+			{courses.sort((a, b) => a.id - b.id).map((course) => (
 				<Link to={`/courses/${course.id}`} key={course.id} className={`course-card ${course.demo && "course-demo"} `}>
 					<div>
 						<h4>{course.name} {course.demo && "[DEMO]"}</h4>
