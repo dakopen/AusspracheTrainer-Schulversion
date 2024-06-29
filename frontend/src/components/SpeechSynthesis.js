@@ -40,7 +40,6 @@ const SpeechSynthesis = ({ audioUrl }) => {
 			const percentagePosition = (100 * audio.currentTime) / audio.duration;
 			setTimelinePosition(percentagePosition);
 			timelineRef.current.style.backgroundSize = `${percentagePosition}% 100%`;
-			timelineRef.current.value = percentagePosition;
 		}
 	};
 
@@ -58,11 +57,9 @@ const SpeechSynthesis = ({ audioUrl }) => {
 	useEffect(() => {
 		setLoading(true);
 		const audio = audioRef.current;
-		const source = document.getElementById("audio-source");
-
-		if (audio && source) {
+		if (audio) {
 			audio.pause();
-			source.src = audioUrl;
+			audio.src = audioUrl; // directly set the src attribute
 			audio.load();
 			audio.oncanplaythrough = () => {
 				setLoading(false);
@@ -80,7 +77,6 @@ const SpeechSynthesis = ({ audioUrl }) => {
 				onEnded={() => setIsPlaying(false)}
 				onTimeUpdate={onTimeUpdate}
 			>
-				<source id="audio-source" src={audioUrl} type="audio/wav" />
 				Dein Browser unterstützt das Audioelement nicht.
 			</audio>
 			<div className="controls">

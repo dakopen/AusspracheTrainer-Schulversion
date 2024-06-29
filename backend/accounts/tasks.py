@@ -18,7 +18,7 @@ def send_reminder_emails():
         
         email = EmailMessage(
             subject=f"AusspracheTrainer-Studie: das {todo.standard_todo.id - 4}. Training wartet auf dich!",
-            body=f"Bitte nimm dir 5-10 Minuten erledige dein {todo.standard_todo.id - 4}. Aussprache Training auf<br><br><a href='https://studie.aussprachetrainer.org'>studie.aussprachetrainer.org</a>.<br><br>Insgesamt gibt es 6 Trainings.<br><br>Viel Erfolg und vielen Dank für deine aktive Teilnahme an der Studie!",
+            body=f"Bitte nimm dir 5-10 Minuten erledige dein {todo.standard_todo.id - 4}. Aussprache Training auf:<br><br><a href='https://studie.aussprachetrainer.org'>studie.aussprachetrainer.org</a><br><br>Insgesamt gibt es 6 Trainings.<br><br>Viel Erfolg und vielen Dank für deine aktive Teilnahme an der Studie!",
             from_email=settings.DEFAULT_FROM_EMAIL,
             bcc=list(todo.course.students.all().values_list('email', flat=True)),
         )
