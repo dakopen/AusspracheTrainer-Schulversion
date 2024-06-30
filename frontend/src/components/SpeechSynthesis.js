@@ -25,11 +25,8 @@ const SpeechSynthesis = ({ audioUrl, sentenceId }) => {
 		if (audio) {
 			if (audio.paused) {
 				switchFromTextToTimeline();
-				console.log("Playing the audio");
 				audio.play().then(() => {
-					console.log("Playing the audio");
 					setIsPlaying(true);
-					console.log("SentenceId: ", sentenceId);
 					logSynthSpeech(sentenceId, authTokens);
 				}).catch((error) => {
 					console.error("Failed to play the audio:", error);
