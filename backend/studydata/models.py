@@ -98,3 +98,9 @@ class StudySentenceByWord(models.Model):
 
     def __str__(self):
         return f"Study Sentence by Word for {self.user.username} on {self.sentence.sentence} at index {self.word_index}"
+    
+
+class SynthSpeechLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sentence = models.ForeignKey('StudySentences', on_delete=models.CASCADE)
+    time = models.DateTimeField(auto_now_add=True)

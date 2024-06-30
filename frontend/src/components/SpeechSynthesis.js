@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import "./SpeechSynthesis.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
+import { logSynthSpeech } from "../utils/api";
+import AuthContext from "../context/AuthContext";
 
-const SpeechSynthesis = ({ audioUrl }) => {
+const SpeechSynthesis = ({ audioUrl, sentenceId }) => {
 	const audioRef = useRef(null);
 	const timelineRef = useRef(null);
 	const synthTutorialRef = useRef(null);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [timelinePosition, setTimelinePosition] = useState(0);
 	const [loading, setLoading] = useState(true);
+	const { authTokens } = useContext(AuthContext);
 
 	const switchFromTextToTimeline = () => {
 		timelineRef.current.style.display = "inherit";
@@ -22,8 +25,12 @@ const SpeechSynthesis = ({ audioUrl }) => {
 		if (audio) {
 			if (audio.paused) {
 				switchFromTextToTimeline();
+				console.log("Playing the audio");
 				audio.play().then(() => {
+					console.log("Playing the audio");
 					setIsPlaying(true);
+					console.log("SentenceId: ", sentenceId);
+					logSynthSpeech(sentenceId, authTokens);
 				}).catch((error) => {
 					console.error("Failed to play the audio:", error);
 				});
@@ -61,10 +68,8 @@ const SpeechSynthesis = ({ audioUrl }) => {
 			audio.pause();
 			audio.src = audioUrl; // directly set the src attribute
 			audio.load();
-			audio.oncanplaythrough = () => {
-				setLoading(false);
-				setIsPlaying(false);
-			};
+			setLoading(false);
+			setIsPlaying(false);
 		}
 	}, [audioUrl]);
 

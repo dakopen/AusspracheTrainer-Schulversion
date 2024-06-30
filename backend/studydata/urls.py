@@ -10,9 +10,8 @@ urlpatterns = [
     path('sentences/<int:sentence_id>/', views.StudySentencesListView.as_view(), name='sentences-update'),
     path('course-assignments/', views.RetrieveStudySentencesByCourseAndLocation.as_view(), name='course-assignments-sentences'),
     path('task-status/<str:task_id>/', views.TaskStatusView.as_view(), name='task-status'),
-
     path('average-course-sentence-scores/', views.RetrieveStudySentencesByCourseAndLocationWithScore.as_view(), name='average-course-sentence-scores'),
-
     path('trigger-audio-analysis/', views.TriggerAudioAnalysisView.as_view(), name='trigger-audio-analysis'),
+    path('log-synth-speech/', views.SynthSpeechLogView.as_view(), name='log-synth-speech'),
 
 ]

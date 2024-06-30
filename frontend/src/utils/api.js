@@ -572,3 +572,30 @@ export const fetchAverageScoresByCourseAndSentence = async (courseId, startLocat
 		throw error;
 	}
 };
+
+export const logSynthSpeech = async (sentence, authTokens) => {
+	try {
+		const response = await fetch(
+			`${STUDYDATA_BASE_URL}/log-synth-speech/`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+				},
+				body: JSON.stringify({ sentence }),  // sentence = sentenceId
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to log synthetic speech");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error logging synthetic speech:", error);
+		throw error;
+	}
+};

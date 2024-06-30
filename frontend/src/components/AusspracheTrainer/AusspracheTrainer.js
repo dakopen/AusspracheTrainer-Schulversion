@@ -73,7 +73,7 @@ const AusspracheTrainer = ({ textareaText, sentenceId, audioUrl, onNextSentence,
                 <br></br>
                 <RecordingButton pollCompleted={pollCompleted} resetRef={resetRef} />
             </AudioRecordingProvider>
-            {(user.full_access_group && !isTest) ? <SpeechSynthesis audioUrl={audioUrl} /> : <>
+            {(user.full_access_group && !isTest) ? <SpeechSynthesis audioUrl={audioUrl} sentenceId={sentenceId}/> : <>
                 <div style={{ marginTop: "50px" }}>
 
                 </div>

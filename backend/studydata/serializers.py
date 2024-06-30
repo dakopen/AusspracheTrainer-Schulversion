@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, PronunciationAssessmentResult, FinalQuestionnaire
+from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, PronunciationAssessmentResult, FinalQuestionnaire, SynthSpeechLog
 
 class FirstQuestionnaireSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,3 +57,16 @@ class StudySentencesCourseAssignmentSerializer(serializers.ModelSerializer):
             completeness__gt=25
         ).exists()
         return completed
+    
+class SynthSpeechLogSerializer(serializers.ModelSerializer):
+    sentence = serializers.PrimaryKeyRelatedField(queryset=StudySentences.objects.all())
+
+    class Meta:
+        model = SynthSpeechLog
+        fields = '__all__'
+        read_only_fields = ('user', 'time')
+
+    def validate(self, data):
+        # Inject the user from the request context
+        data['user'] = self.context['request'].user
+        return data

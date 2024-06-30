@@ -11,15 +11,17 @@ from rest_framework import serializers
 from accounts.permissions import IsStudystudent, IsAuthenticated, IsTeacherOrSecretaryOrAdmin, IsAdmin, IsStudystudentOrTeacher
 from todo.views import complete_user_todo_user_and_standard_todo
 import backend.settings
-
+from django.views.decorators.csrf import csrf_exempt
 from accounts.models import Course
 from .tasks import async_pronunciation_assessment
-from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, TestSentencesWithAudio, StudySentenceByWord
+from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, TestSentencesWithAudio, StudySentenceByWord, \
+                    SynthSpeechLog
 from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, \
-    StudySentencesSerializer, StudySentencesCourseAssignmentSerializer, FinalQuestionnaireSerializer
+    StudySentencesSerializer, StudySentencesCourseAssignmentSerializer, FinalQuestionnaireSerializer, SynthSpeechLogSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from celery.result import AsyncResult
+from django.http import JsonResponse
 
 logger = logging.getLogger(__name__)
 
@@ -343,3 +345,14 @@ class RetrieveStudySentencesByCourseAndLocationWithScore(APIView):
             return Response(serializer.validated_data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SynthSpeechLogView(APIView):
+    permission_classes = [IsStudystudent]
+
+    def post(self, request, *args, **kwargs):
+        serializer = SynthSpeechLogSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     FirstQuestionnaire, FinalQuestionnaire,
     PronunciationAssessmentResult, TestSentencesWithAudio, StudySentences, 
-    StudySentencesCourseAssignment, StudySentenceByWord
+    StudySentencesCourseAssignment, StudySentenceByWord, SynthSpeechLog
 )
 class FirstQuestionnaireAdmin(admin.ModelAdmin):
     list_display = ('user', 'date_submitted', 'age', 'sex', 'pronunciation_skill', 'weekly_language_contact_hours')
@@ -30,6 +30,10 @@ class StudySentenceByWordAdmin(admin.ModelAdmin):
     list_display = ('course', 'word_index', 'sentence', 'user', 'accuracy_score')
     readonly_fields = ('course', 'word_index', 'sentence', 'user', 'accuracy_score')
 
+class SynthSpeechLogAdmin(admin.ModelAdmin):
+    list_display = ('user', 'time', 'sentence')
+    readonly_fields = ('user', 'time', 'sentence')
+
 admin.site.register(FirstQuestionnaire, FirstQuestionnaireAdmin)
 admin.site.register(FinalQuestionnaire, FinalQuestionnaireAdmin)
 admin.site.register(PronunciationAssessmentResult, PronunciationAssessmentResultAdmin)
@@ -37,3 +41,4 @@ admin.site.register(TestSentencesWithAudio, TestSentencesWithAudioAdmin)
 admin.site.register(StudySentences, StudySentencesAdmin)
 admin.site.register(StudySentencesCourseAssignment, StudySentencesCourseAssignmentAdmin)
 admin.site.register(StudySentenceByWord, StudySentenceByWordAdmin)
+admin.site.register(SynthSpeechLog, SynthSpeechLogAdmin)

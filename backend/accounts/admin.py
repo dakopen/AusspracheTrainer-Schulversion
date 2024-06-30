@@ -12,9 +12,6 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ('name', 'teacher__username')  # Allow search by teacher's username
 
 class UserAdmin(BaseUserAdmin):
-    # Define the fields to be used in displaying the User model.
-    # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
     list_display = ('username', 'role', 'school', 'belongs_to_course', 'language', 'full_access_group')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
@@ -27,13 +24,13 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('username', 'password1', 'password2'),
         }),
     )
-    search_fields = ('username',)
+    search_fields = ('username', 'email')  # Include email in search fields
     ordering = ('username',)
     filter_horizontal = ()
 
 class ChangedUsernamesAdmin(admin.ModelAdmin):
     list_display = ('user', 'old_username', 'new_username', 'created_at')
-    exclude = ('email',)  # exclude email if present in model fields, adjust if needed
+    exclude = ('email',)  # Exclude email if present in model fields, adjust if needed
 
 # Register the models with their corresponding custom admin classes
 admin.site.register(School, SchoolAdmin)
