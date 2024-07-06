@@ -13,5 +13,5 @@ urlpatterns = [
     path('average-course-sentence-scores/', views.RetrieveStudySentencesByCourseAndLocationWithScore.as_view(), name='average-course-sentence-scores'),
     path('trigger-audio-analysis/', views.TriggerAudioAnalysisView.as_view(), name='trigger-audio-analysis'),
     path('log-synth-speech/', views.SynthSpeechLogView.as_view(), name='log-synth-speech'),
-
+    path('generate-user-report/', views.GenerateUserReportPDF.as_view(), name='generate-user-report'),
 ]

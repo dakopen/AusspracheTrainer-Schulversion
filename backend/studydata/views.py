@@ -15,13 +15,14 @@ from django.views.decorators.csrf import csrf_exempt
 from accounts.models import Course
 from .tasks import async_pronunciation_assessment
 from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, TestSentencesWithAudio, StudySentenceByWord, \
-                    SynthSpeechLog
+                    SynthSpeechLog, PronunciationAssessmentResult
 from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, \
     StudySentencesSerializer, StudySentencesCourseAssignmentSerializer, FinalQuestionnaireSerializer, SynthSpeechLogSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from celery.result import AsyncResult
 from django.http import JsonResponse
+from .utils import create_user_report_pdf
 
 logger = logging.getLogger(__name__)
 
@@ -356,3 +357,45 @@ class SynthSpeechLogView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class GenerateUserReportPDF(APIView):
+    permission_classes = [IsStudystudent]
+
+    def post(self, request):
+
+        # check if the course belongs to the teacher or the course teacher school belongs to the secretary
+        user = self.request.user
+
+
+        user_data = {"sentences": [], "language": user.language}
+
+        # fetch all location values for the course
+        course = user.belongs_to_course
+       
+        # fetch all sentences for the course
+        sentences_assignements = StudySentencesCourseAssignment.objects.filter(course=course)
+
+        sentence_counter = 1
+        for sentence_assignment in sentences_assignements:
+            sentence_data = []
+
+            sentence_id = sentence_assignment.sentence.id
+            sentence_text = sentence_assignment.sentence.sentence
+            
+            # fetch all the pronunciation assessment results for the sentence for the user
+            pronunciation_results = PronunciationAssessmentResult.objects.filter(sentence=sentence_id, user=user, completeness__gt=25)
+            if pronunciation_results:
+                for pronunciation_result in pronunciation_results:
+                    data = pronunciation_result.json_response
+                    words_data = data.get("NBest", [])[0].get("Words", [])
+    
+                    # Create a list of tuples (word, score, error_type)
+                    word_score_list = [(entry["Word"], entry["PronunciationAssessment"]["AccuracyScore"], entry["PronunciationAssessment"]["ErrorType"]) for entry in words_data]
+                    sentence_data.append(word_score_list)
+            user_data["sentences"].append({"sentence_counter": sentence_counter, "sentence_text": sentence_text, "words": sentence_data})
+            sentence_counter += 1
+
+        # presigned_url = create_user_report_pdf()
+        # return JsonResponse({'url': presigned_url})
+        return JsonResponse({'url': user_data})

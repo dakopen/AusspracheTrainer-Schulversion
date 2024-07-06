@@ -25,12 +25,21 @@ def send_reminder_emails():
         email.content_subtype = "html"
         email.send(fail_silently=True)
 
-        send_mail(
-            subject=f"AusspracheTrainer-Studie: das {todo.standard_todo.id - 4}. Training startet",
-            message=f"Hallo liebe Lehrkraft,\nbitte erinnern Sie Ihre Schüler:innen daran, dass ab heute das {todo.standard_todo.id - 4}. Training auf studie.aussprachetrainer.org verfügbar ist (es wurde auch eine Erinnerungsmail an die Schüler:innen versandt).\n\nDie Schüler:innen haben bis zum {formats.date_format(todo.due_date, 'd.m.Y')} um 16:59 Uhr Zeit, das Training zu absolvieren.\n\nProfi Tipp: In den Kurseinstellungen können Sie sowohl das Start- als auch Enddatum nach Belieben verändern.\n\nVielen Dank!",
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[todo.course.teacher.username],
-            fail_silently=True,
-        )
+        if todo.standard_todo.id == 10:
+            send_mail(
+                subject=f"AusspracheTrainer-Studie: Bitte planen Sie den finalen Test, denn das {todo.standard_todo.id - 4}. Training startet",
+                message=f"Hallo liebe Lehrkraft,\n in einer Woche Ihre Schüler:innen mit dem Training fertig (heute startet das letzte Training). Bitte planen Sie (falls nicht schon getan) den finalen Test, um die Studie abzuschließen. Der finale Test sollte wenn möglich in frühestens 8 Tagen (1 Tag nach dem Ende des Trainings) stattfinden. Er kann aber auch erst in 2-3 Wochen stattfinden. Sie können ihn entweder planen (über die Kursansicht) oder am Testtag in der Schule kurz vor Beginn der Unterrichtsstunde starten (empfohlen; einfach auf 'heute starten' drücken).\n\nVielen Dank!",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[todo.course.teacher.username],
+                fail_silently=True,
+            )
+        else:
+            send_mail(
+                subject=f"AusspracheTrainer-Studie: das {todo.standard_todo.id - 4}. Training startet",
+                message=f"Hallo liebe Lehrkraft,\nbitte erinnern Sie Ihre Schüler:innen daran, dass ab heute das {todo.standard_todo.id - 4}. Training auf studie.aussprachetrainer.org verfügbar ist (es wurde auch eine Erinnerungsmail an die Schüler:innen versandt).\n\nDie Schüler:innen haben bis zum {formats.date_format(todo.due_date, 'd.m.Y')} um 18:59 Uhr Zeit, das Training zu absolvieren.\n\nProfi Tipp: In den Kurseinstellungen können Sie sowohl das Start- als auch Enddatum nach Belieben verändern.\n\nVielen Dank!",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[todo.course.teacher.username],
+                fail_silently=True,
+            )
         
          

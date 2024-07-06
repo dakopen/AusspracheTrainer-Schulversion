@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import StudyStudentLogin from "../StudyStudentLogin/StudyStudentLogin";
 
-import { triggerAnalysis } from "../../utils/api";
+import { triggerAnalysis, generateUserReportPDF } from "../../utils/api";
 
 import './TeacherHomePage.css';
 import './HomePage.css';
@@ -62,6 +62,21 @@ const HomePage = () => {
 	const getIconClass = (index) => {
 		return activeInfoIndex === index ? 'icon' : 'icon icon-inactive';
 	};
+
+
+	const handleGenerateUserReportPDF = async () => {
+		try {
+			const url = await generateUserReportPDF(authTokens);
+			if (url.error) {
+				throw new Error('Failed to generate user report PDF');
+			}
+			console.log("Generated PDF URL:", url);
+		} catch (error) {
+			console.error("Error generating user report PDF:", error);
+			addNotification("Es ist ein Fehler beim Generieren aufgetreten.", "error");
+		}
+	};
+
 
 	return (
 		<div className="App">
@@ -128,6 +143,7 @@ const HomePage = () => {
 				<>
 					<h1>AusspracheTrainer Studie</h1>
 					<ToDo />
+					<button onClick={handleGenerateUserReportPDF}>Download Report</button>
 				</>
 			}
 			{isTeacher(user) &&

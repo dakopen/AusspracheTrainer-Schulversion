@@ -1,2 +1,4 @@
 User-agent: *
-Disallow: /
+Disallow: /rolelogin
+Disallow: /forgot-username
+Disallow: /request-password-reset

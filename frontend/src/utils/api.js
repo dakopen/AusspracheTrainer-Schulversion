@@ -542,6 +542,28 @@ export const generateUsernamesPDF = async (authTokens, courseId) => {
 	}
 };
 
+export const generateUserReportPDF = async (authTokens) => {
+	try {
+		const response = await fetch(`${STUDYDATA_BASE_URL}/generate-user-report/`, {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${authTokens.access}`,
+				'ngrok-skip-browser-warning': 'true',
+				'Content-Type': 'application/json'  // Include if your endpoint expects JSON
+			},
+		});
+		const data = await response.json();
+		if (!response.ok) {
+			throw new Error(data.error || 'Failed to generate user report PDF');
+		}
+		return data.url;
+	} catch (error) {
+		console.error("Error generating user report PDF:", error);
+		return { error: "ERROR" };
+	}
+};
+
+
 
 export const fetchAverageScoresByCourseAndSentence = async (courseId, startLocation, endLocation, authTokens) => {
 	try {
