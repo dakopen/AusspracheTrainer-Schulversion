@@ -47,6 +47,7 @@ class FinalQuestionnaireView(APIView):
         if serializer.is_valid():
             serializer.save()
             complete_user_todo_user_and_standard_todo(request.user, 13)
+            request.user.finished_study = True
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
