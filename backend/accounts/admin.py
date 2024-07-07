@@ -12,10 +12,10 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ('name', 'teacher__username')  # Allow search by teacher's username
 
 class UserAdmin(BaseUserAdmin):
-    list_display = ('username', 'role', 'school', 'belongs_to_course', 'language', 'full_access_group')
+    list_display = ('username', 'role', 'school', 'belongs_to_course', 'language', 'full_access_group', 'finished_study', 'downloaded_report')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Permissions', {'fields': ('role', 'school', 'belongs_to_course', 'language', 'full_access_group')}),
+        ('Permissions', {'fields': ('role', 'school', 'belongs_to_course', 'language', 'full_access_group', 'finished_study', 'downloaded_report')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (

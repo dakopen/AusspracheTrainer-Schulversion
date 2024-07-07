@@ -15,6 +15,8 @@ urlpatterns = [
     path('forgot-username/', views.ForgotUsernameView.as_view(), name='forgot-username'),
     path('request-reset-password/', views.PasswordResetRequestView.as_view(), name='request-reset-password'),
     path('reset-password/<uidb64>/<token>/', views.PasswordResetView.as_view(), name='reset-password'),
+    path('check-finished-study-and-downloaded-report/', views.CheckUserFinishedStudyAndDownloadedReport.as_view(), name='check-user-finished-study-and-downloaded-report'),
+    path('mark-user-report-as-downloaded/', views.MarkUserReportAsDownloadedView.as_view(), name='mark-user-report-as-downloaded'),
 
     path('schools/', views.SchoolListView.as_view(), name='school-list'),
     path('schools/create', views.SchoolCreateView.as_view(), name='school-create'),

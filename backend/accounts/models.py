@@ -72,6 +72,9 @@ class User(AbstractUser):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    finished_study = models.BooleanField(default=False)
+    downloaded_report = models.BooleanField(default=False)
+
 
 class ChangedUsernames(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE)

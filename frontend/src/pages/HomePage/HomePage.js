@@ -3,13 +3,14 @@ import React, { useState, useContext, useEffect, createRef } from "react";
 import { useNotification } from "../../context/NotificationContext";
 import { isStudyStudent, isTeacher, isNotLoggedIn } from "../../utils/RoleChecks";
 import ToDo from "../../components/ToDo/ToDo";
+import FinishedStudy from "../../components/FinishedStudy/FinishedStudy";
 import AuthContext from "../../context/AuthContext";
 import { faUser, faChalkboardTeacher, faSchool, faChevronDown, faDownload, faSignInAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import StudyStudentLogin from "../StudyStudentLogin/StudyStudentLogin";
 
-import { triggerAnalysis, generateUserReportPDF } from "../../utils/api";
+import { triggerAnalysis, generateUserReportPDF, fetchUserStudyStatus } from "../../utils/api";
 
 import './TeacherHomePage.css';
 import './HomePage.css';
@@ -20,6 +21,21 @@ const HomePage = () => {
 
 	const [isAdditionalInfoVisible, setIsAdditionalInfoVisible] = useState(false);
 	const [activeInfoIndex, setActiveInfoIndex] = useState(1);
+	const [status, setStatus] = useState({ finished_study: false, downloaded_report: false });
+
+	useEffect(() => {
+		const getStatus = async () => {
+			if (!authTokens) return;
+			try {
+				const data = await fetchUserStudyStatus(authTokens);
+				setStatus(data);
+			} catch (error) {
+				Sentry.captureException(error);
+			}
+		};
+
+		getStatus();
+	}, [authTokens]);
 
 	useEffect(() => {
 		if (isNotLoggedIn(user)) {
@@ -64,18 +80,7 @@ const HomePage = () => {
 	};
 
 
-	const handleGenerateUserReportPDF = async () => {
-		try {
-			const url = await generateUserReportPDF(authTokens);
-			if (url.error) {
-				throw new Error('Failed to generate user report PDF');
-			}
-			addNotification("Der Report wurde erfolgreich generiert. In Kürze erhälst Du eine Mail.", "success");
-		} catch (error) {
-			console.error("Error generating user report PDF:", error);
-			addNotification("Es ist ein Fehler beim Generieren aufgetreten.", "error");
-		}
-	};
+
 
 
 	return (
@@ -142,8 +147,9 @@ const HomePage = () => {
 			{isStudyStudent(user) &&
 				<>
 					<h1>AusspracheTrainer Studie</h1>
-					<ToDo />
-					<button onClick={handleGenerateUserReportPDF}>Download Report</button>
+
+					{!status.finished_study && <ToDo />}
+					{status.finished_study && <FinishedStudy reportSent={status.downloaded_report} status={status} />}
 				</>
 			}
 			{isTeacher(user) &&

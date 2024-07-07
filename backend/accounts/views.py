@@ -523,3 +523,22 @@ class GenerateAndDownloadPDFView(APIView):
 
         presigned_url = create_pdf_for_usernames(usernames, course.name, course_id)
         return JsonResponse({'url': presigned_url})
+    
+class CheckUserFinishedStudyAndDownloadedReport(APIView):
+    permission_classes = [IsStudystudent]
+
+    def get(self, request):
+        user = request.user
+        return Response({'finished_study': user.finished_study, 'downloaded_report': user.downloaded_report}, status=status.HTTP_200_OK)
+
+
+
+class MarkUserReportAsDownloadedView(APIView):
+    permission_classes = [IsStudystudent]
+
+    def post(self, request):
+        user = request.user
+        user.downloaded_report = True
+        user.save()
+
+        return Response({'message': 'User report marked as downloaded.'}, status=status.HTTP_200_OK)

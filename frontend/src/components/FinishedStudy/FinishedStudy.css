@@ -1,0 +1,46 @@
+.finished-study-container {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: var(--light-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	text-align: justify;
+}
+
+.finished-study-header {
+	color: var(--lila);
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.finished-study-detail {
+	margin: 10px 0;
+	display: flex;
+	justify-content: space-between;
+}
+
+.finished-study-button {
+	padding: 8px 16px;
+	background-color: var(--rosa);
+	color: var(--white);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	margin: 10px;
+	width: 45%;
+}
+
+.finished-study-button:hover {
+	background-color: var(--lila);
+}
+
+.left-button {
+	align-self: flex-start;
+}
+
+.right-button {
+	align-self: flex-end;
+}

@@ -359,11 +359,18 @@ class SynthSpeechLogView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+def mark_user_report_as_downloaded(user_id):
+    user = User.objects.get(id=user_id)
+    user.downloaded_report = True
+    user.save()
+
+    return user.downloaded_report
 class GenerateUserReportPDF(APIView):
     permission_classes = [IsStudystudent]
 
     def post(self, request):
         async_user_report_creation.delay(request.user.id)
+        mark_user_report_as_downloaded(request.user.id)
         return JsonResponse({'message': 'In Kürze wirst Du an eine Email mit Deinem Report erhalten.', 'status': 'success'})
         """
         # check if the course belongs to the teacher or the course teacher school belongs to the secretary

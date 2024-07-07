@@ -621,3 +621,56 @@ export const logSynthSpeech = async (sentence, authTokens) => {
 		throw error;
 	}
 };
+
+
+export const markUserReportDownloaded = async (authTokens) => {
+	try {
+		const response = await fetch(
+			`${ACCOUNT_BASE_URL}/mark-user-report-as-downloaded/`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to decline user report");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Failed to decline user report:", error);
+		throw error;
+	}
+};
+
+export const fetchUserStudyStatus = async (authTokens) => {
+	try {
+		const response = await fetch(
+			`${ACCOUNT_BASE_URL}/check-finished-study-and-downloaded-report/`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch user study status");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching user study status:", error);
+		throw error;
+	}
+};

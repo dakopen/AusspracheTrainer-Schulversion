@@ -22,7 +22,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'school', 'role', 'belongs_to_course')  # Adjusted to not include 'email'
+        fields = ('id', 'username', 'school', 'role', 'belongs_to_course', 'finished_study', 'downloaded_report')  # Adjusted to not include 'email'
 
     def create(self, validated_data, school=None, role=None):
         if role is None:
