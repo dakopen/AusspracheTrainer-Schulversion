@@ -70,7 +70,7 @@ const HomePage = () => {
 			if (url.error) {
 				throw new Error('Failed to generate user report PDF');
 			}
-			console.log("Generated PDF URL:", url);
+			addNotification("Der Report wurde erfolgreich generiert. In Kürze erhälst Du eine Mail.", "success");
 		} catch (error) {
 			console.error("Error generating user report PDF:", error);
 			addNotification("Es ist ein Fehler beim Generieren aufgetreten.", "error");

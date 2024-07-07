@@ -556,7 +556,7 @@ export const generateUserReportPDF = async (authTokens) => {
 		if (!response.ok) {
 			throw new Error(data.error || 'Failed to generate user report PDF');
 		}
-		return data.url;
+		return data.message;
 	} catch (error) {
 		console.error("Error generating user report PDF:", error);
 		return { error: "ERROR" };

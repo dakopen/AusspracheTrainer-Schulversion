@@ -13,7 +13,7 @@ from todo.views import complete_user_todo_user_and_standard_todo
 import backend.settings
 from django.views.decorators.csrf import csrf_exempt
 from accounts.models import Course
-from .tasks import async_pronunciation_assessment
+from .tasks import async_pronunciation_assessment, async_user_report_creation
 from .models import FirstQuestionnaire, StudySentences, StudySentencesCourseAssignment, TestSentencesWithAudio, StudySentenceByWord, \
                     SynthSpeechLog, PronunciationAssessmentResult
 from .serializers import FirstQuestionnaireSerializer, AudioAnalysisSerializer, \
@@ -363,7 +363,9 @@ class GenerateUserReportPDF(APIView):
     permission_classes = [IsStudystudent]
 
     def post(self, request):
-
+        async_user_report_creation.delay(request.user.id)
+        return JsonResponse({'message': 'In Kürze wirst Du an eine Email mit Deinem Report erhalten.', 'status': 'success'})
+        """
         # check if the course belongs to the teacher or the course teacher school belongs to the secretary
         user = self.request.user
 
@@ -385,6 +387,8 @@ class GenerateUserReportPDF(APIView):
             
             # fetch all the pronunciation assessment results for the sentence for the user
             pronunciation_results = PronunciationAssessmentResult.objects.filter(sentence=sentence_id, user=user, completeness__gt=25)
+            total_accuracy = 0
+            count = 0
             if pronunciation_results:
                 for pronunciation_result in pronunciation_results:
                     data = pronunciation_result.json_response
@@ -393,9 +397,12 @@ class GenerateUserReportPDF(APIView):
                     # Create a list of tuples (word, score, error_type)
                     word_score_list = [(entry["Word"], entry["PronunciationAssessment"]["AccuracyScore"], entry["PronunciationAssessment"]["ErrorType"]) for entry in words_data]
                     sentence_data.append(word_score_list)
-            user_data["sentences"].append({"sentence_counter": sentence_counter, "sentence_text": sentence_text, "words": sentence_data})
+                    count += 1
+                    total_accuracy += pronunciation_result.accuracy
+            user_data["sentences"].append({"sentence_counter": sentence_counter, "sentence_text": sentence_text, "words": sentence_data, "accuracy": total_accuracy/count if count > 0 else None})
             sentence_counter += 1
-
+        
+        create_user_report_pdf(user_data)
+        """
         # presigned_url = create_user_report_pdf()
         # return JsonResponse({'url': presigned_url})
-        return JsonResponse({'url': user_data})
