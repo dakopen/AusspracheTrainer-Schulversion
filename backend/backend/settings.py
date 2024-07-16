@@ -34,6 +34,10 @@ MS_SPEECH_SERVICES_REGION = "germanywestcentral"
 DELETE_AUDIO_FILE_AFTER_ANALYSIS = True
 # Application definition
 
+if DEBUG:
+    sentry_environment = "dev"
+else:
+    sentry_environment = "prod"
 
 sentry_sdk.init(
     dsn="https://cdfa3ecf76bbadfe421f351711f126cf@o4505771582750720.ingest.us.sentry.io/4507391552913408",
@@ -44,6 +48,7 @@ sentry_sdk.init(
     # of sampled transactions.
     # We recommend adjusting this value in production.
     profiles_sample_rate=1.0,
+    environment=sentry_environment
 )
 
 

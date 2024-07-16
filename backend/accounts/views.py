@@ -19,7 +19,8 @@ from django.db import connection
 
 from .utils import generate_random_username, create_pdf_for_usernames
 from .models import School, Course, ChangedUsernames
-from .serializers import UserEmailSerializer, UserSerializer, SchoolSerializer, CourseSerializer, ChangedUsernamesSerializer
+from .serializers import UserEmailSerializer, UserSerializer, SchoolSerializer, CourseSerializer, ChangedUsernamesSerializer, \
+                        AccountsHealthCheckSerializer
 from .permissions import IsAdminOrSecretaryCreatingAllowedRoles, IsAdmin, IsSecretaryOrAdmin, \
                         IsTeacher, IsTeacherOrAdmin, IsTeacherOrSecretaryOrAdmin, IsStudystudent
 
@@ -542,3 +543,29 @@ class MarkUserReportAsDownloadedView(APIView):
         user.save()
 
         return Response({'message': 'User report marked as downloaded.'}, status=status.HTTP_200_OK)
+    
+class HealthCheckView(APIView):
+    permission_classes = [IsAdmin]
+
+    def get(self, request, format=None):
+        schools_data = []
+
+        for school in School.objects.all():
+            total_teachers = User.objects.filter(role=User.TEACHER, school=school).count()
+            total_courses = Course.objects.filter(teacher__school=school).count()
+            
+            schools_data.append({
+                'name': school.name,
+                'address': school.address,
+                'total_teachers': total_teachers,
+                'total_courses': total_courses,
+            })
+
+        data = {
+            'schools': schools_data,
+        }
+
+        serializer = AccountsHealthCheckSerializer(data=data)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

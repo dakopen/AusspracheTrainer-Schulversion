@@ -123,3 +123,12 @@ class ChangedUsernamesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChangedUsernames
         fields = ['user', 'old_username', 'new_username', 'created_at']
+
+class SchoolStatsSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    address = serializers.CharField()
+    total_teachers = serializers.IntegerField()
+    total_courses = serializers.IntegerField()
+
+class AccountsHealthCheckSerializer(serializers.Serializer):
+    schools = SchoolStatsSerializer(many=True)

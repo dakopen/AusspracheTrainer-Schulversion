@@ -19,3 +19,9 @@ class ToDoDatesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ToDoDates
         fields = ['activation_date', 'due_date', 'standard_todo']
+
+
+class ToDoCompletionStatsSerializer(serializers.Serializer):
+    todo_title = serializers.CharField()
+    completed_count = serializers.IntegerField()
+    

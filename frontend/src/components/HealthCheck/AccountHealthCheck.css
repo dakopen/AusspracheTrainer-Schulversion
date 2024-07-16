@@ -1,0 +1,45 @@
+.health-check-container {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: var(--light-rosa);
+	border: 2px solid var(--lila);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.health-check-header {
+	color: var(--lila);
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.school-stat {
+	margin: 10px 0;
+	padding: 10px;
+	background-color: var(--white);
+	border: 1px solid var(--lila);
+	border-radius: 4px;
+}
+
+.school-name {
+	font-weight: bold;
+	color: var(--black);
+	margin-bottom: 5px;
+}
+
+.school-detail {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.error {
+	color: red;
+	text-align: center;
+}
+
+.loading {
+	text-align: center;
+	color: var(--black);
+}

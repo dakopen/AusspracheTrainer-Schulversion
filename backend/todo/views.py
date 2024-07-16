@@ -5,13 +5,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from accounts.permissions import IsStudystudentOrTeacher, IsTeacherOrSecretaryOrAdmin
+from accounts.permissions import IsStudystudentOrTeacher, IsTeacherOrSecretaryOrAdmin, IsAdmin
 from .models import StandardToDo, UserToDo, ToDoDates
-from .serializers import StandardToDoSerializer, UserToDoSerializer, ToDoDatesSerializer
+from .serializers import StandardToDoSerializer, UserToDoSerializer, ToDoDatesSerializer, ToDoCompletionStatsSerializer
 from datetime import timedelta, datetime
 import logging
-
 from django.utils.dateparse import parse_datetime
+from django.db.models import Count
 
 from accounts.models import Course
 
@@ -184,3 +184,21 @@ class ToDoDatesView(APIView):
         
 
 
+class ToDoCompletionStatsView(APIView):
+    permission_classes = [IsAdmin]
+
+    def get(self, request, format=None):
+        standard_todos = StandardToDo.objects.all()
+        data = []
+
+        for todo in standard_todos:
+            completed_count = UserToDo.objects.filter(todo_date__standard_todo=todo, completed=True).count()
+            data.append({
+                'todo_title': todo.title,
+                'completed_count': completed_count
+            })
+
+        serializer = ToDoCompletionStatsSerializer(data=data, many=True)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

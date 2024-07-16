@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('health-check/', views.HealthCheckView.as_view(), name='health-check'),
+
     path('hello-world/', views.hello_world, name='hello_world'),
     path('create-teacher', views.CreateTeacherView.as_view(), name='create-teacher'),  # überarbeiten
     path('set-password/', views.SetPasswordView.as_view(), name='set-password'),

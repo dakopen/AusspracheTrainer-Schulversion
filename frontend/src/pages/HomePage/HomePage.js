@@ -1,9 +1,10 @@
 import * as Sentry from "@sentry/react";
 import React, { useState, useContext, useEffect, createRef } from "react";
 import { useNotification } from "../../context/NotificationContext";
-import { isStudyStudent, isTeacher, isNotLoggedIn } from "../../utils/RoleChecks";
+import { isStudyStudent, isTeacher, isNotLoggedIn, isAdmin } from "../../utils/RoleChecks";
 import ToDo from "../../components/ToDo/ToDo";
 import FinishedStudy from "../../components/FinishedStudy/FinishedStudy";
+import AccountHealthCheck from "../../components/HealthCheck/AccountHealthCheck";
 import AuthContext from "../../context/AuthContext";
 import { faUser, faChalkboardTeacher, faSchool, faChevronDown, faDownload, faSignInAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +15,7 @@ import { triggerAnalysis, generateUserReportPDF, fetchUserStudyStatus } from "..
 
 import './TeacherHomePage.css';
 import './HomePage.css';
+import ToDoHealthCheck from "../../components/HealthCheck/ToDoHealthCheck";
 
 const HomePage = () => {
 	const { addNotification } = useNotification();
@@ -27,8 +29,10 @@ const HomePage = () => {
 		const getStatus = async () => {
 			if (!authTokens) return;
 			try {
-				const data = await fetchUserStudyStatus(authTokens);
-				setStatus(data);
+				if (isStudyStudent(user)) {
+					const data = await fetchUserStudyStatus(authTokens);
+					setStatus(data);
+				}
 			} catch (error) {
 				Sentry.captureException(error);
 			}
@@ -175,6 +179,12 @@ const HomePage = () => {
 							</p>
 						</div>
 					</div>
+				</>
+			}
+			{isAdmin(user) &&
+				<>
+					<AccountHealthCheck></AccountHealthCheck>
+					<ToDoHealthCheck></ToDoHealthCheck>
 				</>
 			}
 		</div>

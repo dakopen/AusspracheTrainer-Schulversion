@@ -674,3 +674,55 @@ export const fetchUserStudyStatus = async (authTokens) => {
 		throw error;
 	}
 };
+
+export const fetchHealthCheck = async (authTokens) => {
+	try {
+		const response = await fetch(
+			`${ACCOUNT_BASE_URL}/health-check/`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + String(authTokens.access),
+					"ngrok-skip-browser-warning": "true",
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch health check data");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching health check data:", error);
+		throw error;
+	}
+};
+
+export const fetchToDoCompletionStats = async (authTokens) => {
+    try {
+        const response = await fetch(
+            `${TODO_BASE_URL}/todo-completion-stats/`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + String(authTokens.access),
+                    "ngrok-skip-browser-warning": "true",
+                },
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch todo completion stats");
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching todo completion stats:", error);
+        throw error;
+    }
+};
