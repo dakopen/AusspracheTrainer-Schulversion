@@ -59,10 +59,10 @@ const TutorialPage = () => {
                 if (id == 3 || id == 11) {
                     setTodo_id(id);
                     let fetchedSentences = null;
-                    if (todo_id == 3) {
+                    if (id == 3) {
                         fetchedSentences = await fetchSentencesByCourseAndLocation(101, 102, authTokens);
                     }
-                    else if (todo_id == 11) {
+                    else if (id == 11) {
                         fetchedSentences = await fetchSentencesByCourseAndLocation(103, 104, authTokens);
                     }
                     setSentences(fetchedSentences);
