@@ -46,8 +46,11 @@ class FinalQuestionnaireView(APIView):
         serializer = FinalQuestionnaireSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
+            
             complete_user_todo_user_and_standard_todo(request.user, 13)
             request.user.finished_study = True
+            request.user.save()
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -60,7 +63,6 @@ class AudioAnalysisView(APIView):
             audio_file = request.FILES['audio']
             sentence_id = serializer.validated_data['sentence_id']  # TODO: Change later to sentence_id
             audio_mimetype = serializer.validated_data['audio_mimetype']
-
 
             logger.warn(f"Initiating analysis for sentence with id {sentence_id} with mimetype {audio_mimetype}")
 
@@ -130,7 +132,8 @@ class TriggerAudioAnalysisView(APIView):
             audio_file_path = test_sentence.audio_file_path
             # retrieve the sentence
             sentence_id = test_sentence.sentence.id
-            async_pronunciation_assessment.delay(audio_file_path, sentence_id, user.belongs_to_course.language, user_id=user.id, delete_after_analysis=True)
+
+            async_pronunciation_assessment(audio_file_path, sentence_id, user.belongs_to_course.language, user_id=user.id, delete_after_analysis=True)
             sentenceAudioLink = TestSentencesWithAudio.objects.filter(user=user, sentence=test_sentence.sentence)
             sentenceAudioLink.update(deleted=True)
         return Response({'message': 'Analysis triggered'}, status=status.HTTP_200_OK)

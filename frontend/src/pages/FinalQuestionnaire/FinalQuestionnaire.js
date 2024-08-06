@@ -38,8 +38,8 @@ const FinalQuestionnaire = () => {
 
 		const payload = {
 			motivation: motivation || null,
-			feelingOfImprovement: feelingOfImprovement || null,
-			weeklyTrainingMinutes: weeklyTrainingMinutes
+			feeling_of_improvement: feelingOfImprovement || null,
+			weekly_training_in_minutes: weeklyTrainingMinutes
 				? parseInt(weeklyTrainingMinutes)
 				: null,
 		};
@@ -66,9 +66,6 @@ const FinalQuestionnaire = () => {
 					"success"
 				);
 				// Reset the form fields to null after successful submission
-				setFeelingOfImprovement(null);
-				setMotivation(null);
-				setweeklyTrainingMinutes(null);
 				navigate("/");
 			} else {
 				const responseData = await response.json();
