@@ -74,7 +74,16 @@ const TutorialPage = () => {
 
         const fetchData = async () => {
             try {
-                const result = await fetchSentencesByCourseAndLocation(101, 102, authTokens);
+                const result = null;
+                if (todo_id == -1) {
+                    return;
+                }
+                else if (todo_id == 3) {
+                    result = await fetchSentencesByCourseAndLocation(101, 102, authTokens);
+                }
+                else if (todo_id == 11) {
+                    result = await fetchSentencesByCourseAndLocation(103, 104, authTokens);
+                }
                 setSentences(result);
             } catch (err) {
                 console.error("Error fetching sentences:", err);
