@@ -130,7 +130,7 @@ class TriggerAudioAnalysisView(APIView):
             audio_file_path = test_sentence.audio_file_path
             # retrieve the sentence
             sentence_id = test_sentence.sentence.id
-            async_pronunciation_assessment(audio_file_path, sentence_id, user.belongs_to_course.language, user_id=user.id, delete_after_analysis=True)
+            async_pronunciation_assessment.delay(audio_file_path, sentence_id, user.belongs_to_course.language, user_id=user.id, delete_after_analysis=True)
             sentenceAudioLink = TestSentencesWithAudio.objects.filter(user=user, sentence=test_sentence.sentence)
             sentenceAudioLink.update(deleted=True)
         return Response({'message': 'Analysis triggered'}, status=status.HTTP_200_OK)
